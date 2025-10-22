@@ -36,11 +36,14 @@ public class Habitacion implements Serializable{
     @Column(name = "capacidad_total")
     private String capacidad_total;
 
+    @Column(name = "precio")
+    private Double precio; 
+
     public Habitacion() {
     }
 
     public Habitacion(Long id_habitacion, Integer numero_habitacion, String nombre_comercial, String descripcion,
-            String medidas, String vista, String estado_operativo, String foto_portada_url, String capacidad_total) {
+            String medidas, String vista, String estado_operativo, String foto_portada_url, String capacidad_total, Double precio) {
         this.id_habitacion = id_habitacion;
         this.numero_habitacion = numero_habitacion;
         this.nombre_comercial = nombre_comercial;
@@ -50,10 +53,7 @@ public class Habitacion implements Serializable{
         this.estado_operativo = estado_operativo;
         this.foto_portada_url = foto_portada_url;
         this.capacidad_total = capacidad_total;
-    }
-  
-    public static long getSerialversionuid() {
-        return serialVersionUID;
+        this.precio = precio;
     }
 
     public Long getId_habitacion() {
@@ -128,6 +128,14 @@ public class Habitacion implements Serializable{
         this.capacidad_total = capacidad_total;
     }
 
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -157,6 +165,8 @@ public class Habitacion implements Serializable{
         ", vista: " + vista + 
         ", estado operativo: " + estado_operativo + 
         ", foto_portada_url: " + foto_portada_url +
+        ", capacidad total: " + capacidad_total + 
+        ", precio: " + precio + 
         '}';
     }
     

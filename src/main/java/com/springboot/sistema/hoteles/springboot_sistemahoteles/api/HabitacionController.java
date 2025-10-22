@@ -46,7 +46,18 @@ public class HabitacionController {
     @PostMapping("/habitacion")
     public ResponseEntity<Habitacion> create(@RequestBody Habitacion entidad){
         try{
-            Habitacion _entidad = repository.save(new Habitacion(null, entidad.getNumero_habitacion(), entidad.getNombre_comercial(), entidad.getDescripcion(), entidad.getMedidas(), entidad.getVista(), entidad.getEstado_operativo(), entidad.getFoto_portada_url(), entidad.getCapacidad_total() ));
+            Habitacion _entidad = repository.save(new Habitacion(
+                null, 
+                entidad.getNumero_habitacion(), 
+                entidad.getNombre_comercial(), 
+                entidad.getDescripcion(), 
+                entidad.getMedidas(), 
+                entidad.getVista(), 
+                entidad.getEstado_operativo(), 
+                entidad.getFoto_portada_url(), 
+                entidad.getCapacidad_total(),
+                entidad.getPrecio()
+                ));
             return new ResponseEntity<>(_entidad, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); 
@@ -65,6 +76,7 @@ public class HabitacionController {
             _entidad.setEstado_operativo(entidad.getEstado_operativo());
             _entidad.setFoto_portada_url(entidad.getFoto_portada_url());
             _entidad.setCapacidad_total(entidad.getCapacidad_total());
+            _entidad.setPrecio(entidad.getPrecio());
             return new ResponseEntity<>(repository.save(_entidad), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
