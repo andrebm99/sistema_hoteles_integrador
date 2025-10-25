@@ -1,0 +1,191 @@
+<!doctype html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurum | Administrador</title>
+    <style>
+        /* Variables rápidas */
+        :root {
+            --icon-border: rgba(0, 0, 0, 0.08);
+            --icon-bg: #fff;
+            --brand-color: #0b1220;
+        }
+
+        /* Reset ligero */
+        .navbar {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        /* Separación entre items principales */
+        .nav-sep .nav-item+.nav-item {
+            margin-left: 14px;
+        }
+
+        /* Estilo botones de icono (círculos con borde) */
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            border: 1px solid var(--icon-border);
+            background: var(--icon-bg);
+            display: inline-grid;
+            place-items: center;
+            color: #111;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(11, 18, 24, 0.06);
+        }
+
+        /* Avatar */
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            object-fit: cover;
+            border: 1px solid var(--icon-border);
+            border-radius: 50%;
+        }
+
+        /* Nombre de usuario al lado del avatar (oculto en pantallas muy pequeñas) */
+        .user-name {
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* Ajustes de tamaño */
+        @media (max-width: 576px) {
+            .nav-sep .nav-item+.nav-item {
+                margin-left: 8px;
+            }
+
+            .icon-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 14px;
+            }
+
+            .user-avatar {
+                width: 36px;
+                height: 36px;
+            }
+
+            .user-name,
+            .dropdown-toggle .fa-caret-down {
+                display: none;
+            }
+        }
+
+        /* Cuando se colapsa, damos separación vertical a los links (opcional) */
+        @media (max-width: 992px) {
+            .navbar-collapse .nav-link {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+        }
+
+        /* Resaltar link activo */
+        .navbar .nav-link.active {
+            font-weight: 700;
+            color: #111;
+        }
+    </style>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+
+<body>
+    <div id="app" class="container-fluid p-0" style="min-width:100vw;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 border-bottom">
+            <div class="container-fluid">
+                <!-- Marca -->
+                <a class="navbar-brand fw-bold fs-3" href="/">Aurum</a>
+                <!-- Íconos y perfil (siempre visibles, a la derecha) -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Botones circulares de icono -->
+                    <button id="btn-theme" class="icon-btn" title="Modo"><i id="theme-icon"
+                            class="fa-solid fa-moon"></i></button>
+                    <button class="icon-btn" title="Mensajes"><i class="fa-solid fa-comment"></i></button>
+                    <button class="icon-btn" title="Notificaciones"><i class="fa-solid fa-bell"></i></button>
+
+                    <!-- Perfil / dropdown -->
+                    <div class="dropdown">
+                        <a href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" class="d-block text-decoration-none">
+                            <img src="https://i.pravatar.cc/44" alt="Avatar" class="rounded-circle user-avatar avatar-only">
+                            <span class="ms-2 d-none d-sm-inline user-name">Administrador</span>
+                            <i class="fa-solid fa-caret-down ms-1 d-none d-sm-inline"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user me-2"></i>Mi perfil</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear me-2"></i>Configuración</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/"><i class="fa-solid fa-house-user"></i> Web Usuario</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i
+                                        class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Fragmento de contenido -->
+        <div layout:fragment="content" class="p-4">
+            <!-- Contenido de la página -->
+        </div>
+
+        <footer class="p-3 text-center">
+            Aurum Telo
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.6.1/vue-resource.min.js"
+        integrity="sha512-NuUIe6TWdEivPTcxnihx2e6r2xQFEFPrJfpdZWoBwZF6G51Rphcf5r/1ZU/ytj4lyHwLd/YGMix4a5LqAN15XA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script layout:fragment="script">
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeBtn = document.getElementById('btn-theme');
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (themeBtn && themeIcon) {
+                themeBtn.addEventListener('click', function () {
+                    if (themeIcon.classList.contains('fa-moon')) {
+                        themeIcon.classList.remove('fa-moon');
+                        themeIcon.classList.add('fa-sun');
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else {
+                        themeIcon.classList.remove('fa-sun');
+                        themeIcon.classList.add('fa-moon');
+                        document.documentElement.removeAttribute('data-theme');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

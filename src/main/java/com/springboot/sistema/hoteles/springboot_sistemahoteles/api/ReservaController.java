@@ -3,6 +3,7 @@ package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,43 +22,63 @@ public class ReservaController {
     @GetMapping("/reserva")
     public ResponseEntity<List<Reserva>> getAll(@RequestParam(required = false) String title) {
         try {
-            List<Reserva> lista = new ArrayList<Reserva>();
-            repository.findAll().forEach(lista::add);
-            if (lista.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            try {
+                List<Reserva> lista = repository.findAll();
+                if (lista == null)
+                    lista = new ArrayList<>();
+                return new ResponseEntity<>(lista, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(lista, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/reserva/{id_reserva}")
-    public ResponseEntity<Reserva> getById(@PathVariable("id_reserva") Long id_reserva) {
-        Optional<Reserva> entidad = repository.findById(id_reserva);
-        if (entidad.isPresent()) {
-            return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/reserva/codigo/{codigo}")
+    public ResponseEntity<Reserva> getByCodigo(@PathVariable("codigo") String codigo) {
+        try {
+            Optional<Reserva> entidad = repository.findByCodigo(codigo);
+            if (entidad.isPresent()) {
+                return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    @GetMapping("/reserva/{id_reserva}")
+    public ResponseEntity<Reserva> getById(@PathVariable("id_reserva") Long id_reserva) {
+        try {
+            Optional<Reserva> entidad = repository.findById(id_reserva);
+            if (entidad.isPresent()) {
+                return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/reserva")
-    public ResponseEntity<Reserva> create(@RequestBody Reserva entidad){
-        try{
+    public ResponseEntity<Reserva> create(@RequestBody Reserva entidad) {
+        try {
             Reserva _entidad = repository.save(new Reserva(
-                null, 
-                entidad.getNombres_apellidos(),
-                entidad.getDni(),
-                entidad.getHabitacion(),
-                entidad.getPiso(),
-                entidad.getFechaInicio(),
-                entidad.getFecha_salida(),
-                entidad.getMetodo_pago()
-            ));
+                    null,
+                    entidad.getCodigo(),
+                    entidad.getNombresapellidos(),
+                    entidad.getDni(),
+                    entidad.getHabitacion(),
+                    entidad.getOcupantes(),
+                    entidad.getFechaInicio(),
+                    entidad.getFecha_salida(),
+                    entidad.getMetodo_pago()));
             return new ResponseEntity<>(_entidad, HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -65,10 +86,11 @@ public class ReservaController {
     public ResponseEntity<Reserva> update(@PathVariable("id_reserva") Long id_reserva, @RequestBody Reserva entidad) {
         Reserva _entidad = repository.findById(id_reserva).orElse(null);
         if (_entidad != null) {
-            _entidad.setNombres_apellidos(entidad.getNombres_apellidos());
+            _entidad.setCodigo(entidad.getCodigo());
+            _entidad.setNombresapellidos(entidad.getNombresapellidos());
             _entidad.setDni(entidad.getDni());
             _entidad.setHabitacion(entidad.getHabitacion());
-            _entidad.setPiso(entidad.getPiso());
+            _entidad.setOcupantes(entidad.getOcupantes());
             _entidad.setFechaInicio(entidad.getFechaInicio());
             _entidad.setFecha_salida(entidad.getFecha_salida());
             _entidad.setMetodo_pago(entidad.getMetodo_pago());

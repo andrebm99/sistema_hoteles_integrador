@@ -34,8 +34,6 @@ public class Persona implements Serializable{
         this.apellidos = apellidos;
     }
 
-    
-
     public Long getId() {
         return id;
     }

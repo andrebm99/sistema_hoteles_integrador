@@ -2,6 +2,7 @@ package com.springboot.sistema.hoteles.springboot_sistemahoteles.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -15,19 +16,22 @@ public class Reserva implements Serializable {
     @Column(name = "id_reserva")
     private Long id_reserva;
 
-    @Column(name = "nombres_apellidos", nullable = true)
-    private String nombres_apellidos;
+    @Column(name = "codigo", unique = true, nullable = false, length = 36)
+    private String codigo;
 
-    @Column(name = "dni", unique = true, nullable = true)
+    @Column(name = "nombresapellidos", nullable = false)
+    private String nombresapellidos;
+
+    @Column(name = "dni", unique = true, nullable = false)
     private Integer dni;
 
-    @Column(name = "habitacion", nullable = true)
+    @Column(name = "habitacion", nullable = false)
     private String habitacion;
 
-    @Column(name = "piso", nullable = true)
-    private Integer piso;
+    @Column(name = "ocupantes", nullable = false)
+    private String ocupantes;
 
-    @Column(name = "fecha_inicio", nullable = true)
+    @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;
 
     @Column(name = "fecha_salida")
@@ -39,18 +43,25 @@ public class Reserva implements Serializable {
     public Reserva() {
     }
 
-    public Reserva(Long id_reserva, String nombres_apellidos, Integer dni, String habitacion, Integer piso, LocalDateTime fechaInicio,
-            LocalDateTime fecha_salida, String metodo_pago) {
+    public Reserva(Long id_reserva, String codigo, String nombresapellidos, Integer dni, String habitacion,
+            String ocupantes, LocalDateTime fechaInicio, LocalDateTime fecha_salida, String metodo_pago) {
         this.id_reserva = id_reserva;
-        this.nombres_apellidos = nombres_apellidos;
+        this.nombresapellidos = nombresapellidos;
         this.dni = dni;
         this.habitacion = habitacion;
-        this.piso = piso;
+        this.ocupantes = ocupantes;
         this.fechaInicio = fechaInicio;
         this.fecha_salida = fecha_salida;
         this.metodo_pago = metodo_pago;
     }
 
+    @PrePersist
+    public void prePersist(){
+        if(this.codigo == null || this.codigo.isEmpty()){
+            this.codigo = UUID.randomUUID().toString(); 
+        }
+    }
+    
     public Long getId_reserva() {
         return id_reserva;
     }
@@ -59,12 +70,20 @@ public class Reserva implements Serializable {
         this.id_reserva = id_reserva;
     }
 
-    public String getNombres_apellidos() {
-        return nombres_apellidos;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setNombres_apellidos(String nombres_apellidos) {
-        this.nombres_apellidos = nombres_apellidos;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombresapellidos() {
+        return nombresapellidos;
+    }
+
+    public void setNombresapellidos(String nombresapellidos) {
+        this.nombresapellidos = nombresapellidos;
     }
 
     public Integer getDni() {
@@ -83,12 +102,12 @@ public class Reserva implements Serializable {
         this.habitacion = habitacion;
     }
 
-    public Integer getPiso() {
-        return piso;
+    public String getOcupantes() {
+        return ocupantes;
     }
 
-    public void setPiso(Integer piso) {
-        this.piso = piso;
+    public void setOcupantes(String ocupantes) {
+        this.ocupantes = ocupantes;
     }
 
     public LocalDateTime getFechaInicio() {
@@ -138,10 +157,11 @@ public class Reserva implements Serializable {
     public String toString() {
         return "Reserva{" + 
         "id=" + id_reserva + 
-        ", nombres=" + nombres_apellidos 
-        + ", dni: " + dni + 
+        "id=" + codigo +
+        ", nombres=" + nombresapellidos +
+        ", dni: " + dni + 
         ", habitación: " + habitacion + 
-        ", piso: " + piso + 
+        ", Cantidad de Ocupantes: " + ocupantes + 
         ", fecha de inicio: " + fechaInicio + 
         ", fecha de salida: " + fecha_salida + 
         ", metodo de pago: " + metodo_pago + 
