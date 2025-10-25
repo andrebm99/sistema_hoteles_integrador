@@ -58,6 +58,82 @@
             font-weight: 600;
         }
 
+        /* Sidebar */
+        .app-sidebar {
+            position: fixed;
+            top: 64px;
+            /* ajusta si tu header es más alto/bajo */
+            left: 0;
+            bottom: 0;
+            width: 220px;
+            background: #f7fafb;
+            border-right: 1px solid #e6eaef;
+            overflow-y: auto;
+            z-index: 1040;
+            padding-top: 8px;
+            transform: translateX(0);
+            transition: transform .18s ease;
+        }
+
+        /* inner spacing */
+        .app-sidebar .sidebar-inner {
+            padding-bottom: 24px;
+        }
+
+        /* links */
+        .app-sidebar .nav-link {
+            color: #1f2937;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 4px 6px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .app-sidebar .nav-link:hover {
+            background: #eef7ff;
+            color: #034f84;
+        }
+
+        .app-sidebar .nav-link.active {
+            background: linear-gradient(#ecf8ff, #f0f9ff);
+            color: #034f84;
+        }
+
+        /* Transición suave para esconder/mostrar */
+        .app-sidebar {
+            transition: transform .22s ease, width .18s ease;
+        }
+
+        /* Clase que oculta la sidebar desplazándola hacia la izquierda */
+        .app-sidebar.hidden {
+            transform: translateX(-120%);
+        }
+
+        /* Cuando la sidebar esté oculta, quitamos la separación en el main */
+        .admin-main.sidebar-hidden {
+            margin-left: 0 !important;
+        }
+
+        /* Ajuste del icono del botón cuando la sidebar está oculta */
+        #sidebar-toggle-btn.collapsed #sidebar-toggle-icon {
+            transform: rotate(180deg);
+            transition: transform .18s ease;
+        }
+
+        #sidebar-show-btn {
+            transition: opacity .18s ease, transform .18s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* clase que hace visible el botón */
+        #sidebar-show-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         /* Ajustes de tamaño */
         @media (max-width: 576px) {
             .nav-sep .nav-item+.nav-item {
@@ -79,6 +155,26 @@
             .dropdown-toggle .fa-caret-down {
                 display: none;
             }
+
+            /* SideBar */
+            .app-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 260px;
+                transform: translateX(-110%);
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            }
+
+            .app-sidebar.open {
+                transform: translateX(0);
+            }
+
+            /* desplaza el contenido cuando el sidebar está abierto si quieres */
+            .admin-main.shifted {
+                margin-left: 260px;
+            }
         }
 
         /* Cuando se colapsa, damos separación vertical a los links (opcional) */
@@ -87,12 +183,34 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
+
+            #sidebar-show-btn {
+                display: none !important;
+            }
+
+            /* Resaltar link activo */
+            .navbar .nav-link.active {
+                font-weight: 700;
+                color: #111;
+            }
+
+            .admin-main {
+                margin-left: 240px;
+            }
+
+            .admin-main {
+                margin-left: 0 !important;
+            }
         }
 
-        /* Resaltar link activo */
-        .navbar .nav-link.active {
-            font-weight: 700;
-            color: #111;
+        /* pulido visual cuando el sidebar está oculto en escritorio */
+        .app-sidebar.hidden {
+            transform: translateX(-120%);
+        }
+
+        .admin-main.sidebar-hidden {
+            margin-left: 0 !important;
+            transition: margin-left .18s ease;
         }
     </style>
 
@@ -109,20 +227,21 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 border-bottom">
             <div class="container-fluid">
-                <!-- Marca -->
                 <a class="navbar-brand fw-bold fs-3" href="/">Aurum</a>
-                <!-- Íconos y perfil (siempre visibles, a la derecha) -->
+                <button id="sidebar-open-btn" class="btn btn-outline-secondary d-lg-none me-2" aria-label="Abrir menú">
+                    <i class="fa fa-bars"></i>
+                </button>
                 <div class="d-flex align-items-center gap-2">
-                    <!-- Botones circulares de icono -->
                     <button id="btn-theme" class="icon-btn" title="Modo"><i id="theme-icon"
                             class="fa-solid fa-moon"></i></button>
                     <button class="icon-btn" title="Mensajes"><i class="fa-solid fa-comment"></i></button>
                     <button class="icon-btn" title="Notificaciones"><i class="fa-solid fa-bell"></i></button>
 
-                    <!-- Perfil / dropdown -->
                     <div class="dropdown">
-                        <a href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" class="d-block text-decoration-none">
-                            <img src="https://i.pravatar.cc/44" alt="Avatar" class="rounded-circle user-avatar avatar-only">
+                        <a href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                            class="d-block text-decoration-none">
+                            <img src="https://i.pravatar.cc/44" alt="Avatar"
+                                class="rounded-circle user-avatar avatar-only">
                             <span class="ms-2 d-none d-sm-inline user-name">Administrador</span>
                             <i class="fa-solid fa-caret-down ms-1 d-none d-sm-inline"></i>
                         </a>
@@ -131,8 +250,7 @@
                             </li>
                             <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear me-2"></i>Configuración</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="fa-solid fa-house-user"></i> Web Usuario</a>
+                            <li><a class="dropdown-item" href="/"><i class="fa-solid fa-house-user"></i> Web Usuario</a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -145,13 +263,64 @@
             </div>
         </nav>
 
-        <!-- Fragmento de contenido -->
+        <nav id="app-sidebar" class="app-sidebar" aria-label="Sidebar administrador">
+            <div class="sidebar-inner">
+                <div class="sidebar-brand d-flex align-items-center justify-content-between px-3 py-2">
+                    <button id="sidebar-close-btn" class="btn btn-sm d-lg-none" aria-label="Cerrar menú">✕</button>
+                </div>
+                <button id="sidebar-toggle-btn" class="btn btn-outline-secondary ms-2 d-none d-lg-inline-flex"
+                    aria-label="Alternar menú">
+                    <i id="sidebar-toggle-icon" class="fa fa-chevron-left"></i>
+                </button>
+
+                <ul class="nav flex-column px-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reservas" data-path="reservas">
+                            <i class="fa-solid fa-calendar me-3" ></i> Reservas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" data-path="habitaciones">
+                            <i class="fa-solid fa-igloo me-3"></i> Habitaciones
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" data-path="reportes">
+                            <i class="fa-solid fa-chart-simple me-3"></i> Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" data-path="roles">
+                            <i class="fa-solid fa-clipboard-user me-3"></i> Personal Hotel
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <button 
+            id="sidebar-show-btn" 
+            class="btn btn-outline-primary p-1" 
+            aria-label="Mostrar menú" 
+            title="Mostrar menú"
+            style="
+                display:none; 
+                position:fixed; 
+                left:8px; top:76px; 
+                z-index:1070; 
+                border-radius:10px; 
+                padding:10px 10px; 
+                color: black; 
+                background: white; 
+                border: 1px solid black;
+                ">
+            <i class="fa fa-bars"></i>
+        </button>
+
         <div layout:fragment="content" class="p-4">
-            <!-- Contenido de la página -->
         </div>
 
         <footer class="p-3 text-center">
-            Aurum Telo
+            Hotel Aurum
         </footer>
     </div>
 
@@ -164,26 +333,125 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.6.1/vue-resource.min.js"
         integrity="sha512-NuUIe6TWdEivPTcxnihx2e6r2xQFEFPrJfpdZWoBwZF6G51Rphcf5r/1ZU/ytj4lyHwLd/YGMix4a5LqAN15XA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script layout:fragment="script">
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const themeBtn = document.getElementById('btn-theme');
-            const themeIcon = document.getElementById('theme-icon');
 
-            if (themeBtn && themeIcon) {
-                themeBtn.addEventListener('click', function () {
-                    if (themeIcon.classList.contains('fa-moon')) {
-                        themeIcon.classList.remove('fa-moon');
-                        themeIcon.classList.add('fa-sun');
-                        document.documentElement.setAttribute('data-theme', 'dark');
+    </script>
+    <script layout:fragment="script">
+        // sidebar control & active link
+        (function () {
+            const sidebar = document.getElementById('app-sidebar');
+            const closeBtn = document.getElementById('sidebar-close-btn');
+
+            const openBtn = document.getElementById('sidebar-open-btn');
+            if (openBtn) openBtn.addEventListener('click', () => sidebar.classList.add('open'));
+
+            if (closeBtn) closeBtn.addEventListener('click', () => sidebar.classList.remove('open'));
+
+            document.addEventListener('click', function (e) {
+                if (window.innerWidth <= 991 && sidebar.classList.contains('open')) {
+                    if (!sidebar.contains(e.target) && !(openBtn && openBtn.contains(e.target))) {
+                        sidebar.classList.remove('open');
+                    }
+                }
+            });
+
+            function markActive() {
+                const path = window.location.pathname.split('/').filter(Boolean).pop() || 'inicio';
+                document.querySelectorAll('#app-sidebar .nav-link').forEach(a => {
+                    // compara la porción final de href con path
+                    let href = a.getAttribute('href') || '';
+                    let last = href.split('/').filter(Boolean).pop() || 'inicio';
+                    if (last === path) {
+                        a.classList.add('active');
                     } else {
-                        themeIcon.classList.remove('fa-sun');
-                        themeIcon.classList.add('fa-moon');
-                        document.documentElement.removeAttribute('data-theme');
+                        a.classList.remove('active');
                     }
                 });
             }
+            markActive();
+        })();
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.app-sidebar') || document.getElementById('offcanvas');
+            const main = document.querySelector('.admin-main') || document.querySelector('[layout\\:fragment="content"]') || document.querySelector('#app');
+            const openBtn = document.getElementById('sidebar-open-btn'); // móvil
+            const toggleBtn = document.getElementById('sidebar-toggle-btn'); // desktop hide/show
+            const showBtn = document.getElementById('sidebar-show-btn'); // botón para volver a mostrar cuando esté oculta
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+
+            if (!sidebar) return; // no hay sidebar (seguridad)
+
+            function setShowButtonVisibility(hidden) {
+                if (!showBtn) return;
+                if (hidden && window.innerWidth > 991) {
+                    showBtn.classList.add('visible');
+                    showBtn.style.display = ''; 
+                } else {
+                    showBtn.classList.remove('visible');
+                }
+            }
+
+            function applySidebarState(hidden) {
+                if (!sidebar) return;
+                if (hidden) {
+                    sidebar.classList.add('hidden');
+                    if (main) main.classList.add('sidebar-hidden');
+                    if (toggleBtn) toggleBtn.classList.add('collapsed');
+                    if (toggleIcon) toggleIcon.style.transform = 'rotate(180deg)';
+                    localStorage.setItem('sidebarHidden', '1');
+                    setShowButtonVisibility(true);
+                } else {
+                    sidebar.classList.remove('hidden');
+                    if (main) main.classList.remove('sidebar-hidden');
+                    if (toggleBtn) toggleBtn.classList.remove('collapsed');
+                    if (toggleIcon) toggleIcon.style.transform = '';
+                    localStorage.removeItem('sidebarHidden');
+                    setShowButtonVisibility(false);
+                }
+            }
+
+            const savedHidden = localStorage.getItem('sidebarHidden') === '1';
+
+            const applyHidden = (window.innerWidth > 991) ? savedHidden : false;
+            applySidebarState(applyHidden);
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function () {
+                    const isHidden = sidebar.classList.contains('hidden');
+                    applySidebarState(!isHidden);
+                });
+            }
+
+            if (showBtn) {
+                showBtn.addEventListener('click', function () {
+                    applySidebarState(false);
+                });
+            }
+
+            if (openBtn) {
+                openBtn.addEventListener('click', function () {
+                    sidebar.classList.add('open');
+                    if (main) main.classList.add('shifted');
+                    setShowButtonVisibility(false);
+                });
+            }
+
+            document.addEventListener('click', function (e) {
+                if (!sidebar) return;
+                if (window.innerWidth <= 991 && sidebar.classList.contains('open')) {
+                    const inside = sidebar.contains(e.target) || (openBtn && openBtn.contains(e.target));
+                    if (!inside) {
+                        sidebar.classList.remove('open');
+                        if (main) main.classList.remove('shifted');
+                    }
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                const nowHidden = sidebar.classList.contains('hidden');
+                setShowButtonVisibility(nowHidden);
+            });
         });
     </script>
 </body>
