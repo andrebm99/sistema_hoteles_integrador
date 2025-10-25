@@ -9,7 +9,7 @@ public class UsuariosAController {
     @Autowired
     @RequestMapping("/usuarios_administracion")
     public String page() {
-        return "usuarios_administracion";
+        return "rutas_admin/personal";
     }
     
 }

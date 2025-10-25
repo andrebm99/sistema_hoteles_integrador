@@ -10,7 +10,7 @@ public class HabitacionesController {
     @Autowired
     @RequestMapping("/habitaciones")
     public String page() {
-        return "habitaciones";
+        return "rutas_admin/habitaciones";
     }
     
 }
