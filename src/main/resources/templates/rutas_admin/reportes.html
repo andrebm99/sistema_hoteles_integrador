@@ -1,0 +1,167 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_navbar_admin}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UTP Integrador - Reservas</title>
+</head>
+
+<body>
+    <section layout:fragment="content" id="app">
+
+        <div class="container-fluid ">
+            <h3 font-size-1 >ADMINISTRAR RESERVAS DE HABITACIONES</h3>
+            <section class="filtros mb-3">
+
+            </section>
+            <section class="tabla-reservas">
+                <div class="container-fluid pt-3">
+                    <form class="row gx-2 align-items-center p-2"
+                        style="background: #f6f9fb; border-radius: 12px; align-items: center; display: flex; justify-content: center;">
+                        <div class="col-auto">
+                            <label class="form-label fw-semibold mb-1" for="codigo">Código</label>
+                            <input type="text" class="form-control" id="codigo" style="max-width: 150px;"
+                                v-model="filtros.codigo" placeholder="Código reserva">
+                        </div>
+
+                        <div class="col-auto d-flex align-items-end gap-1">
+                            <label for="agregar"></label>
+                            <button type="button" class="btn btn-outline-dark fw-semibold px-10" @click="nuevo">Agregar
+                                +</button>
+                            <button type="button" class="btn btn-outline-dark fw-semibold px-3"
+                                @click="listar">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+                
+                </div>
+                
+            </section>
+        </div>
+    </section>
+
+    <script layout:fragment="script">
+        new Vue({
+            el: "#app",
+            data: {
+                filtros: {
+                    codigo: '',
+                    dni
+                },
+                entidad: {
+                    nombresapellidos: '',
+                    dni: '',
+                    habitacion: '',
+                    ocupantes: '',
+                    fechaInicio: '',
+                    fecha_salida: '',
+                    metodo_pago: ''
+                },
+                entidades: []
+            },
+            methods: {
+
+                showModal: function (id) {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+
+                    const modal = bootstrap.Modal.getOrCreateInstance(el);
+                    modal.show();
+                },
+                hideModal: function (id) {
+                    const el = document.getElementById(el);
+                    if (!el) return;
+                    const modal = bootstrap.Modal.getOrCreateInstance(el);
+                    modal.hide();
+                },
+                listar: function () {
+                    const codigo = this.filtros.codigo && this.filtros.codigo.trim() !== "" ?
+                        this.filtros.codigo.trim() : null;
+                    if (codigo) {
+                        this.$http.get('/api/reserva/codigo/' + encodeURIComponent(codigo))
+                            .then(response => {
+                                const data = (
+                                    response && response.data !== undefined)
+                                    ? response.data : (response && response.body !== undefined
+                                        ? response.body : null);
+                                this.entidades = data ? [data] : [];
+                            })
+                            .catch(error => {
+                                this.entidades = [];
+                                alert('No encontrado o error al buscar por código', error);
+                            });
+                        return;
+                    }
+
+                    this.$http.get('/api/reserva')
+                        .then(response => {
+                            const data = (
+                                response && response.data !== undefined)
+                                ? response.data : (response && response.body !== undefined
+                                    ? response.body : []);
+                            this.entidades = Array.isArray(data) ? data : [];
+                        })
+                        .catch(error => {
+                            console.error('Error al listar reservas', error);
+                            this.entidades = [];
+                        });
+
+                },
+
+                nuevo: function () {
+                    this.entidad = {
+                        id_reserva: 0,
+                        nombresapellidos: "",
+                        dni: 0,
+                        habitacion: "",
+                        ocupantes: "",
+                        fechaInicio: "",
+                        fecha_salida: "",
+                        metodo_pago: ""
+
+                    };
+                    $("#mdlEntidad").modal("show");
+                },
+                editar: function (id_reserva) {
+                    this.$http.get('/api/reserva/' + id_reserva).then(response => {
+                        this.entidad = response.data;
+                        $("#mdlEntidad").modal("show");
+                    });
+                },
+                guardar: function () {
+                    const dni = String(this.entidad.dni);
+
+                    if (!dni || dni.length !== 8) {
+                        alert("Esta ingresando menos/más caracteres que lo permitido.");
+                        return;
+                    }
+
+                    this.$http.post('/api/reserva', this.entidad).then(response => {
+                        this.listar();
+                        $("#mdlEntidad").modal("hide");
+                    });
+                },
+                actualizar: function () {
+                    this.$http.put('/api/reserva/' + this.entidad.id_reserva, this.entidad).then(response => {
+                        this.listar();
+                        $("#mdlEntidad").modal("hide");
+                    });
+                },
+                eliminar: function (id_reserva) {
+                    this.entidad.id_reserva = id_reserva;
+                    $("#mdlEliminar").modal("show");
+                },
+                confirmareliminacion: function () {
+                    this.$http.delete('/api/reserva/' + this.entidad.id_reserva).then(response => {
+                        this.listar();
+                        $("#mdlEliminar").modal("hide");
+                    });
+                }
+            },
+            mounted: function () {
+                this.listar();
+            }
+        });
+    </script>
+</body>
+
+</html>

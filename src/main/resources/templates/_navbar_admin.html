@@ -104,6 +104,8 @@
         /* Transición suave para esconder/mostrar */
         .app-sidebar {
             transition: transform .22s ease, width .18s ease;
+            border-right: 1px solid rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 0 1px black;
         }
 
         /* Clase que oculta la sidebar desplazándola hacia la izquierda */
@@ -168,7 +170,7 @@
             }
 
             .app-sidebar.open {
-                transform: translateX(0);
+                transform: translateX(1);
             }
 
             /* desplaza el contenido cuando el sidebar está abierto si quieres */
@@ -214,17 +216,14 @@
         }
     </style>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 
 <body>
     <div id="app" class="container-fluid p-0" style="min-width:100vw;">
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 border-bottom">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold fs-3" href="/">Aurum</a>
@@ -280,7 +279,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/" data-path="habitaciones">
+                        <a class="nav-link" href="/habitaciones" data-path="habitaciones">
                             <i class="fa-solid fa-igloo me-3"></i> Habitaciones
                         </a>
                     </li>
@@ -290,7 +289,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/" data-path="roles">
+                        <a class="nav-link" href="/usuarios_administracion" data-path="usuarios_administracion">
                             <i class="fa-solid fa-clipboard-user me-3"></i> Personal Hotel
                         </a>
                     </li>
@@ -336,7 +335,6 @@
 
     </script>
     <script layout:fragment="script">
-        // sidebar control & active link
         (function () {
             const sidebar = document.getElementById('app-sidebar');
             const closeBtn = document.getElementById('sidebar-close-btn');
@@ -357,7 +355,6 @@
             function markActive() {
                 const path = window.location.pathname.split('/').filter(Boolean).pop() || 'inicio';
                 document.querySelectorAll('#app-sidebar .nav-link').forEach(a => {
-                    // compara la porción final de href con path
                     let href = a.getAttribute('href') || '';
                     let last = href.split('/').filter(Boolean).pop() || 'inicio';
                     if (last === path) {
