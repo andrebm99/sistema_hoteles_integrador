@@ -9,11 +9,11 @@ public class Habitacion implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_rol", unique = true)
+    @Column(name = "id_habitacion", unique = true)
     private Long id_habitacion;
 
-    @Column(name = "numero_habitacion", unique = true, nullable = false)
-    private Integer numero_habitacion; 
+    @Column(name = "numerohabitacion", unique = true, nullable = false)
+    private String numerohabitacion; 
 
     @Column(name = "nombre_comercial")
     private String nombre_comercial;
@@ -30,8 +30,16 @@ public class Habitacion implements Serializable{
     @Column(name = "estado_operativo")
     private String estado_operativo; 
 
-    @Column(name = "foto_portada_url", length = 2048)
-    private String foto_portada_url;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "foto_portada", columnDefinition = "LONGBLOB")
+    private byte[] foto_portada;
+
+    @Column(name = "foto_portada_content_type")
+    private String foto_portada_content_type;
+
+    @Column(name = "foto_portada_filename")
+    private String foto_portada_filename;
 
     @Column(name = "capacidad_total")
     private String capacidad_total;
@@ -42,16 +50,19 @@ public class Habitacion implements Serializable{
     public Habitacion() {
     }
 
-    public Habitacion(Long id_habitacion, Integer numero_habitacion, String nombre_comercial, String descripcion,
-            String medidas, String vista, String estado_operativo, String foto_portada_url, String capacidad_total, Double precio) {
+    public Habitacion(Long id_habitacion, String numerohabitacion, String nombre_comercial, String descripcion,
+            String medidas, String vista, String estado_operativo, byte[] foto_portada,
+            String foto_portada_content_type, String foto_portada_filename, String capacidad_total, Double precio) {
         this.id_habitacion = id_habitacion;
-        this.numero_habitacion = numero_habitacion;
+        this.numerohabitacion = numerohabitacion;
         this.nombre_comercial = nombre_comercial;
         this.descripcion = descripcion;
         this.medidas = medidas;
         this.vista = vista;
         this.estado_operativo = estado_operativo;
-        this.foto_portada_url = foto_portada_url;
+        this.foto_portada = foto_portada;
+        this.foto_portada_content_type = foto_portada_content_type;
+        this.foto_portada_filename = foto_portada_filename;
         this.capacidad_total = capacidad_total;
         this.precio = precio;
     }
@@ -64,12 +75,12 @@ public class Habitacion implements Serializable{
         this.id_habitacion = id_habitacion;
     }
 
-    public Integer getNumero_habitacion() {
-        return numero_habitacion;
+    public String getNumerohabitacion() {
+        return numerohabitacion;
     }
 
-    public void setNumero_habitacion(Integer numero_habitacion) {
-        this.numero_habitacion = numero_habitacion;
+    public void setNumerohabitacion(String numerohabitacion) {
+        this.numerohabitacion = numerohabitacion;
     }
 
     public String getNombre_comercial() {
@@ -112,12 +123,28 @@ public class Habitacion implements Serializable{
         this.estado_operativo = estado_operativo;
     }
 
-    public String getFoto_portada_url() {
-        return foto_portada_url;
+    public byte[] getFoto_portada() {
+        return foto_portada;
     }
 
-    public void setFoto_portada_url(String foto_portada_url) {
-        this.foto_portada_url = foto_portada_url;
+    public void setFoto_portada(byte[] foto_portada) {
+        this.foto_portada = foto_portada;
+    }
+
+    public String getFoto_portada_content_type() {
+        return foto_portada_content_type;
+    }
+
+    public void setFoto_portada_content_type(String foto_portada_content_type) {
+        this.foto_portada_content_type = foto_portada_content_type;
+    }
+
+    public String getFoto_portada_filename() {
+        return foto_portada_filename;
+    }
+
+    public void setFoto_portada_filename(String foto_portada_filename) {
+        this.foto_portada_filename = foto_portada_filename;
     }
 
     public String getCapacidad_total() {
@@ -159,12 +186,12 @@ public class Habitacion implements Serializable{
     public String toString() {
         return "Habitación{" + 
         "id de habitación =" + id_habitacion + 
+        ", numero de habitracion: " + numerohabitacion+
         ", nombres comercial=" + nombre_comercial +
         ", descripción: " + descripcion + 
         ", medidas: " + medidas +
         ", vista: " + vista + 
         ", estado operativo: " + estado_operativo + 
-        ", foto_portada_url: " + foto_portada_url +
         ", capacidad total: " + capacidad_total + 
         ", precio: " + precio + 
         '}';

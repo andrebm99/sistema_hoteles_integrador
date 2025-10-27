@@ -1,167 +1,341 @@
+<!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_navbar_admin}">
-
 <head>
-    <meta charset="UTF-8">
-    <title>UTP Integrador - Reservas</title>
+  <meta charset="UTF-8">
+  <title>UTP Integrador - Habitaciones</title>
+  <style>
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
+    @media (max-width: 992px) { .grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width: 576px) { .grid { grid-template-columns:1fr; } }
+    .thumb { width:100%; height:160px; object-fit:cover; border-radius:6px; background:#eee; }
+  </style>
 </head>
-
 <body>
-    <section layout:fragment="content" id="app">
+  <section layout:fragment="content" id="app">
+    <div class="container-fluid">
+      <h3 class="mt-2 mb-3">ADMINISTRACIÓN DE HABITACIONES</h3>
 
-        <div class="container-fluid ">
-            <h3 font-size-1 >ADMINISTRAR RESERVAS DE HABITACIONES</h3>
-            <section class="filtros mb-3">
-
-            </section>
-            <section class="tabla-reservas">
-                <div class="container-fluid pt-3">
-                    <form class="row gx-2 align-items-center p-2"
-                        style="background: #f6f9fb; border-radius: 12px; align-items: center; display: flex; justify-content: center;">
-                        <div class="col-auto">
-                            <label class="form-label fw-semibold mb-1" for="codigo">Código</label>
-                            <input type="text" class="form-control" id="codigo" style="max-width: 150px;"
-                                v-model="filtros.codigo" placeholder="Código reserva">
-                        </div>
-
-                        <div class="col-auto d-flex align-items-end gap-1">
-                            <label for="agregar"></label>
-                            <button type="button" class="btn btn-outline-dark fw-semibold px-10" @click="nuevo">Agregar
-                                +</button>
-                            <button type="button" class="btn btn-outline-dark fw-semibold px-3"
-                                @click="listar">Buscar</button>
-                        </div>
-                    </form>
-                </div>
-                
-                </div>
-                
-            </section>
+      <section class="filtros mb-3">
+        <div class="container-fluid pt-3">
+          <form class="row gx-2 align-items-center p-2"
+                style="background:#f6f9fb;border-radius:12px;align-items:center;display:flex;justify-content:center;"
+                @submit.prevent>
+            <div class="col-auto">
+              <label class="form-label fw-semibold mb-1" for="numerohabitacion">N° de Habitación</label>
+              <input type="text" class="form-control" id="numerohabitacion" style="max-width:150px;"
+                     v-model="filtros.numerohabitacion" placeholder="Ej. 201">
+            </div>
+            <div class="col-auto d-flex align-items-end gap-2">
+              <button type="button" class="btn btn-outline-dark fw-semibold px-3" @click="listar">Buscar</button>
+              <button type="button" class="btn btn-outline-dark fw-semibold px-3" @click="nuevo">Nuevo +</button>
+            </div>
+          </form>
         </div>
-    </section>
+      </section>
 
-    <script layout:fragment="script">
-        new Vue({
-            el: "#app",
-            data: {
-                filtros: {
-                    codigo: '',
-                    dni
-                },
-                entidad: {
-                    nombresapellidos: '',
-                    dni: '',
-                    habitacion: '',
-                    ocupantes: '',
-                    fechaInicio: '',
-                    fecha_salida: '',
-                    metodo_pago: ''
-                },
-                entidades: []
-            },
-            methods: {
+      <section class="tabla-reservas">
+        <div v-if="entidades.length === 0" class="text-center text-muted">No hay habitaciones registradas</div>
 
-                showModal: function (id) {
-                    const el = document.getElementById(id);
-                    if (!el) return;
+        <div v-else class="grid">
+          <div class="card" v-for="h in entidades" :key="h.id_habitacion"
+               style="padding:12px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.08);background:#fff;">
+            <img class="thumb"
+                 :src="imageSrc(h)"
+                 @error="onImgError($event)"
+                 :alt="'Foto habitación ' + (h.numerohabitacion || '')">
 
-                    const modal = bootstrap.Modal.getOrCreateInstance(el);
-                    modal.show();
-                },
-                hideModal: function (id) {
-                    const el = document.getElementById(el);
-                    if (!el) return;
-                    const modal = bootstrap.Modal.getOrCreateInstance(el);
-                    modal.hide();
-                },
-                listar: function () {
-                    const codigo = this.filtros.codigo && this.filtros.codigo.trim() !== "" ?
-                        this.filtros.codigo.trim() : null;
-                    if (codigo) {
-                        this.$http.get('/api/reserva/codigo/' + encodeURIComponent(codigo))
-                            .then(response => {
-                                const data = (
-                                    response && response.data !== undefined)
-                                    ? response.data : (response && response.body !== undefined
-                                        ? response.body : null);
-                                this.entidades = data ? [data] : [];
-                            })
-                            .catch(error => {
-                                this.entidades = [];
-                                alert('No encontrado o error al buscar por código', error);
-                            });
-                        return;
-                    }
+            <div class="title" style="font-weight:700;margin-top:8px;">
+              N°{{ h.numerohabitacion }} - {{ h.nombre_comercial || '' }}
+            </div>
 
-                    this.$http.get('/api/reserva')
-                        .then(response => {
-                            const data = (
-                                response && response.data !== undefined)
-                                ? response.data : (response && response.body !== undefined
-                                    ? response.body : []);
-                            this.entidades = Array.isArray(data) ? data : [];
-                        })
-                        .catch(error => {
-                            console.error('Error al listar reservas', error);
-                            this.entidades = [];
-                        });
+            <div class="meta" style="color:#666;font-size:.9rem;">
+              {{ h.descripcion || '' }}
+            </div>
 
-                },
+            <div style="margin-top:6px;">
+              <span
+                :class="['status', (h.estado_operativo || '').toLowerCase() === 'ocupada' ? 'ocupada' : 'disponible']"
+                :style="(h.estado_operativo || '').toLowerCase() === 'ocupada'
+                        ? 'background:#e23b3b;color:#fff;padding:6px 10px;border-radius:6px;display:inline-block;font-weight:600;'
+                        : 'background:#57d26a;color:#fff;padding:6px 10px;border-radius:6px;display:inline-block;font-weight:600;'">
+                {{ h.estado_operativo || 'Disponible' }}
+              </span>
+            </div>
 
-                nuevo: function () {
-                    this.entidad = {
-                        id_reserva: 0,
-                        nombresapellidos: "",
-                        dni: 0,
-                        habitacion: "",
-                        ocupantes: "",
-                        fechaInicio: "",
-                        fecha_salida: "",
-                        metodo_pago: ""
+            <div class="card-footer"
+                 style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <small class="text-muted">Vista: {{ h.vista || '-' }} · Medidas: {{ h.medidas || '-' }}</small>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary" @click="editar(h)">Editar</button>
+                <button class="btn btn-sm btn-danger" @click="confirmEliminar(h)">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                    };
-                    $("#mdlEntidad").modal("show");
-                },
-                editar: function (id_reserva) {
-                    this.$http.get('/api/reserva/' + id_reserva).then(response => {
-                        this.entidad = response.data;
-                        $("#mdlEntidad").modal("show");
-                    });
-                },
-                guardar: function () {
-                    const dni = String(this.entidad.dni);
+      <!-- Modal Crear / Editar -->
+      <div class="modal fade" id="mdlHabitacion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ entidad.id_habitacion ? 'Editar Habitación' : 'Nueva Habitación' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
 
-                    if (!dni || dni.length !== 8) {
-                        alert("Esta ingresando menos/más caracteres que lo permitido.");
-                        return;
-                    }
+            <div class="modal-body">
+              <form id="formHabitacion" @submit.prevent>
+                <div class="row g-2">
+                  <div class="col-md-3">
+                    <label class="form-label">N° Habitación</label>
+                    <input type="text" class="form-control" v-model="entidad.numerohabitacion" placeholder="201" required>
+                  </div>
 
-                    this.$http.post('/api/reserva', this.entidad).then(response => {
-                        this.listar();
-                        $("#mdlEntidad").modal("hide");
-                    });
-                },
-                actualizar: function () {
-                    this.$http.put('/api/reserva/' + this.entidad.id_reserva, this.entidad).then(response => {
-                        this.listar();
-                        $("#mdlEntidad").modal("hide");
-                    });
-                },
-                eliminar: function (id_reserva) {
-                    this.entidad.id_reserva = id_reserva;
-                    $("#mdlEliminar").modal("show");
-                },
-                confirmareliminacion: function () {
-                    this.$http.delete('/api/reserva/' + this.entidad.id_reserva).then(response => {
-                        this.listar();
-                        $("#mdlEliminar").modal("hide");
-                    });
+                  <div class="col-md-5">
+                    <label class="form-label">Nombre comercial</label>
+                    <input type="text" class="form-control" v-model="entidad.nombre_comercial">
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label">Estado operativo</label>
+                    <select class="form-select" v-model="entidad.estado_operativo">
+                      <option value="">-- Seleccione --</option>
+                      <option value="Disponible">Disponible</option>
+                      <option value="Ocupada">Ocupada</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Descripción</label>
+                    <input type="text" class="form-control" v-model="entidad.descripcion">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Medidas</label>
+                    <input type="text" class="form-control" v-model="entidad.medidas">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Vista</label>
+                    <input type="text" class="form-control" v-model="entidad.vista">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Capacidad total</label>
+                    <input type="text" class="form-control" v-model="entidad.capacidad_total">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Precio</label>
+                    <input type="number" class="form-control" v-model.number="entidad.precio" step="0.01">
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Foto (opcional)</label>
+                    <input type="file" id="fileFoto" class="form-control" accept="image/*">
+                    <div class="form-text">Si subes una foto al crear/editar, se almacenará en la base de datos.</div>
+
+                    <div v-if="previewUrl" style="margin-top:8px;">
+                      <img :src="previewUrl" style="max-width:200px;max-height:150px;object-fit:cover;border-radius:6px;">
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelarModal">Cancelar</button>
+              <button v-if="!entidad.id_habitacion" type="button" class="btn btn-primary" @click="guardar">Crear</button>
+              <div v-else class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-primary" @click="actualizar">Guardar cambios</button>
+                <button type="button" class="btn btn-primary" @click="actualizarFoto">Subir/Actualizar foto</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Confirmar eliminar -->
+      <div class="modal fade" id="mdlEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmar Eliminación</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">¿Desea eliminar esta habitación con N° {{ entidad.numerohabitacion }}?</div>
+            <div class="modal-footer">
+              <button class="btn btn-danger" @click="confirmarEliminar">Eliminar</button>
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center text-muted mt-4">Hotel Aurum</div>
+    </div>
+  </section>
+
+  <!-- SCRIPT: sólo el fragment script (las librerías deben venir desde el layout) -->
+  <script layout:fragment="script">
+    // Usamos axios (debe estar cargado por el layout). Registramos axios como this.$http
+    if (window.axios && window.Vue) {
+      Vue.prototype.$http = axios;
+    }
+
+    // Iniciamos cuando DOM esté listo (aunque Thymeleaf suele inyectar este fragment al final del body)
+    document.addEventListener('DOMContentLoaded', function () {
+      new Vue({
+        el: "#app",
+        data: {
+          filtros: { numerohabitacion: '' },
+          entidad: {
+            id_habitacion: null,
+            numerohabitacion: '',
+            nombre_comercial: '',
+            descripcion: '',
+            medidas: '',
+            vista: '',
+            estado_operativo: '',
+            capacidad_total: '',
+            precio: null
+          },
+          entidades: [],
+          previewUrl: null,
+          fallbackImg: '/images/placeholder-room.png'
+        },
+        methods: {
+          apiBase() { return '/api'; },
+
+          getModalInstance(id) {
+            const el = document.getElementById(id);
+            if (!el) return null;
+            try { return bootstrap.Modal.getOrCreateInstance(el); } catch (e) { console.error(e); return null; }
+          },
+
+          listar() {
+            (this.$http || axios).get(this.apiBase() + '/habitaciones')
+              .then(response => {
+                const data = response && response.data !== undefined ? response.data : (response && response.body !== undefined ? response.body : []);
+                this.entidades = Array.isArray(data) ? data : [];
+                if (this.filtros.numerohabitacion && String(this.filtros.numerohabitacion).trim() !== '') {
+                  const filtro = String(this.filtros.numerohabitacion).trim();
+                  this.entidades = this.entidades.filter(h => String(h.numerohabitacion) === filtro);
                 }
-            },
-            mounted: function () {
-                this.listar();
-            }
-        });
-    </script>
-</body>
+              })
+              .catch(err => { console.error('Error al listar habitaciones', err); this.entidades = []; });
+          },
 
+          imageSrc(h) {
+            if (!h || !h.id_habitacion) return this.fallbackImg;
+            return this.apiBase() + '/habitaciones/' + h.id_habitacion + '/foto';
+          },
+
+          onImgError(e) {
+            e.target.onerror = null;
+            e.target.src = this.fallbackImg;
+          },
+
+          nuevo() {
+            this.entidad = { id_habitacion: null, numerohabitacion: '', nombre_comercial: '', descripcion: '', medidas: '', vista: '', estado_operativo: '', capacidad_total: '', precio: null };
+            this.previewUrl = null;
+            const modal = this.getModalInstance('mdlHabitacion');
+            if (modal) modal.show();
+          },
+
+          editar(h) {
+            this.entidad = Object.assign({}, h);
+            this.previewUrl = this.imageSrc(h) + '?t=' + Date.now();
+            const modal = this.getModalInstance('mdlHabitacion');
+            if (modal) modal.show();
+          },
+
+          cancelarModal() {
+            this.previewUrl = null;
+            const modal = this.getModalInstance('mdlHabitacion');
+            if (modal) modal.hide();
+            const fileInput = document.getElementById('fileFoto'); if (fileInput) fileInput.value = '';
+          },
+
+          guardar() {
+            const numStr = String(this.entidad.numerohabitacion || '').trim();
+            if (!/^\d+$/.test(numStr)) { alert('El número debe ser numérico'); return; }
+            if (parseInt(numStr, 10) < 201) { alert('No se permiten números menores a 201'); return; }
+
+            const payload = {
+              numerohabitacion: numStr,
+              nombre_comercial: this.entidad.nombre_comercial,
+              descripcion: this.entidad.descripcion,
+              medidas: this.entidad.medidas,
+              vista: this.entidad.vista,
+              estado_operativo: this.entidad.estado_operativo,
+              capacidad_total: this.entidad.capacidad_total,
+              precio: this.entidad.precio
+            };
+
+            const fd = new FormData();
+            fd.append('data', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+            const fileInput = document.getElementById('fileFoto');
+            if (fileInput && fileInput.files.length > 0) fd.append('file', fileInput.files[0]);
+
+            (this.$http || axios).post(this.apiBase() + '/habitaciones', fd)
+              .then(() => { this.listar(); this.cancelarModal(); })
+              .catch(err => { console.error('Error creando habitación', err); alert('Error al crear habitación'); });
+          },
+
+          actualizar() {
+            if (!this.entidad.id_habitacion) return;
+            const payload = {
+              numerohabitacion: this.entidad.numerohabitacion,
+              nombre_comercial: this.entidad.nombre_comercial,
+              descripcion: this.entidad.descripcion,
+              medidas: this.entidad.medidas,
+              vista: this.entidad.vista,
+              estado_operativo: this.entidad.estado_operativo,
+              capacidad_total: this.entidad.capacidad_total,
+              precio: this.entidad.precio
+            };
+            (this.$http || axios).put(this.apiBase() + '/habitaciones/' + this.entidad.id_habitacion, payload)
+              .then(() => { this.listar(); this.cancelarModal(); })
+              .catch(err => { console.error('Error actualizando', err); alert('Error al actualizar'); });
+          },
+
+          actualizarFoto() {
+            if (!this.entidad.id_habitacion) return;
+            const fileInput = document.getElementById('fileFoto');
+            if (!fileInput || fileInput.files.length === 0) { alert('Seleccione archivo'); return; }
+            const fd = new FormData(); fd.append('file', fileInput.files[0]);
+            (this.$http || axios).put(this.apiBase() + '/habitaciones/' + this.entidad.id_habitacion + '/foto', fd)
+              .then(() => { this.listar(); this.previewUrl = this.imageSrc(this.entidad) + '?t=' + Date.now(); if (fileInput) fileInput.value = ''; alert('Foto actualizada'); })
+              .catch(err => { console.error('Error subiendo foto', err); alert('Error al subir foto'); });
+          },
+
+          confirmEliminar(h) {
+            this.entidad = Object.assign({}, h);
+            const modal = this.getModalInstance('mdlEliminar');
+            if (modal) modal.show();
+          },
+
+          confirmarEliminar() {
+            if (!this.entidad.id_habitacion) return;
+            (this.$http || axios).delete(this.apiBase() + '/habitaciones/' + this.entidad.id_habitacion)
+              .then(() => { this.listar(); const modal = this.getModalInstance('mdlEliminar'); if (modal) modal.hide(); })
+              .catch(err => { console.error('Error eliminando', err); alert('No se pudo eliminar'); });
+          }
+        },
+
+        mounted() {
+          const fileInput = document.getElementById('fileFoto');
+          if (fileInput) {
+            fileInput.addEventListener('change', (ev) => {
+              const file = ev.target.files && ev.target.files[0];
+              this.previewUrl = file ? URL.createObjectURL(file) : null;
+            });
+          }
+          this.listar();
+        }
+      });
+    });
+  </script>
+</body>
 </html>
