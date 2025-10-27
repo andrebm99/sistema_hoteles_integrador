@@ -77,7 +77,7 @@ public class Alumno implements Serializable{
 
     @Override
     public String toString(){
-        return "Alumno{" + "id= " + id + ", nombres = " + nombres + ", apellidos= " + apellidos + '}'; 
+        return "Alumno {" + "id= " + id + ", nombres = " + nombres + ", apellidos= " + apellidos + '}'; 
     }
     
 }

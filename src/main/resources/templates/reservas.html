@@ -2,6 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/static/favicon.ico">
     <title>UTP Integrador - Reservas</title>
 </head>
 
@@ -9,7 +10,7 @@
     <section layout:fragment="content" id="app">
 
         <div class="container-fluid ">
-            <h3 font-size-1 >ADMINISTRAR RESERVAS DE HABITACIONES</h3>
+            <h3 font-size-1>ADMINISTRAR RESERVAS DE HABITACIONES</h3>
             <section class="filtros mb-3">
             </section>
             <section class="tabla-reservas">
@@ -18,16 +19,44 @@
                         style="background: #f6f9fb; border-radius: 12px; align-items: center; display: flex; justify-content: center;">
                         <div class="col-auto">
                             <label class="form-label fw-semibold mb-1" for="codigo">Código</label>
-                            <input type="text" class="form-control" id="codigo" style="max-width: 150px;"
+                            <input type="text" class="form-control" id="codigo" style="max-width: 300px;"
                                 v-model="filtros.codigo" placeholder="Código reserva">
                         </div>
 
+                        <div class="col-auto">
+                            <label class="form-label fw-semibold mb-1" for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" style="max-width: 300px;"
+                                v-model="filtros.nombresapellidos" placeholder="Nombre del huesped">
+                        </div>
+
+                        <div class="col-auto">
+                            <label class="form-label fw-semibold mb-1" for="dni">DNI</label>
+                            <input type="text" class="form-control" id="dni" style="max-width: 300px;"
+                                v-model="filtros.dni" placeholder="DNI del huesped">
+                        </div>
+
+                        <div class="col-auto">
+                            <label class="form-label fw-semibold mb-1" for="habitacion">Habitaciones</label>
+                                <select name="habitacion" id="habitacion" class="form-select mb-1 col-sm-10"
+                                    v-model="entidad.habitacion" required>
+                                    <option value="">--Elija una habitación--</option>
+                                    <option value="Matrimonial">Matrimonial</option>
+                                    <option value="Estandar">Suite Estandar</option>
+                                    <option value="Doble">Doble</option>
+                                    <option value="Doble Accesible">Doble Accesible</option>
+                                    <option value="Familiar">Familiar</option>
+                                </select>
+                        </div>
+
                         <div class="col-auto d-flex align-items-end gap-1">
-                            <label for="agregar"></label>
-                            <button type="button" class="btn btn-outline-dark fw-semibold px-10" @click="nuevo">Agregar
-                                +</button>
+
                             <button type="button" class="btn btn-outline-dark fw-semibold px-3"
                                 @click="listar">Buscar</button>
+                            <button type="button" class="btn btn-outline-dark fw-semibold px-3"
+                                @click="limpiar">Limpiar filtro</button>
+                            <button type="button" class="btn btn-outline-dark fw-semibold px-10" @click="nuevo">Agregar
+                                +</button>
+
                         </div>
                     </form>
                 </div>
@@ -43,7 +72,7 @@
                             <th>Fecha de Inicio</th>
                             <th>Fecha de Salida</th>
                             <th>Metodo de pago</th>
-                            <th>Acciones</th>
+                            <th>Botones de Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,9 +131,12 @@
                                     <div class="col-sm-10">
                                         <select name="habitacion" id="habitacion" class="form-select mb-3 col-sm-10"
                                             v-model="entidad.habitacion" required>
-                                            <option value="">Elige una habitación..</option>
+                                            <option value="">--Elija una habitación--</option>
                                             <option value="Matrimonial">Matrimonial</option>
-                                            <option value="Personal">Personal</option>
+                                            <option value="Estandar">Suite Estandar</option>
+                                            <option value="Doble">Doble</option>
+                                            <option value="Doble Accesible">Doble Accesible</option>
+                                            <option value="Familiar">Familiar</option>
                                         </select>
                                     </div>
                                     </p>
@@ -120,6 +152,12 @@
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
                                         </select>
                                     </div>
                                     </p>
@@ -145,7 +183,8 @@
                                         <select name="metodo_pago" id="metodo_pago" class="form-select mb-3 col-sm-10"
                                             required v-model="entidad.metodo_pago">
                                             <option value="">Selecciona su método de pago..</option>
-                                            <option value="Tarjeta">Tarjeta de Crédito | Débito</option>
+                                            <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                                            <option value="Tarjeta de Débito">Tarjeta de Débito</option>
                                             <option value="Efectivo">Efectivo</option>
                                         </select>
                                     </div>
@@ -155,7 +194,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" v-if="entidad.id_reserva==0"
-                                    @click="guardar">Registrar</button>
+                                    @click="guardar">Reservar</button>
                                 <button type="button" class="btn btn-primary" v-if="entidad.id_reserva!=0"
                                     @click="actualizar">Actualizar</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -193,7 +232,9 @@
             data: {
                 filtros: {
                     codigo: '',
-                    dni
+                    nombresapellidos: '',
+                    dni: ''
+
                 },
                 entidad: {
                     nombresapellidos: '',
@@ -259,7 +300,7 @@
                     this.entidad = {
                         id_reserva: 0,
                         nombresapellidos: "",
-                        dni: 0,
+                        dni: null,
                         habitacion: "",
                         ocupantes: "",
                         fechaInicio: "",
@@ -303,7 +344,17 @@
                         this.listar();
                         $("#mdlEliminar").modal("hide");
                     });
+                },
+
+                estadoInicial() {
+                    return {
+                        codigo: ''
+                    };
+                },
+                limpiar() {
+                    this.filtros = this.estadoInicial();
                 }
+
             },
             mounted: function () {
                 this.listar();

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>UTP Integrador - Habitaciones</title>
+  <link rel="icon" href="/static/favicon">
   <style>
     .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
     @media (max-width: 992px) { .grid { grid-template-columns:repeat(2,1fr); } }
@@ -38,7 +39,7 @@
 
         <div v-else class="grid">
           <div class="card" v-for="h in entidades" :key="h.id_habitacion"
-               style="padding:12px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.08);background:#fff;">
+               style="padding:12px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.1);background:#fff;">
             <img class="thumb"
                  :src="imageSrc(h)"
                  @error="onImgError($event)"
@@ -63,7 +64,12 @@
             </div>
 
             <div class="card-footer"
-                 style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+                 style="
+                  margin-top:8px;
+                  display:flex;
+                  justify-content:space-between;
+                  align-items:center;
+                  ">
               <div>
                 <small class="text-muted">Vista: {{ h.vista || '-' }} · Medidas: {{ h.medidas || '-' }}</small>
               </div>
@@ -76,7 +82,6 @@
         </div>
       </section>
 
-      <!-- Modal Crear / Editar -->
       <div class="modal fade" id="mdlHabitacion" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -90,12 +95,19 @@
                 <div class="row g-2">
                   <div class="col-md-3">
                     <label class="form-label">N° Habitación</label>
-                    <input type="text" class="form-control" v-model="entidad.numerohabitacion" placeholder="201" required>
+                    <input type="text" class="form-control" v-model="entidad.numerohabitacion" placeholder="Mayor que 201" required>
                   </div>
 
                   <div class="col-md-5">
                     <label class="form-label">Nombre comercial</label>
-                    <input type="text" class="form-control" v-model="entidad.nombre_comercial">
+                    <select  class="form-select" v-model="entidad.nombre_comercial">
+                      <option value="">-- Elija un nombre --</option>
+                      <option value="Matrimonial">Matrimonial</option>
+                      <option value="Estandar">Suite Estandar</option>
+                      <option value="Doble">Doble</option>
+                      <option value="Doble Accesible">Doble Accesible</option>
+                      <option value="Familiar">Familiar</option>
+                    </select>
                   </div>
 
                   <div class="col-md-4">
@@ -104,36 +116,37 @@
                       <option value="">-- Seleccione --</option>
                       <option value="Disponible">Disponible</option>
                       <option value="Ocupada">Ocupada</option>
+                      <!-- <option value="Mantenimiento">Mantenimiento</option> -->
                     </select>
                   </div>
 
                   <div class="col-12">
                     <label class="form-label">Descripción</label>
-                    <input type="text" class="form-control" v-model="entidad.descripcion">
+                    <input type="text" class="form-control" v-model="entidad.descripcion" placeholder="Añade una descripción (Opcional)">
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label">Medidas</label>
-                    <input type="text" class="form-control" v-model="entidad.medidas">
+                    <input type="text" class="form-control" v-model="entidad.medidas" placeholder="Ejm: 10m2">
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Vista</label>
-                    <input type="text" class="form-control" v-model="entidad.vista">
+                    <input type="text" class="form-control" v-model="entidad.vista" placeholder="Ejm: Vista al sunset">
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label">Capacidad total</label>
-                    <input type="text" class="form-control" v-model="entidad.capacidad_total">
+                    <input type="text" class="form-control" v-model="entidad.capacidad_total" placeholder="Ejm: 2 personas">
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Precio</label>
-                    <input type="number" class="form-control" v-model.number="entidad.precio" step="0.01">
+                    <input type="number" class="form-control" v-model.number="entidad.precio" step="0.01" placeholder="Ejm: S/ 120">
                   </div>
 
                   <div class="col-12">
-                    <label class="form-label">Foto (opcional)</label>
+                    <label class="form-label">Foto de previsualización (opcional)</label>
                     <input type="file" id="fileFoto" class="form-control" accept="image/*">
-                    <div class="form-text">Si subes una foto al crear/editar, se almacenará en la base de datos.</div>
+                    <div class="form-text">PRECAUCIÓN: La foto será almacenada en la base de datos.</div>
 
                     <div v-if="previewUrl" style="margin-top:8px;">
                       <img :src="previewUrl" style="max-width:200px;max-height:150px;object-fit:cover;border-radius:6px;">
@@ -155,7 +168,6 @@
         </div>
       </div>
 
-      <!-- Modal Confirmar eliminar -->
       <div class="modal fade" id="mdlEliminar" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -172,18 +184,14 @@
         </div>
       </div>
 
-      <div class="text-center text-muted mt-4">Hotel Aurum</div>
     </div>
   </section>
 
-  <!-- SCRIPT: sólo el fragment script (las librerías deben venir desde el layout) -->
   <script layout:fragment="script">
-    // Usamos axios (debe estar cargado por el layout). Registramos axios como this.$http
     if (window.axios && window.Vue) {
       Vue.prototype.$http = axios;
     }
 
-    // Iniciamos cuando DOM esté listo (aunque Thymeleaf suele inyectar este fragment al final del body)
     document.addEventListener('DOMContentLoaded', function () {
       new Vue({
         el: "#app",
