@@ -9,7 +9,7 @@ public class ReservasController {
     @Autowired
     @RequestMapping("/reservas")
     public String page() {
-        return "reservas";
+        return "reservas_administrador";
     }
     
 }

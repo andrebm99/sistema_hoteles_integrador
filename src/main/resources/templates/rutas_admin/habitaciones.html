@@ -22,9 +22,8 @@
                 style="background:#f6f9fb;border-radius:12px;align-items:center;display:flex;justify-content:center;"
                 @submit.prevent>
             <div class="col-auto">
-              <label class="form-label fw-semibold mb-1" for="numerohabitacion">N° de Habitación</label>
               <input type="text" class="form-control" id="numerohabitacion" style="max-width:150px;"
-                     v-model="filtros.numerohabitacion" placeholder="Ej. 201">
+                     v-model="filtros.numerohabitacion" placeholder="N° de habitación">
             </div>
             <div class="col-auto d-flex align-items-end gap-2">
               <button type="button" class="btn btn-outline-dark fw-semibold px-3" @click="listar">Buscar</button>
@@ -35,7 +34,7 @@
       </section>
 
       <section class="tabla-reservas">
-        <div v-if="entidades.length === 0" class="text-center text-muted">No hay habitaciones registradas</div>
+        <div v-if="entidades.length === 0" class="text-center text-muted">No se encontraron habitaciones registradas.</div>
 
         <div v-else class="grid">
           <div class="card" v-for="h in entidades" :key="h.id_habitacion"
@@ -71,11 +70,11 @@
                   align-items:center;
                   ">
               <div>
-                <small class="text-muted">Vista: {{ h.vista || '-' }} · Medidas: {{ h.medidas || '-' }}</small>
+                <small class="text-muted">Vista: {{ h.vista || '-' }} | Medidas: {{ h.medidas || '-' }}</small>
               </div>
               <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-secondary" @click="editar(h)">Editar</button>
-                <button class="btn btn-sm btn-danger" @click="confirmEliminar(h)">Eliminar</button>
+                <button class="btn btn-sm btn-outline-secondary" @click="editar(h)"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                <button class="btn btn-sm btn-danger" @click="confirmEliminar(h)"><i class="fa-solid fa-trash"></i> Eliminar</button>
               </div>
             </div>
           </div>

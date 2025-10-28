@@ -13,7 +13,7 @@ public class Habitacion implements Serializable{
     private Long id_habitacion;
 
     @Column(name = "numerohabitacion", unique = true, nullable = false)
-    private String numerohabitacion; 
+    private Integer numerohabitacion; 
 
     @Column(name = "nombre_comercial")
     private String nombre_comercial;
@@ -50,7 +50,7 @@ public class Habitacion implements Serializable{
     public Habitacion() {
     }
 
-    public Habitacion(Long id_habitacion, String numerohabitacion, String nombre_comercial, String descripcion,
+    public Habitacion(Long id_habitacion, Integer numerohabitacion, String nombre_comercial, String descripcion,
             String medidas, String vista, String estado_operativo, byte[] foto_portada,
             String foto_portada_content_type, String foto_portada_filename, String capacidad_total, Double precio) {
         this.id_habitacion = id_habitacion;
@@ -75,11 +75,11 @@ public class Habitacion implements Serializable{
         this.id_habitacion = id_habitacion;
     }
 
-    public String getNumerohabitacion() {
+    public Integer getNumerohabitacion() {
         return numerohabitacion;
     }
 
-    public void setNumerohabitacion(String numerohabitacion) {
+    public void setNumerohabitacion(Integer numerohabitacion) {
         this.numerohabitacion = numerohabitacion;
     }
 

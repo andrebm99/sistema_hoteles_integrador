@@ -45,11 +45,6 @@ public class Usuario_Administracion implements Serializable{
         this.fecha_creado = fecha_creado;
         this.fecha_actualizacion = fecha_actualizacion;
     }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
     public Long getId() {
         return id;
     }
