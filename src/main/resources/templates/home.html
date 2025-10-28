@@ -1,25 +1,98 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layout}">
-    <head>
-        <title>UTP Integrador</title>
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <h1>Bienvenidos a la pagina de inicio</h1>
-            <ul>
-                <li>
-                    <a href="/profesores">Gestion de Profesores</a>
-                </li>
-                <li>
-                    <a href="/personas">Gestion de Personas</a>
-                </li>
-                <li>
-                    <a href="/alumnos">Gestion de Alumnos</a>
-                </li>
-                <li>
-                    <a href="/correos">Enviar correos</a>
-                </li>
-            </ul>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Aurum</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/oas.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/shared.css}">
+  <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="home.html" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Aurum</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="reservas">administración</a></li>
+          <li><a href="">Conocenos</a></li>
+          <li><a href="">Ofertas</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="cta-btn" th:href="@{login}">Iniciar sesión / Registrarse</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <img src="/img/hero-bg.png" alt="" data-aos="fade-in">
+
+      <div class="container d-flex flex-column align-items-center">
+        <h2 data-aos="fade-up" data-aos-delay="100">Un lugar para relajarte, un espacio para recordar</h2>
+        <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+          <a href="reservas_usuario" class="btn-get-started">Hospedate!</a>
         </div>
-    </body>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <h3>Nuestras habitaciones</h3>
+            <img src="/img/about.jpg" class="img-fluid rounded-4 mb-4" alt="">
+            <p>Cada una de nuestras habitaciones ha sido diseñada para brindarte el máximo confort.</p>
+            <p>Contamos con espacios modernos, acogedores y equipados con todo lo que necesitas para una estadía placentera. Ya sea que viajes por trabajo o descanso, encontrarás el lugar ideal para relajarte y disfrutar de una experiencia única.</p>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
+            <div class="content ps-0 ps-lg-5">
+              <h3>Nuestro compromiso</h3>
+              <p>Nos dedicamos a ofrecerte un servicio de calidad, donde la hospitalidad y la atención personalizada son nuestra prioridad.</p>
+              <ul>
+                <li><i class="bi bi-check-circle-fill"></i> <span>Aurum: el brillo del confort en cada detalle..</span></li>
+                <li><i class="bi bi-check-circle-fill"></i> <span>Descubre en Aurum una experiencia dorada de descanso.</span></li>
+                <li><i class="bi bi-check-circle-fill"></i> <span>Más que un hotel, una experiencia inolvidable.</span></li>
+              </ul>
+              <p>Queremos que tu visita no solo sea una estadía, sino un recuerdo especial que te invite a volver. Tu satisfacción y bienestar son el centro de todo lo que hacemos.</p>
+
+              <div class="position-relative mt-4">
+                <img src="/img/about-2.jpg" class="img-fluid rounded-4" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <div th:replace="~{_layout::footer}"></div>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <script src="/js/oas.js"></script>
+  <script th:src="@{/js/home.js}"></script>
+
+</body>
+
 </html>

@@ -1,0 +1,75 @@
+/* Reset general */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Imagen derecha ocupa TODO sin espacio blanco */
+.imagen-derecha {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Formulario centrado */
+.login-form {
+  width: 80%;
+  max-width: 380px;
+  text-align: center;
+}
+
+/* Logo centrado arriba */
+.logo-container {
+  text-align: center;
+}
+
+.logo-container img {
+  width: 95px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Botón principal */
+.btn-custom {
+  background-color: #FFC107 !important;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: #e0a800 !important;
+  color: #000;
+}
+
+/* Título */
+.title-login {
+  color: #FFC107;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Enlaces */
+.link-custom {
+  color: #FFC107;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.link-custom:hover {
+  text-decoration: underline;
+}
+
+.link-hover:hover {
+  color: #FFC107 !important;
+}

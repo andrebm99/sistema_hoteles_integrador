@@ -1,0 +1,388 @@
+/* ===========================
+   GENERAL & BODY
+   =========================== */
+body {
+  margin: 0;
+  background-color: #f9f9f9;
+  color: #222;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ===========================
+   MAIN CONTAINER
+   =========================== */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 80px;
+  gap: 40px;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+/* ===========================
+   FILTERS
+   =========================== */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.filter-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+  color: #222;
+  font-family: 'Poppins', sans-serif;
+}
+
+.filter-btn:hover {
+  border-color: #ffcc00;
+}
+
+/* ===========================
+   ROOMS
+   =========================== */
+.rooms {
+  flex: 1;
+}
+
+.room-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: background-color 0.3s, border 0.3s;
+}
+
+.room-card img {
+  width: 230px;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.room-card img:hover {
+  transform: scale(1.05);
+}
+
+.room-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.room-info p {
+  font-size: 14px;
+  margin: 10px 0;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tag {
+  background: #eef1f8;
+  color: #333;
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 6px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.price-reserve {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price-reserve p {
+  margin: 0;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.reserve-btn {
+  background: #ffcc00;
+  border: none;
+  color: #222;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reserve-btn:hover {
+  background: #f8c933;
+}
+
+/* ===========================
+   PAYMENT BOX
+   =========================== */
+.payment-box {
+  width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+  padding: 25px 20px;
+  height: fit-content;
+  transition: background-color 0.3s, border 0.3s;
+}
+
+.payment-box h3 {
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.payment-box .section {
+  margin-bottom: 20px;
+}
+
+.payment-box small {
+  color: #777;
+  display: block;
+  margin-bottom: 5px;
+  transition: color 0.3s;
+}
+
+.payment-box .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+  transition: border-color 0.3s;
+}
+
+.payment-box .row span {
+  transition: color 0.3s;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: #ffcc00;
+  margin-right: 8px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.total span {
+  transition: color 0.3s;
+}
+
+.continue-btn {
+  margin-top: 25px;
+  width: 100%;
+  background: #ffcc00;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #222;
+}
+
+.continue-btn:hover {
+  background: #f8c933;
+}
+
+/* ===========================
+   MODAL
+   =========================== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal img {
+  max-width: 70%;
+  border-radius: 10px;
+}
+
+.modal.active {
+  display: flex;
+}
+
+/* ===========================
+   DARK MODE
+   =========================== */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Header en oscuro */
+.dark-mode .header {
+  background-color: #1f1f1f;
+  border-bottom-color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.dark-mode .logo span,
+.dark-mode .header-nav .nav-link,
+.dark-mode .header-nav .nav-icon,
+.dark-mode .header .search-form button i {
+  color: #e0e0e0;
+}
+
+.dark-mode .header .search-form input {
+  background: #2c2c2c;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+/* Cards y panel lateral en oscuro */
+.dark-mode .room-card,
+.dark-mode .payment-box {
+  background: #1f1f1f;
+  box-shadow: none;
+  border: 1px solid #333;
+}
+
+.dark-mode .room-info h3,
+.dark-mode .payment-box h3,
+.dark-mode h2 {
+  color: #e0e0e0;
+}
+
+.dark-mode .room-info p,
+.dark-mode .payment-box small {
+  color: #b0b0b0;
+}
+
+.dark-mode .price-reserve p,
+.dark-mode .total span,
+.dark-mode .payment-box .row span {
+  color: #e0e0e0;
+}
+
+/* Etiquetas y filtros en oscuro */
+.dark-mode .tag {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.dark-mode .filter-btn,
+.dark-mode select.filter-btn,
+.dark-mode input.filter-btn[type="date"] {
+  background: #2c2c2c;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+.dark-mode .payment-box .row {
+  border-bottom-color: #333;
+}
+
+/* Botones principales (mantienen amarillo) */
+.dark-mode .reserve-btn,
+.dark-mode .continue-btn {
+  background: #ffcc00;
+  color: #222;
+}
+
+/* Modal en oscuro */
+.dark-mode .modal {
+  background: rgba(0,0,0,0.85);
+}
+
+/* Dropdown en oscuro */
+.dark-mode .dropdown-menu {
+  background-color: #1f1f1f;
+  border-color: #333;
+}
+
+.dark-mode .dropdown-menu .dropdown-item {
+  color: #e0e0e0;
+}
+
+.dark-mode .dropdown-menu .dropdown-item:hover {
+  background-color: #2a2a2a;
+}
+
+.dark-mode .header-nav .profile {
+  background-color: #1f1f1f;
+}
+
+.dark-mode .header-nav .profile .dropdown-header h6 {
+  color: #e0e0e0;
+}
+
+.dark-mode .header-nav .profile .dropdown-header span {
+  color: #b0b0b0;
+}
+
+.dark-mode .header-nav .profile .dropdown-item {
+  color: #e0e0e0;
+}
+
+.dark-mode .header-nav .profile .dropdown-item:hover {
+  background-color: #2c2c2c;
+}
+
+
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 900px) {
+  .main-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .payment-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .footer-aurum .col-lg-5,
+  .footer-aurum .col-lg-2,
+  .footer-aurum .col-lg-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+}
