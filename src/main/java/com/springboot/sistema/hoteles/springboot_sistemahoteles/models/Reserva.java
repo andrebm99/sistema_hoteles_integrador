@@ -25,6 +25,9 @@ public class Reserva implements Serializable {
     @Column(name = "dni", unique = true, nullable = false)
     private Integer dni;
 
+    @Column(name = "edad", nullable = false)
+    private Integer edad;
+
     @Column(name = "habitacion", nullable = false)
     private String habitacion;
 
@@ -43,11 +46,14 @@ public class Reserva implements Serializable {
     public Reserva() {
     }
 
-    public Reserva(Long id_reserva, String codigo, String nombresapellidos, Integer dni, String habitacion,
-            String ocupantes, LocalDateTime fechaInicio, LocalDateTime fecha_salida, String metodo_pago) {
+    public Reserva(Long id_reserva, String codigo, String nombresapellidos, Integer dni, Integer edad,
+            String habitacion, String ocupantes, LocalDateTime fechaInicio, LocalDateTime fecha_salida,
+            String metodo_pago) {
         this.id_reserva = id_reserva;
+        this.codigo = codigo;
         this.nombresapellidos = nombresapellidos;
         this.dni = dni;
+        this.edad = edad;
         this.habitacion = habitacion;
         this.ocupantes = ocupantes;
         this.fechaInicio = fechaInicio;
@@ -92,6 +98,14 @@ public class Reserva implements Serializable {
 
     public void setDni(Integer dni) {
         this.dni = dni;
+    }
+
+    public Integer getEdad() {
+        return edad;
+    }
+
+    public void setEdad(Integer edad) {
+        this.edad = edad;
     }
 
     public String getHabitacion() {

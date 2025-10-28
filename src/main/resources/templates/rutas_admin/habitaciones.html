@@ -94,7 +94,7 @@
                 <div class="row g-2">
                   <div class="col-md-3">
                     <label class="form-label">N° Habitación</label>
-                    <input type="text" class="form-control" v-model="entidad.numerohabitacion" placeholder="Mayor que 201" required>
+                    <input type="text" class="form-control" v-model="entidad.numerohabitacion" placeholder="Añadir desde 201" required>
                   </div>
 
                   <div class="col-md-5">
@@ -135,7 +135,7 @@
 
                   <div class="col-md-6">
                     <label class="form-label">Capacidad total</label>
-                    <input type="text" class="form-control" v-model="entidad.capacidad_total" placeholder="Ejm: 2 personas">
+                    <input type="text" class="form-control" v-model="entidad.capacidad_total" placeholder="Ejm: 2 adultos">
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Precio</label>
@@ -153,7 +153,14 @@
                     <div class="form-text">PRECAUCIÓN: La foto será almacenada en la base de datos.</div>
 
                     <div v-if="previewUrl" style="margin-top:8px;">
-                      <img :src="previewUrl" style="max-width:200px;max-height:150px;object-fit:cover;border-radius:6px;">
+                      <img 
+                        :src="previewUrl" 
+                        style="
+                          max-width:200px;
+                          max-height:150px;
+                          object-fit:cover;
+                          border-radius:6px;
+                        ">
                     </div>
                   </div>
                 </div>

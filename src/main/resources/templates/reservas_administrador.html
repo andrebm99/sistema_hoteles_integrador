@@ -67,6 +67,7 @@
                             <th>Codigo</th>
                             <th>Nombres</th>
                             <th>DNI</th>
+                            <th>Edad</th>
                             <th>Habitación</th>
                             <th>Ocupantes</th>
                             <th>Fecha de Inicio</th>
@@ -81,6 +82,7 @@
                             <td>{{item.codigo}}</td>
                             <td>{{item.nombresapellidos}}</td>
                             <td>{{item.dni}}</td>
+                            <td>{{item.edad}}</td>
                             <td>{{item.habitacion}}</td>
                             <td>{{item.ocupantes}}</td>
                             <td>{{item.fechaInicio}}</td>
@@ -118,13 +120,23 @@
                                             required />
                                     </div>
                                 </div>
+                                
                                 <div class="form-group row mb-3">
-                                    <label for="dni" class="col-sm-2 col-form-label">Ingrese su DNI</label>
+                                    <label for="edad" class="col-sm-2 col-form-label">Ingrese su DNI</label>
                                     <div class="col-sm-10">
                                         <input class="form-control" id="dni" v-model="entidad.dni"
                                             placeholder="Ingrese su DNI" required />
                                     </div>
                                 </div>
+                                
+                                <div class="form-group row mb-3">
+                                    <label for="dni" class="col-sm-2 col-form-label">Ingrese su Edad</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" id="edad" v-model="entidad.edad"
+                                            placeholder="Ingrese su Edad" required />
+                                    </div>
+                                </div>
+
                                 <div class="form-group row mb-3">
                                     <p class="col-sm-2 col-form-label">
                                         Habitacion:
@@ -148,16 +160,15 @@
                                         <select name="ocupantes" id="piso" class="form-select mb-3"
                                             v-model="entidad.ocupantes" required>
                                             <option value="">--ocupantes--</option>
-                                            <option valu="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
+                                            <option valu="1 adulto">1 adulto</option>
+                                            <option value="2 adultos">2 adultos</option>
+                                            <option value="3 adultos">3 adultos</option>
+                                            <option value="4 adultos">4 adultos</option>
+                                            <option value="1 adulto + 1 niño">1 adulto + 1 niño</option>
+                                            <option value="2 adultos + 1 niño">2 adultos + 1 niño</option>
+                                            <option value="3 adultos + 1 niño">3 adultos + 1 niño</option>
+                                            <option value="2 adultos + 3 niños">2 adultos + 3 niños</option>
+                                            <option value="4 adultos + 2 niños">4 adultos + 2 niños</option>
                                         </select>
                                     </div>
                                     </p>
@@ -182,14 +193,19 @@
                                     <div class="col-sm-10">
                                         <select name="metodo_pago" id="metodo_pago" class="form-select mb-3 col-sm-10"
                                             required v-model="entidad.metodo_pago">
-                                            <option value="">Selecciona su método de pago..</option>
-                                            <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                                            <option value="Tarjeta de Débito">Tarjeta de Débito</option>
-                                            <option value="Efectivo">Efectivo</option>
+                                            <option value="">Seleccione su método de pago..</option>
+                                            <option value="Tarjeta">Tarjeta</option>
+                                            <option value="Paypal">Paypal</option>
+                                            <option value="Transferencia">Transferencia</option>
                                         </select>
                                     </div>
                                     </p>
-
+                                </div>
+                                <div class="form-group row mb-3 align-items-center">
+                                    <label for="proceso_pago" class="col-sm-4 col-form-label">Ir al proceso de pago: </label>
+                                    <div class="col-sm-8 justify-content-end">
+                                        <a class="btn btn-primary" th:href="@{/proceso_pago}">Pagar ahora</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -232,13 +248,14 @@
             data: {
                 filtros: {
                     codigo: '',
-                    nombresapellidos: '',
-                    dni: ''
+                    // nombresapellidos: '',
+                    // dni: ''
 
                 },
                 entidad: {
                     nombresapellidos: '',
                     dni: '',
+                    edad: '',
                     habitacion: '',
                     ocupantes: '',
                     fechaInicio: '',
@@ -301,6 +318,7 @@
                         id_reserva: 0,
                         nombresapellidos: "",
                         dni: null,
+                        edad: null,
                         habitacion: "",
                         ocupantes: "",
                         fechaInicio: "",
@@ -321,6 +339,13 @@
 
                     if (!dni || dni.length !== 8) {
                         alert("Esta ingresando menos/más caracteres que lo permitido.");
+                        return;
+                    }
+
+                    const edad = Number(this.entidad.edad);
+
+                    if(!Number.isFinite(edad) || edad < 18){
+                        alert("No se permiten menores de 18 en registros del Hotel Aurum!."); 
                         return;
                     }
 

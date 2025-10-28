@@ -19,6 +19,7 @@ public class ReservaController {
     @Autowired
     ReservaRepository repository;
 
+    // Listar todas las reservas
     @GetMapping("/reserva")
     public ResponseEntity<List<Reserva>> getAll(@RequestParam(required = false) String title) {
         try {
@@ -71,6 +72,7 @@ public class ReservaController {
                     entidad.getCodigo(),
                     entidad.getNombresapellidos(),
                     entidad.getDni(),
+                    entidad.getEdad(),
                     entidad.getHabitacion(),
                     entidad.getOcupantes(),
                     entidad.getFechaInicio(),
@@ -89,6 +91,7 @@ public class ReservaController {
             _entidad.setCodigo(entidad.getCodigo());
             _entidad.setNombresapellidos(entidad.getNombresapellidos());
             _entidad.setDni(entidad.getDni());
+            _entidad.setEdad(entidad.getEdad());
             _entidad.setHabitacion(entidad.getHabitacion());
             _entidad.setOcupantes(entidad.getOcupantes());
             _entidad.setFechaInicio(entidad.getFechaInicio());
