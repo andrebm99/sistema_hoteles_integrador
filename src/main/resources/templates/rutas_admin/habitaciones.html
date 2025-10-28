@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>UTP Integrador - Habitaciones</title>
-  <link rel="icon" href="/static/favicon">
+  <link rel="icon" th:href="@{/favicon.ico}">
   <style>
     .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
     @media (max-width: 992px) { .grid { grid-template-columns:repeat(2,1fr); } }
@@ -144,7 +144,12 @@
 
                   <div class="col-12">
                     <label class="form-label">Foto de previsualización (opcional)</label>
-                    <input type="file" id="fileFoto" class="form-control" accept="image/*">
+                    <input 
+                      type="file" 
+                      id="fileFoto" 
+                      class="form-control" 
+                      accept="image/*"
+                    >
                     <div class="form-text">PRECAUCIÓN: La foto será almacenada en la base de datos.</div>
 
                     <div v-if="previewUrl" style="margin-top:8px;">
