@@ -318,8 +318,12 @@
             if (!fileInput || fileInput.files.length === 0) { alert('Seleccione archivo'); return; }
             const fd = new FormData(); fd.append('file', fileInput.files[0]);
             (this.$http || axios).put(this.apiBase() + '/habitaciones/' + this.entidad.id_habitacion + '/foto', fd)
-              .then(() => { this.listar(); this.previewUrl = this.imageSrc(this.entidad) + '?t=' + Date.now(); if (fileInput) fileInput.value = ''; alert('Foto actualizada'); })
-              .catch(err => { console.error('Error subiendo foto', err); alert('Error al subir foto'); });
+              .then(() => { 
+                this.listar(); 
+                this.previewUrl = this.imageSrc(this.entidad) + '?t=' + Date.now(); if (fileInput) fileInput.value = ''; 
+                alert('Foto actualizada'); 
+              })
+              .catch(error => { console.error('Error subiendo foto', error); alert('Error al subir foto'); });
           },
 
           confirmEliminar(h) {

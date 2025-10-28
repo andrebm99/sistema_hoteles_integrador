@@ -60,7 +60,7 @@
                 entidades: []
             },
             methods: {
-
+                // Mostrar modal
                 showModal: function (id) {
                     const el = document.getElementById(id);
                     if (!el) return;
@@ -68,12 +68,14 @@
                     const modal = bootstrap.Modal.getOrCreateInstance(el);
                     modal.show();
                 },
+                // Ocultar modal
                 hideModal: function (id) {
                     const el = document.getElementById(el);
                     if (!el) return;
                     const modal = bootstrap.Modal.getOrCreateInstance(el);
                     modal.hide();
                 },
+
                 listar: function () {
                     const codigo = this.filtros.codigo && this.filtros.codigo.trim() !== "" ?
                         this.filtros.codigo.trim() : null;
@@ -122,12 +124,14 @@
                     };
                     $("#mdlEntidad").modal("show");
                 },
+
                 editar: function (id_reserva) {
                     this.$http.get('/api/reserva/' + id_reserva).then(response => {
                         this.entidad = response.data;
                         $("#mdlEntidad").modal("show");
                     });
                 },
+
                 guardar: function () {
                     const dni = String(this.entidad.dni);
 
@@ -144,16 +148,21 @@
                 actualizar: function () {
                     this.$http.put('/api/reserva/' + this.entidad.id_reserva, this.entidad).then(response => {
                         this.listar();
+                        // Cerrar modal
                         $("#mdlEntidad").modal("hide");
                     });
                 },
+
                 eliminar: function (id_reserva) {
                     this.entidad.id_reserva = id_reserva;
+                    // Muestra el modal de confirmar eliminación
                     $("#mdlEliminar").modal("show");
                 },
+
                 confirmareliminacion: function () {
                     this.$http.delete('/api/reserva/' + this.entidad.id_reserva).then(response => {
                         this.listar();
+                        // Cierra el modal de eliminación
                         $("#mdlEliminar").modal("hide");
                     });
                 }
