@@ -1,0 +1,164 @@
+/* ====================================================================
+   ARCHIVO CSS COMPARTIDO (ÚNICA FUENTE DE VERDAD)
+   Este archivo contiene los estilos para componentes reutilizables
+   como el header y el footer.
+==================================================================== */
+
+/* ----- Estilos Generales ----- */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* ----- Header ----- */
+.header {
+    background-color: #fff;
+    padding: 15px 0;
+    transition: background-color 0.3s, border-bottom-color 0.3s;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.header-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header-nav .nav-link {
+    color: #000;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.header-nav .nav-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.header-nav .nav-profile {
+  color: #000000;
+  transition: color 0.3s;
+}
+
+.header-nav .nav-profile img {
+  max-height: 36px;
+}
+
+/* ----- Footer ----- */
+.footer-aurum {
+    background: #111;
+    color: #fff;
+    font-size: 14px;
+    padding: 40px 0;
+    margin-top: 50px;
+    transition: background-color 0.3s;
+}
+
+.footer-aurum h3, .footer-aurum h4 {
+    color: #fff;
+    font-weight: bold;
+}
+
+.footer-aurum .footer-info p {
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 0;
+    color: #ffffff;
+}
+
+.footer-aurum .social-links a {
+    font-size: 18px;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    line-height: 1;
+    padding: 8px 0;
+    margin-right: 4px;
+    border-radius: 50%;
+    text-align: center;
+    width: 36px;
+    height: 36px;
+    transition: 0.3s;
+}
+
+.footer-aurum .footer-links {
+    padding-left: 30px;
+}
+
+.footer-aurum .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-aurum .footer-links ul i {
+    padding-right: 2px;
+    color: #ffc107;
+}
+
+.footer-aurum .footer-links ul li {
+    padding: 8px 0;
+}
+
+.footer-aurum .footer-links ul a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-aurum .footer-newsletter form {
+    margin-top: 30px;
+    background: #fff;
+    padding: 6px 10px;
+    position: relative;
+    border-radius: 10px;
+}
+
+.footer-aurum .footer-newsletter form input[type="email"] {
+    border: 0;
+    padding: 4px 8px;
+    width: calc(100% - 120px);
+}
+
+.footer-aurum .footer-newsletter form input[type="submit"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border: 0;
+    background: #ffc107;
+    color: #000;
+    padding: 0 20px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* ----- Dark Mode para Componentes Compartidos ----- */
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+.dark-mode .header {
+    background-color: #1f1f1f;
+    border-bottom-color: #333;
+}
+
+.dark-mode .logo, .dark-mode .header-nav .nav-link {
+    color: #fff;
+}
+
+.dark-mode .footer-aurum {
+    background-color: #1a1a1a;
+}

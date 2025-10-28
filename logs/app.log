@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2025-10-28T11:39:47.000-05:00  INFO 9871 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HomeController.page()
 2025-10-28T11:39:47.017-05:00  INFO 9871 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.PersonasController.page()
 2025-10-28T11:39:47.020-05:00  INFO 9871 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.ProfesoresController.page()
@@ -19,3 +20,16 @@
 2025-10-28T11:41:37.241-05:00  INFO 9871 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-10-28T11:41:37.262-05:00  INFO 9871 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-10-28T11:41:37.299-05:00  INFO 9871 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+=======
+2025-10-28T13:06:31.623-05:00  INFO 56423 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-10-28T13:06:31.858-05:00  INFO 56423 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2025-10-28T13:06:31.897-05:00  INFO 56423 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Started IntegradorspringbootApplication in 25.396 seconds (process running for 26.892)
+2025-10-28T13:06:34.671-05:00  INFO 56423 --- [springboot-sistemahoteles] [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-28T13:06:34.672-05:00  INFO 56423 --- [springboot-sistemahoteles] [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-28T13:06:34.675-05:00  INFO 56423 --- [springboot-sistemahoteles] [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-10-28T13:10:03.336-05:00  INFO 56423 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-28T13:10:03.343-05:00  INFO 56423 --- [springboot-sistemahoteles] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-10-28T13:10:03.365-05:00  INFO 56423 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-28T13:10:03.373-05:00  INFO 56423 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-28T13:10:03.397-05:00  INFO 56423 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+>>>>>>> integracion-frontend

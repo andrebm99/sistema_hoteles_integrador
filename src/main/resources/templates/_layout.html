@@ -1,55 +1,143 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-    <head>
-        <title>UTP Integrador</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    </head>
-    <body>
-        <div id="app" class="container">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/">UTP Integrador</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 
+    Este archivo no es una página visible, sino una colección de fragmentos reutilizables.
+    Cada fragmento se puede importar en otras páginas usando th:replace.
+-->
+
+<body>
+
+    <!-- ===== FRAGMENTO: ENCABEZADO PRINCIPAL ===== -->
+    <!-- Usado en la mayoría de las páginas, como 'proceso_pago.html' -->
+    <header class="header" th:fragment="main-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a th:href="@{/home}" class="logo">Aurum</a>
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/conocenos}">Conócenos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/ofertas}">Ofertas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon" href="#" id="dark-mode-toggle">
+                            <i class="bi bi-moon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown pe-3">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="/img/IconUser.png" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>Jairo Leonel</h6>
+                                <span>Usuario</span>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/profesores">Profesores</a>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" th:href="@{ajustescuenta}">
+                                    <i class="bi bi-person"></i>
+                                    <span>Mi Perfil</span>
+                                </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/personas">Personas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/alumnos">Alumnos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/reservas">Administracion</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
                             </li>
                         </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== FRAGMENTO: ENCABEZADO SIMPLE (FLOTANTE) ===== -->
+    <!-- Usado en páginas especiales como 'reserva_exitosa.html' -->
+    <header class="header fixed-top" th:fragment="simple-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a th:href="@{/home}" class="logo">Aurum</a>
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    <li class="nav-item dropdown pe-3">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="/img/IconUser.png" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>Jairo Leonel</h6>
+                                <span>Usuario</span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" th:href="@{/ajustes}">
+                                    <i class="bi bi-person"></i>
+                                    <span>Mi Perfil</span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== FRAGMENTO: PIE DE PÁGINA ===== -->
+    <footer class="footer-aurum" th:fragment="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 footer-info">
+                    <h3>Aurum</h3>
+                    <p>
+                        Ca. Los Eucaliptos 225<br>
+                        San Isidro, Lima 15076<br><br>
+                        <strong>Telefono:</strong> +51 922 742 687<br>
+                        <strong>Email:</strong> infoAurum@gmail.com<br>
+                    </p>
+                    <div class="social-links mt-3">
+                        <a href="https://x.com/"><i class="bi bi-twitter-x"></i></a>
+                        <a href="https://www.facebook.com/"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
-            </nav>
-            <div layout:fragment="content">
-
-            </div>
-            <div>
-                Pie de página
+                <div class="col-lg-2 col-6 footer-links">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><i class="bi bi-chevron-right"></i> <a href="ajustescuenta">Perfil</a></li>
+                        <li><i class="bi bi-chevron-right"></i> <a href="#">Ofertas</a></li>
+                        <li><i class="bi bi-chevron-right"></i> <a href="#">Conócenos</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-6 footer-links">
+                    <h4>Otros</h4>
+                    <ul>
+                        <li><i class="bi bi-chevron-right"></i> <a href="#">Eventos</a></li>
+                        <li><i class="bi bi-chevron-right"></i> <a href="#">Libro de reclamaciones</a></li>
+                        <li><i class="bi bi-chevron-right"></i> <a href="#">Acuerdos de seguridad y privacidad</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 footer-newsletter">
+                    <h4>Otras noticias</h4>
+                    <p>Suscríbete para recibir las últimas noticias sobre Aurum</p>
+                    <form action="" method="post">
+                        <input type="email" name="email"><input type="submit" value="SUSCRIBETE">
+                    </form>
+                </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.6.1/vue-resource.min.js" integrity="sha512-NuUIe6TWdEivPTcxnihx2e6r2xQFEFPrJfpdZWoBwZF6G51Rphcf5r/1ZU/ytj4lyHwLd/YGMix4a5LqAN15XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script layout:fragment="script">
-
-        </script>
-    </body>
+    </footer>
+</body>
 </html>

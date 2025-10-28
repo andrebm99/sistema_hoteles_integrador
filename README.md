@@ -7,7 +7,10 @@
 - Html - CSS - JavaScript
 - AWS - Base de datos - MySQL
 
-## Instalación
+
+
+## Clonación y despliegue de aplicación
+
 
 Clonación de repositorio
 
@@ -41,4 +44,8 @@ spring.mail.username=jcervanteslivon@gmail.com
 spring.mail.password=iwwgsgntqbvlxmfq
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+
 ```
+Ejecución del programa:
+
+Debemos ejecutar el archivo en la ruta `src/main/java/com/springboot/sistema/hoteles/springboot_sistemahoteles/IntegradorspringbootApplication.java`

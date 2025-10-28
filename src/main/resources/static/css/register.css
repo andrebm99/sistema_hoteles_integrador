@@ -1,0 +1,107 @@
+:root {
+  --brand: #FFC107;
+  --font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font); }
+
+/* Layout general */
+.full-screen-container {
+  height: 100vh;
+  display: flex;
+}
+
+.image-section {
+  flex: 1;
+  overflow: hidden;
+}
+.registration-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Formulario centrado */
+.form-section {
+  flex: 1;
+  background: #fff;
+  padding: 3rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-wrapper {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Subtítulo “Regístrate” visible */
+.subtitle-register {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+.subtitle-register .highlight {
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* Título principal */
+.title-register {
+  text-align: center;
+  font-weight: 800;
+  font-size: 2rem;
+  color: var(--brand);
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.title-register::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  background: var(--brand);
+  border-radius: 8px;
+  margin: 0.6rem auto 0;
+}
+
+/* Inputs */
+.form-control,
+.form-select {
+  font-family: var(--font);
+  font-size: 1rem;
+  padding: 0.75rem;
+}
+
+/* Etiquetas */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+/* Botón “Registrar” (igual al de Iniciar) */
+.btn {
+  font-family: var(--font);
+  font-weight: 700;
+}
+.btn-brand {
+  background: var(--brand);
+  border: none;
+  color: #000;
+  font-weight: 700;
+}
+.btn-brand:hover {
+  background: #e0a800;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 1199px) {
+  .full-screen-container { flex-direction: column; height: auto; }
+  .image-section { display: none; }
+  .form-section { padding: 2rem; }
+}

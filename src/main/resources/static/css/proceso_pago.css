@@ -1,0 +1,207 @@
+/* General Body & Font */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Main Content */
+.main-content {
+    padding: 50px 0;
+}
+
+.main-title {
+    font-weight: 900;
+    font-size: 3rem;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #6c757d;
+    margin-bottom: 40px;
+}
+
+/* Summary Card */
+.summary-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 25px;
+    height: 100%;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.summary-card .card-title, .summary-subtitle, .detail-item strong, .total-section strong {
+    color: #000;
+    transition: color 0.3s;
+}
+
+.summary-card .card-title {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.summary-subtitle {
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.reservation-details .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.detail-item i {
+    font-size: 1.5rem;
+    color: #ffc107;
+    margin-right: 15px;
+}
+
+.detail-item span, .total-section span, .total-section small {
+    color: #6c757d;
+}
+
+.detail-item strong {
+    font-weight: bold;
+}
+
+.total-section {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.total-section strong {
+    font-weight: bold;
+}
+
+/* Payment Methods */
+.payment-methods {
+    margin-bottom: 30px;
+}
+
+.payment-option {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 15px 25px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.payment-option.active {
+    border-color: #000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.payment-option i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #ffc107;
+}
+
+.payment-option strong {
+    font-weight: bold;
+    color: #000;
+    transition: color 0.3s;
+}
+
+.payment-option span {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Payment Form */
+.payment-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+}
+
+.form-title, .form-label {
+    color: #000;
+    transition: color 0.3s;
+}
+
+.form-title {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-confirm-payment {
+    background-color: #ffc107;
+    color: #000;
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* --- Dark Mode --- */
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+.dark-mode .header {
+    background-color: #1f1f1f;
+    border-bottom-color: #333;
+}
+
+.dark-mode .logo, .dark-mode .header-nav .nav-link, .dark-mode .main-title {
+    color: #fff;
+}
+
+.dark-mode .summary-card, .dark-mode .payment-option, .dark-mode .payment-form {
+    background-color: #1f1f1f;
+    border-color: #333;
+}
+
+.dark-mode .summary-card .card-title, .dark-mode .summary-subtitle, .dark-mode .detail-item strong, .dark-mode .total-section strong, .dark-mode .payment-option strong, .dark-mode .form-title, .dark-mode .form-label {
+    color: #fff;
+}
+
+.dark-mode .payment-option.active {
+    border-color: #ffc107;
+}
+
+.dark-mode .form-control, .dark-mode .form-select {
+    background-color: #2c2c2c;
+    color: #fff;
+    border-color: #444;
+}
+
+.dark-mode .footer-aurum {
+    background-color: #1a1a1a;
+}

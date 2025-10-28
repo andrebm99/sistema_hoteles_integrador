@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro</title>
+
+  <!-- Fuente Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/register.css"/>
+</head>
+<body>
+  <div class="full-screen-container">
+    <div class="image-section">
+      <img src="/img/RegistroIzquierda.png" alt="Imagen de registro" class="registration-image"/>
+    </div>
+
+    <div class="form-section d-flex align-items-center justify-content-center">
+      <div class="form-wrapper">
+        <!-- “Regístrate” visible -->
+        <h1 class="title-register mb-4">Registro</h1>
+
+        <form id="registrationForm">
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="form-outline">
+                <label class="form-label" for="firstName">Nombre</label>
+                <input type="text" id="firstName" class="form-control form-control-lg" required />
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="form-outline">
+                <label class="form-label" for="lastName">Apellido</label>
+                <input type="text" id="lastName" class="form-control form-control-lg" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="address">Dirección</label>
+            <input type="text" id="address" class="form-control form-control-lg" required />
+          </div>
+
+          <div class="mb-4 py-2">
+            <h6 class="mb-3">Género:</h6>
+            <div class="form-check form-check-inline mb-0 me-4">
+              <input class="form-check-input" type="radio" name="gender" id="femaleGender" value="female" required />
+              <label class="form-check-label" for="femaleGender">Femenino</label>
+            </div>
+            <div class="form-check form-check-inline mb-0 me-4">
+              <input class="form-check-input" type="radio" name="gender" id="maleGender" value="male" />
+              <label class="form-check-label" for="maleGender">Masculino</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <label class="form-label" for="city">Ciudad</label>
+              <select class="form-select form-select-lg" id="city" required>
+                <option value="">Seleccionar Ciudad</option>
+                <option value="lima">Lima</option>
+                <option value="callao">Callao</option>
+                <option value="chiclayo">Chiclayo</option>
+                <option value="puno">Puno</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label" for="state">Distrito</label>
+              <select class="form-select form-select-lg" id="state" required>
+                <option value="">Seleccionar Distrito</option>
+                <option value="LosOlivos">Los Olivos</option>
+                <option value="Magdalena">Magdalena</option>
+                <option value="SantaAnita">Santa Anita</option>
+                <option value="SanMiguel">San Miguel</option>
+                <option value="Lince">Lince</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="dob">Fecha de Nacimiento</label>
+            <input type="date" id="dob" class="form-control form-control-lg" required />
+          </div>
+
+          <!-- Eliminado código postal -->
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" id="email" class="form-control form-control-lg" placeholder="ejemplo@correo.com" required />
+          </div>
+
+          <div class="d-flex justify-content-end pt-3">
+            <button type="reset" class="btn btn-light btn-lg">Limpiar</button>
+            <button type="submit" class="btn btn-brand btn-lg ms-2">Registrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

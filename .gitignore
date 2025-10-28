@@ -29,6 +29,17 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+
+# Archivos de logs
+logs/
+*.log
+*.gz
+
+# Si tienes Node/frontend:
+/node_modules/
 ### VS Code ###
+.mvn/
 .vscode/
+src/test/
+target/
 src/main/resources/application.properties
