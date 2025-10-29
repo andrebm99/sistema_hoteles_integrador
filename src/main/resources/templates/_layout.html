@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<!-- 
-    Este archivo no es una página visible, sino una colección de fragmentos reutilizables.
-    Cada fragmento se puede importar en otras páginas usando th:replace.
--->
-
 <body>
 
-    <!-- ===== FRAGMENTO: ENCABEZADO PRINCIPAL ===== -->
     <!-- Usado en la mayoría de las páginas, como 'proceso_pago.html' -->
     <header class="header" th:fragment="main-header">
         <div class="container d-flex justify-content-between align-items-center">
@@ -57,7 +51,6 @@
         </div>
     </header>
 
-    <!-- ===== FRAGMENTO: ENCABEZADO SIMPLE (FLOTANTE) ===== -->
     <!-- Usado en páginas especiales como 'reserva_exitosa.html' -->
     <header class="header fixed-top" th:fragment="simple-header">
         <div class="container d-flex justify-content-between align-items-center">

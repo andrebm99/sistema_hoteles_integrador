@@ -10,7 +10,6 @@ body, html {
   overflow: hidden;
 }
 
-/* Imagen derecha ocupa TODO sin espacio blanco */
 .imagen-derecha {
   width: 100%;
   height: 100vh;

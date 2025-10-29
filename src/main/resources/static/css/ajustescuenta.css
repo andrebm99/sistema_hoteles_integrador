@@ -6,7 +6,6 @@ body {
 }
 
 .container-fluid-aurum {
-    padding-top: 80px; /* Adjusted for fixed header */
     padding-left: 40px;
     padding-right: 40px;
     padding-bottom: 40px;

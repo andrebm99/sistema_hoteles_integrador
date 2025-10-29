@@ -1,10 +1,4 @@
-/* ====================================================================
-   ARCHIVO CSS COMPARTIDO (ÚNICA FUENTE DE VERDAD)
-   Este archivo contiene los estilos para componentes reutilizables
-   como el header y el footer.
-==================================================================== */
 
-/* ----- Estilos Generales ----- */
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #f9f9f9;
