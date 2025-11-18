@@ -11,11 +11,13 @@ body { font-family: var(--font); }
 .full-screen-container {
   height: 100vh;
   display: flex;
+  align-items: center;
 }
 
 .image-section {
   flex: 1;
   overflow: hidden;
+  height: 100%;
 }
 .registration-image {
   width: 100%;
@@ -27,27 +29,17 @@ body { font-family: var(--font); }
 .form-section {
   flex: 1;
   background: #fff;
-  padding: 3rem 4rem;
+  padding: 2rem 3rem; 
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
+  height: 100%;
 }
 .form-wrapper {
   width: 100%;
-  max-width: 720px;
+  max-width: 550px; 
   margin: 0 auto;
-}
-
-/* Subtítulo “Regístrate” visible */
-.subtitle-register {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 0.8rem;
-  font-weight: 500;
-}
-.subtitle-register .highlight {
-  color: var(--brand);
-  font-weight: 700;
 }
 
 /* Título principal */
@@ -57,7 +49,6 @@ body { font-family: var(--font); }
   font-size: 2rem;
   color: var(--brand);
   position: relative;
-  margin-bottom: 1.5rem;
 }
 .title-register::after {
   content: "";
@@ -73,20 +64,22 @@ body { font-family: var(--font); }
 .form-control,
 .form-select {
   font-family: var(--font);
-  font-size: 1rem;
-  padding: 0.75rem;
+  font-size: 0.9rem;
+  padding: 0.6rem; 
 }
 
 /* Etiquetas */
 .form-label {
   font-weight: 500;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
 }
 
-/* Botón “Registrar” (igual al de Iniciar) */
+/* Botón “Registrar” */
 .btn {
   font-family: var(--font);
   font-weight: 700;
+  padding: 0.6rem 1.5rem;
 }
 .btn-brand {
   background: var(--brand);
@@ -101,7 +94,7 @@ body { font-family: var(--font); }
 
 /* Responsive */
 @media (max-width: 1199px) {
-  .full-screen-container { flex-direction: column; height: auto; }
+  .full-screen-container { flex-direction: column; height: auto; align-items: stretch; }
   .image-section { display: none; }
   .form-section { padding: 2rem; }
 }

@@ -1,15 +1,13 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@SpringBootApplication
+@Controller
 public class PersonasController {
-    @Autowired
-    @RequestMapping("/personas")
+
+    @GetMapping("/personas")
     public String page() {
-        //model.addAttribute("attribute", "value");
         return "personas";
     }
 }

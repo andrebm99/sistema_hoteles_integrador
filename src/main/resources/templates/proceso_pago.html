@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -26,24 +26,23 @@
                     <div class="reservation-details">
                         <div class="detail-item">
                             <span>Habitación</span>
-                            <strong>Suite Deluxe</strong>
+                            <strong id="pp-room">Suite Deluxe</strong>
                         </div>
                         <div class="detail-item">
                             <i class="bi bi-calendar-event"></i>
-                            <span>15/10/2025 → 20/10/2025</span>
+                            <span id="pp-dates">-</span>
                         </div>
                         <div class="detail-item">
-                            <i class="bi bi-people"></i>
-                            <span>1 adulto | 1 niño</span>
+                            <i class="bi bi-people"></i><span id="pp-guests">-</span>
                         </div>
                         <div class="detail-item">
                             <span>Días</span>
-                            <strong>5</strong>
+                            <strong id="pp-days">0</strong>
                         </div>
                     </div>
                     <div class="total-section">
                         <span>Total a pagar <small>(impuestos incluidos)</small></span>
-                        <strong>S/. 500</strong>
+                        <strong><span id="pp-total">S/. 0</span></strong>
                     </div>
                 </div>
             </div>
@@ -150,3 +149,5 @@
     <script th:src="@{/js/proceso_pago.js}"></script>
 </body>
 </html>
+
+

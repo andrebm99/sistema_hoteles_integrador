@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarButtons = document.querySelectorAll('.btn-sidebar');
     const contentSections = document.querySelectorAll('.content-section');
     const internalLinks = document.querySelectorAll('.internal-link');
-    const updateInfoBtn = document.querySelector('.btn-update-info');
     const configSelects = document.querySelectorAll('.config-box .form-select');
     const darkModeToggle = document.getElementById('dark-mode-toggle');
 
@@ -47,37 +46,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Show the section corresponding to the active button on page load
+    // Muestra la seccion al presionar el boton lateral
     const initialActiveButton = document.querySelector('.btn-sidebar.active');
     if (initialActiveButton) {
         const initialTargetId = initialActiveButton.getAttribute('href');
         showSection(initialTargetId);
     } else if (contentSections.length > 0) {
-        // Fallback to show the first section if no button is active
         contentSections[0].style.display = 'block';
     }
 
-    // Handle form submission for updating user info
-    if (updateInfoBtn) {
-        updateInfoBtn.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent actual form submission
-            // Here you would typically gather the form data and send it to the server
-            alert('Información actualizada correctamente (simulación).');
-            console.log('Datos del formulario listos para ser enviados.');
-        });
-    }
-
-    // Handle changes in configuration dropdowns
+    // Mantiene la configuracion establecida
     configSelects.forEach(select => {
         select.addEventListener('change', function() {
             const setting = this.closest('.config-item').querySelector('span').textContent;
             const value = this.value;
             console.log(`'${setting}' cambiado a: ${this.options[this.selectedIndex].text}`);
-            // Here you would typically send the new setting to the server
         });
     });
 
-    // Dark Mode Toggle
+    // Modo oscuro
     if (darkModeToggle) {
         darkModeToggle.addEventListener('click', function(e) {
             e.preventDefault();

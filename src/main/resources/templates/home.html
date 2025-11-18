@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -13,25 +14,57 @@
   <link rel="stylesheet" th:href="@{/css/shared.css}">
   <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
+
 <body class="index-page">
 
-  <header id="header" class="header d-flex align-items-center fixed-top">
+  <header id="header" class="header d-flex align-items-center fixed-top scrolled">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="home.html" class="logo d-flex align-items-center me-auto">
+      <a href="/" class="logo d-flex align-items-center me-auto">
         <h1 class="sitename">Aurum</h1>
       </a>
 
-      <nav id="navmenu" class="navmenu">
+      <nav id="navmenu" class="navmenu header-nav">
         <ul>
           <li><a href="reservas">administración</a></li>
           <li><a href="">Conocenos</a></li>
           <li><a href="">Ofertas</a></li>
+
+          <li th:if="${session.user}" class="nav-item dropdown pe-3">
+            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+              <img src="/img/IconUser.png" alt="Profile" class="rounded-circle">
+              <span class="dropdown-toggle ps-2"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+              <li class="dropdown-header">
+                <h6 style="color: black;" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
+                <span>Usuario</span>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" th:href="@{/ajustescuenta}">
+                  <i class="bi bi-person"></i>
+                  <span>Mi Perfil</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" th:href="@{/logout}">
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Cerrar Sesión</span>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="cta-btn" th:href="@{login}">Iniciar sesión / Registrarse</a>
+      <a class="cta-btn" th:unless="${session.user}" th:href="@{/login}">Iniciar sesión / Registrarse</a>
 
     </div>
   </header>
@@ -50,9 +83,8 @@
         </div>
       </div>
 
-    </section><!-- /Hero Section -->
+    </section>
 
-    <!-- About Section -->
     <section id="about" class="about section">
 
       <div class="container">
@@ -62,18 +94,25 @@
             <h3>Nuestras habitaciones</h3>
             <img src="/img/about.jpg" class="img-fluid rounded-4 mb-4" alt="">
             <p>Cada una de nuestras habitaciones ha sido diseñada para brindarte el máximo confort.</p>
-            <p>Contamos con espacios modernos, acogedores y equipados con todo lo que necesitas para una estadía placentera. Ya sea que viajes por trabajo o descanso, encontrarás el lugar ideal para relajarte y disfrutar de una experiencia única.</p>
+            <p>Contamos con espacios modernos, acogedores y equipados con todo lo que necesitas para una estadía
+              placentera. Ya sea que viajes por trabajo o descanso, encontrarás el lugar ideal para relajarte y
+              disfrutar de una experiencia única.</p>
           </div>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
             <div class="content ps-0 ps-lg-5">
               <h3>Nuestro compromiso</h3>
-              <p>Nos dedicamos a ofrecerte un servicio de calidad, donde la hospitalidad y la atención personalizada son nuestra prioridad.</p>
+              <p>Nos dedicamos a ofrecerte un servicio de calidad, donde la hospitalidad y la atención personalizada son
+                nuestra prioridad.</p>
               <ul>
-                <li><i class="bi bi-check-circle-fill"></i> <span>Aurum: el brillo del confort en cada detalle..</span></li>
-                <li><i class="bi bi-check-circle-fill"></i> <span>Descubre en Aurum una experiencia dorada de descanso.</span></li>
-                <li><i class="bi bi-check-circle-fill"></i> <span>Más que un hotel, una experiencia inolvidable.</span></li>
+                <li><i class="bi bi-check-circle-fill"></i> <span>Aurum: el brillo del confort en cada detalle..</span>
+                </li>
+                <li><i class="bi bi-check-circle-fill"></i> <span>Descubre en Aurum una experiencia dorada de
+                    descanso.</span></li>
+                <li><i class="bi bi-check-circle-fill"></i> <span>Más que un hotel, una experiencia inolvidable.</span>
+                </li>
               </ul>
-              <p>Queremos que tu visita no solo sea una estadía, sino un recuerdo especial que te invite a volver. Tu satisfacción y bienestar son el centro de todo lo que hacemos.</p>
+              <p>Queremos que tu visita no solo sea una estadía, sino un recuerdo especial que te invite a volver. Tu
+                satisfacción y bienestar son el centro de todo lo que hacemos.</p>
 
               <div class="position-relative mt-4">
                 <img src="/img/about-2.jpg" class="img-fluid rounded-4" alt="">
@@ -84,14 +123,15 @@
 
       </div>
 
-    </section><!-- /About Section -->
+    </section>
 
     <div th:replace="~{_layout::footer}"></div>
 
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
-  <script src="/js/oas.js"></script>
-  <script th:src="@{/js/home.js}"></script>
+    <script src="/js/oas.js"></script>
+    <script th:src="@{/js/home.js}"></script>
 
 </body>
 

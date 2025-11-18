@@ -1,5 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // --- Payment Method Selection --- //
+  //Completar con datos de reservas  //
+  try {
+    const q = new URLSearchParams(window.location.search);
+    const room = q.get('room');
+    const checkin = q.get('checkin');
+    const checkout = q.get('checkout');
+    const guests = q.get('guests');
+    const days = q.get('days');
+    const total = q.get('total');
+    if (room) {
+      const el = document.getElementById('pp-room'); if (el) el.textContent = room;
+    }
+    if (checkin && checkout) {
+      const el = document.getElementById('pp-dates'); if (el) el.textContent = checkin + ' - ' + checkout;
+    }
+    if (guests) {
+      const el = document.getElementById('pp-guests'); if (el) el.textContent = guests;
+    }
+    if (days) {
+      const el = document.getElementById('pp-days'); if (el) el.textContent = days;
+    }
+    if (total) {
+      const el = document.getElementById('pp-total'); if (el) el.textContent = 'S/. ' + total;
+    }
+  } catch(e) {}
+  // seleccionar metodo de pago//
   const paymentOptions = document.querySelectorAll('.payment-option');
   const tarjetaForm = document.getElementById('tarjeta-form');
   const paypalForm = document.getElementById('paypal-form');
@@ -26,18 +51,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // --- Desactivar validación nativa en TODOS los forms --- //
   document.querySelectorAll('form').forEach(f => {
     f.setAttribute('novalidate', 'novalidate');
   });
 
-  // --- Forzar navegación sin validar --- //
   const goTo = (url) => { window.location.href = url; };
   document.querySelectorAll('.btn-confirm-payment').forEach(btn => {
-    btn.addEventListener('click', () => goTo('reserva_exitosa')); // cambia la URL si quieres otra
+    btn.addEventListener('click', () => goTo('reserva_exitosa'));
   });
 
-  // --- Dark Mode Toggle (tu código) --- //
+  // Modo oscuros //
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   const body = document.body;
 

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/_layout_usuarios">
+﻿<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/_layout_usuarios" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Cuenta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -20,7 +20,7 @@
                     <div class="profile-section">
                         <img src="/img/IconUser.png" alt="Usuario" class="profile-pic">
                         <div class="profile-info">
-                            <strong>Jairo</strong>
+                            <strong th:text="${user != null ? (user.nombres + ' ' + (user.apellidos != null ? user.apellidos : '')) : 'Usuario'}">Usuario</strong>
                             <p>Usuario</p>
                         </div>
                         <i class="bi bi-three-dots-vertical"></i>
@@ -31,10 +31,10 @@
                 </div>
             </div>
 
-            <!-- Main Content -->
+            <!-- Contenido -->
             <div class="col-lg-9">
                 <div class="main-content">
-                    <!-- Profile/Account Section -->
+                    <!-- Perfil de usuario -->
                     <div id="cuenta-section" class="content-section">
                          <div class="row">
                             <div class="col-md-4 text-center">
@@ -42,24 +42,58 @@
                                 <img src="/img/IconUser.png" alt="Foto de perfil" class="img-fluid rounded-circle mb-3">
                             </div>
                             <div class="col-md-8">
-                                <form>
+                                <div class="mb-3">
+                                  <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+                                  <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+                                </div>
+                                <form method="POST" th:action="@{/ajustescuenta}" th:object="${user}">
                                     <div class="row">
-                                        <div class="col-md-6 mb-3"><label for="nombre" class="form-label">NOMBRE</label><input type="text" class="form-control" id="nombre" value="JAIRO LEONEL MEDIA FLORES"></div>
-                                        <div class="col-md-6 mb-3"><label for="fecha-nacimiento" class="form-label">FECHA DE NACIMIENTO</label><input type="text" class="form-control" id="fecha-nacimiento" value="20/07/2005"></div>
-                                        <div class="col-md-6 mb-3"><label for="edad" class="form-label">EDAD</label><input type="text" class="form-control" id="edad" value="20"></div>
-                                        <div class="col-md-6 mb-3"><label for="sexo" class="form-label">SEXO</label><input type="text" class="form-control" id="sexo" value="MASCULINO"></div>
-                                        <div class="col-md-6 mb-3"><label for="dni" class="form-label">DNI</label><input type="text" class="form-control" id="dni" value="72341231"></div>
-                                        <div class="col-md-6 mb-3"><label for="pais" class="form-label">PAÍS</label><input type="text" class="form-control" id="pais" value="PERÚ"></div>
-                                        <div class="col-md-6 mb-3"><label for="email" class="form-label">EMAIL</label><input type="email" class="form-control" id="email" value="tripaloski_2311@gmail.com"></div>
-                                        <div class="col-md-6 mb-3"><label for="telefono" class="form-label">TELÉFONO</label><input type="tel" class="form-control" id="telefono" value="+51 987 479 828"></div>
-                                        <div class="col-12 mt-3"><button type="submit" class="btn btn-update-info w-100">Actualizar Información</button></div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="nombres" class="form-label">Nombres</label>
+                                          <input type="text" class="form-control" th:field="*{nombres}" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="apellidos" class="form-label">Apellidos</label>
+                                          <input type="text" class="form-control" th:field="*{apellidos}" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                                          <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" th:value="${user.fechaNacimiento != null ? #temporals.format(user.fechaNacimiento, 'yyyy-MM-dd') : ''}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="genero" class="form-label">Género</label>
+                                          <input type="text" class="form-control" th:field="*{genero}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="dni" class="form-label">DNI</label>
+                                          <input type="text" class="form-control" th:field="*{dni}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="direccion" class="form-label">Dirección</label>
+                                          <input type="text" class="form-control" th:field="*{direccion}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="ciudad" class="form-label">Ciudad</label>
+                                          <input type="text" class="form-control" th:field="*{ciudad}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="distrito" class="form-label">Distrito</label>
+                                          <input type="text" class="form-control" th:field="*{distrito}">
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label for="email" class="form-label">Email</label>
+                                          <input type="email" class="form-control" th:field="*{email}" required>
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                          <button type="submit" class="btn btn-update-info w-100">Actualizar Información</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Payment Methods Section -->
+                    <!-- Ajustar metodo de pago -->
                     <div id="metodos-pago-section" class="content-section" style="display:none;">
                          <div class="row">
                             <div class="col-md-5">
@@ -89,7 +123,7 @@
                          </div>
                     </div>
 
-                    <!-- Configuration and Privacy Section -->
+                    <!-- Configuracion de privacidad -->
                     <div id="configuracion-section" class="content-section" style="display:none;">
                         <h5>CONFIGURACIÓN Y PRIVACIDAD</h5>
                         <div class="config-box">
