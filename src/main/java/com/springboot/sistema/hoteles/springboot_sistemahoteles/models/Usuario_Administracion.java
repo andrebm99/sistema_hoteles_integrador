@@ -20,6 +20,9 @@ public class Usuario_Administracion implements Serializable{
     @Column(name = "email")
     private String email; 
 
+    @Column(name = "password_hash")
+    private String passwordHash;
+
     @Column(name = "rol_id")
     private Long rol_id; 
 
@@ -35,11 +38,12 @@ public class Usuario_Administracion implements Serializable{
     public Usuario_Administracion() {
     }
 
-    public Usuario_Administracion(Long id, String nombres_apellidos, String email, Long rol_id, String estado,
+    public Usuario_Administracion(Long id, String nombres_apellidos, String email, String passwordHash, Long rol_id, String estado,
             LocalDate fecha_creado, LocalDate fecha_actualizacion) {
         this.id = id;
         this.nombres_apellidos = nombres_apellidos;
         this.email = email;
+        this.passwordHash = passwordHash;
         this.rol_id = rol_id;
         this.estado = estado;
         this.fecha_creado = fecha_creado;
@@ -67,6 +71,14 @@ public class Usuario_Administracion implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Long getRol_id() {

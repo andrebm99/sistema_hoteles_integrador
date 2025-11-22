@@ -53,40 +53,55 @@
 
     <!-- header simple -->
     <header class="header fixed-top" th:fragment="simple-header">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a th:href="@{/home}" class="logo">Aurum</a>
-            <nav class="header-nav ms-auto">
-                <ul class="d-flex align-items-center">
-                    <li th:if="${session.user}" class="nav-item dropdown pe-3">
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <img src="/img/IconUser.png" alt="Profile" class="rounded-circle">
-                            <span class="dropdown-toggle ps-2"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                            <li class="dropdown-header">
-                                <h6 style="color: black;" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
-                                <span>Usuario</span>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" th:href="@{/ajustescuenta}">
-                                    <i class="bi bi-person"></i>
-                                    <span>Mi Perfil</span>
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" th:href="@{/logout}">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    <span>Cerrar Sesión</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="/" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Aurum</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu header-nav">
+        <ul>
+          <li><a href="">Conocenos</a></li>
+          <li><a href="">Ofertas</a></li>
+
+          <li th:if="${session.user}" class="nav-item dropdown pe-3">
+            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+              <img src="/img/IconUser.png" alt="Profile" class="rounded-circle">
+              <span class="dropdown-toggle ps-2"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+              <li class="dropdown-header">
+                <h6 style="color: black;" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
+                <span>Usuario</span>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" th:href="@{/ajustescuenta}">
+                  <i class="bi bi-person"></i>
+                  <span>Mi Perfil</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" th:href="@{/logout}">
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Cerrar Sesión</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="cta-btn" th:unless="${session.user}" th:href="@{/login}">Iniciar sesión / Registrarse</a>
+
+    </div>
+  </header>
 
     <!--footer-->
     <footer class="footer-aurum" th:fragment="footer">

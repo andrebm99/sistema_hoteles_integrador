@@ -1,7 +1,9 @@
 ﻿package com.springboot.sistema.hoteles.springboot_sistemahoteles.services;
 
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente;
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.UsuarioAdminRepository;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.UsuarioClienteRepository;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,9 +21,16 @@ public class AuthService {
     @Autowired
     private UsuarioClienteRepository usuarioClienteRepository;
 
+    @Autowired
+    private UsuarioAdminRepository usuarioAdminRepository;
+
     @Transactional(readOnly = true)
-    public Optional<UsuarioCliente> authenticate(String email, String password) {
-        return usuarioClienteRepository.findByEmailAndPasswordHash(email, password);
+    public Optional<? extends Object> authenticate(String email, String password, String userType) {
+        if ("admin".equals(userType)) {
+            return usuarioAdminRepository.findByEmailAndPasswordHash(email, password);
+        } else {
+            return usuarioClienteRepository.findByEmailAndPasswordHash(email, password);
+        }
     }
 
     @Transactional
