@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Reserva;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.ReservaRepository;
 
+
+
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
@@ -50,17 +52,44 @@ public class ReservaController {
         }
     }
 
-    @GetMapping("/reserva/{id_reserva}")
-    public ResponseEntity<Reserva> getById(@PathVariable("id_reserva") Long id_reserva) {
-        try {
-            Optional<Reserva> entidad = repository.findById(id_reserva);
-            if (entidad.isPresent()) {
-                return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/reserva/nombresapellidos/{nombresapellidos}")
+    public ResponseEntity<Reserva> getByName(@PathVariable("nombresapellidos") String nombresapellidos) {
+        try{
+            Optional<Reserva> entidad = repository.findByNombresapellidos(nombresapellidos);
+            if(entidad.isPresent()){
+                return new ResponseEntity<>(entidad.get(), HttpStatus.OK); 
+            } else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
             }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+    }
+
+    @GetMapping("/reserva/dni/{dni}")
+    public ResponseEntity<Reserva> getByDni(@PathVariable("dni") Integer dni) {
+        try{
+            Optional<Reserva> entidad = repository.findByDni(dni);
+            if(entidad.isPresent()){
+                return new ResponseEntity<>(entidad.get(), HttpStatus.OK); 
+            } else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+            }
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+    }
+
+    @GetMapping("/reserva/habitacion/{habitacion}")
+    public ResponseEntity<List<Reserva>> getByHabitacion(@PathVariable("habitacion") String habitacion) {
+        try{
+            List<Reserva> entidad = repository.findByHabitacion(habitacion);
+            if(entidad.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } 
+            return new ResponseEntity<>(entidad, HttpStatus.OK); 
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
         }
     }
 

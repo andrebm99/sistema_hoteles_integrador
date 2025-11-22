@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.services.AuthService;
 
 @Controller
