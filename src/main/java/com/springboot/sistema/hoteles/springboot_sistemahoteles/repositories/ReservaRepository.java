@@ -24,4 +24,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long>{
     );
 
     Optional<Reserva> findByCodigo(String codigo);
+    Optional<Reserva> findByNombresapellidos(String nombresapellidos); 
+    Optional<Reserva> findByDni(Integer dni); 
+    List<Reserva> findByHabitacion(String habitacion);
 }

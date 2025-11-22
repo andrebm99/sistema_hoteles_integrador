@@ -39,6 +39,7 @@ logs/
 /node_modules/
 ### VS Code ###
 .mvn/
+logs/
 .vscode/
 src/test/
 target/

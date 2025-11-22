@@ -24,8 +24,8 @@
                         </div>
 
                         <div class="col-auto">
-                            <label class="form-label fw-semibold mb-1" for="nombre">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" style="max-width: 300px;"
+                            <label class="form-label fw-semibold mb-1" for="nombresapellidos">Nombre</label>
+                            <input type="text" class="form-control" id="nombresapellidos" style="max-width: 300px;"
                                 v-model="filtros.nombresapellidos" placeholder="Nombre del huesped">
                         </div>
 
@@ -38,7 +38,7 @@
                         <div class="col-auto">
                             <label class="form-label fw-semibold mb-1" for="habitacion">Habitaciones</label>
                                 <select name="habitacion" id="habitacion" class="form-select mb-1 col-sm-10"
-                                    v-model="entidad.habitacion" required>
+                                    v-model="filtros.habitacion" required>
                                     <option value="">--Elija una habitación--</option>
                                     <option value="Matrimonial">Matrimonial</option>
                                     <option value="Estandar">Suite Estandar</option>
@@ -248,9 +248,9 @@
             data: {
                 filtros: {
                     codigo: '',
-                    // nombresapellidos: '',
-                    // dni: ''
-
+                    nombresapellidos: '',
+                    dni: '',
+                    habitacion: ''
                 },
                 entidad: {
                     nombresapellidos: '',
@@ -282,6 +282,16 @@
                 listar: function () {
                     const codigo = this.filtros.codigo && this.filtros.codigo.trim() !== "" ?
                         this.filtros.codigo.trim() : null;
+
+                    const nombresapellidos = this.filtros.nombresapellidos && this.filtros.nombresapellidos.trim() !== "" ?
+                    this.filtros.nombresapellidos.trim() : null;
+
+                    const dni = this.filtros.dni && this.filtros.dni.trim() !== "" ?
+                    this.filtros.dni.trim() : null;
+
+                    const habitacion = this.filtros.habitacion && this.filtros.habitacion.trim() !== "" ?
+                    this.filtros.habitacion.trim() : null;
+                    
                     if (codigo) {
                         this.$http.get('/api/reserva/codigo/' + encodeURIComponent(codigo))
                             .then(response => {
@@ -296,6 +306,54 @@
                                 alert('No encontrado o error al buscar por código', error);
                             });
                         return;
+                    }
+
+                    if(nombresapellidos) {
+                        this.$http.get('/api/reserva/nombresapellidos/' + encodeURIComponent(nombresapellidos))
+                            .then(response => {
+                                const data = (
+                                    response && response.data !== undefined)
+                                    ? response.data : (response && response.body !== undefined
+                                        ? response.body : null);
+                                this.entidades = data ? [data] : [];
+                            })
+                            .catch(error => {
+                                this.entidades = [];
+                                alert('Nombre no encontrado o error de filtro!', error);
+                            })
+                        return; 
+                    }
+
+                    if(dni){
+                        this.$http.get('/api/reserva/dni/' + encodeURIComponent(dni))
+                            .then(response => {
+                                const data = (
+                                    response && response.data !== undefined)
+                                    ? response.data : (response && response.body !== undefined
+                                        ? response.body : null); 
+                                this.entidades = data ? [data] : []; 
+                            })
+                            .catch(error => {
+                                this.entidades = [];
+                                alert("Dni no encontrado ó erro de filtro!", error); 
+                            })
+                        return;
+                    }
+
+                    if(habitacion) {
+                        this.$http.get('/api/reserva/habitacion/' + encodeURIComponent(habitacion))
+                            .then(response => {
+                                const data = (
+                                    response && response.data !== undefined)
+                                    ? response.data : (response && response.body !== undefined
+                                        ? response.body : null);
+                                this.entidades = Array.isArray(data) ? data: (data ? [data] : []);
+                            })
+                            .catch(error => {
+                                this.entidades = [];
+                                alert('Habitación no encontrada o error de filtro!', error);
+                            })
+                        return; 
                     }
 
                     this.$http.get('/api/reserva')
