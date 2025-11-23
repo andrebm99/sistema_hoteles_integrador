@@ -1,10 +1,19 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,29 +21,75 @@ import org.springframework.web.bind.annotation.*;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Reserva;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.ReservaRepository;
 
-
-
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class ReservaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReservaController.class);
     @Autowired
     ReservaRepository repository;
 
-    // Listar todas las reservas
     @GetMapping("/reserva")
-    public ResponseEntity<List<Reserva>> getAll(@RequestParam(required = false) String title) {
+    public ResponseEntity<Map<String, Object>> getAll(
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "id_reserva") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String codigo,
+            @RequestParam(required = false) String nombresapellidos,
+            @RequestParam(required = false) Integer dni,
+            @RequestParam(required = false) String habitacion) {
         try {
-            try {
-                List<Reserva> lista = repository.findAll();
-                if (lista == null)
-                    lista = new ArrayList<>();
-                return new ResponseEntity<>(lista, HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (size < 1)
+                size = 10;
+            if (size > 100)
+                size = 100;
+            if (page < 0)
+                page = 0;
+
+            Set<String> allowed = Set.of("id_reserva", "codigo", "nombresapellidos", "dni", "habitacion", "fechaInicio",
+                    "fecha_salida");
+
+            String sortProperty = sortBy;
+            if ("id".equalsIgnoreCase(sortBy) || "idReserva".equalsIgnoreCase(sortBy)) {
+                sortProperty = "id_reserva";
             }
+
+            if (!allowed.contains(sortProperty)) {
+                logger.warn("Sort property '{}' no permitida, usando 'id_reserva' por defecto", sortBy);
+                sortProperty = "id_reserva";
+            }
+
+            Sort sort;
+            try {
+                sort = Sort.by(Sort.Direction.fromString(sortDir), sortProperty);
+            } catch (IllegalArgumentException e) {
+                sort = Sort.by("id_reserva").ascending();
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            Page<Reserva> pageResult;
+
+            try {
+                pageResult = repository.buscarReservas(codigo, nombresapellidos, dni, habitacion, pageable);
+            } catch (org.springframework.data.mapping.PropertyReferenceException pre) {
+                logger.warn("Propiedad de ordenamiento inválida ('{}'), intentando sin ordenamiento", sortBy);
+                pageable = PageRequest.of(page, size);
+                pageResult = repository.buscarReservas(codigo, nombresapellidos, dni, habitacion, pageable);
+            }
+
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("content", pageResult.getContent());
+            resp.put("totalElements", pageResult.getTotalElements());
+            resp.put("totalPages", pageResult.getTotalPages());
+            resp.put("page", pageResult.getNumber());
+            resp.put("size", pageResult.getSize());
+
+            return new ResponseEntity<>(resp, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("Error listado reservas", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -54,42 +109,42 @@ public class ReservaController {
 
     @GetMapping("/reserva/nombresapellidos/{nombresapellidos}")
     public ResponseEntity<Reserva> getByName(@PathVariable("nombresapellidos") String nombresapellidos) {
-        try{
+        try {
             Optional<Reserva> entidad = repository.findByNombresapellidos(nombresapellidos);
-            if(entidad.isPresent()){
-                return new ResponseEntity<>(entidad.get(), HttpStatus.OK); 
-            } else{
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+            if (entidad.isPresent()) {
+                return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/reserva/dni/{dni}")
     public ResponseEntity<Reserva> getByDni(@PathVariable("dni") Integer dni) {
-        try{
+        try {
             Optional<Reserva> entidad = repository.findByDni(dni);
-            if(entidad.isPresent()){
-                return new ResponseEntity<>(entidad.get(), HttpStatus.OK); 
-            } else{
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+            if (entidad.isPresent()) {
+                return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/reserva/habitacion/{habitacion}")
     public ResponseEntity<List<Reserva>> getByHabitacion(@PathVariable("habitacion") String habitacion) {
-        try{
+        try {
             List<Reserva> entidad = repository.findByHabitacion(habitacion);
-            if(entidad.isEmpty()){
+            if (entidad.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } 
-            return new ResponseEntity<>(entidad, HttpStatus.OK); 
-        } catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            }
+            return new ResponseEntity<>(entidad, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

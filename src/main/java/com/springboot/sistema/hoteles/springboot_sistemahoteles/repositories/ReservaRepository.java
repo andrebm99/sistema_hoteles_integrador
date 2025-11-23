@@ -2,6 +2,8 @@ package com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,11 +18,12 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long>{
         "(:dni IS NULL OR r.dni = :dni) AND " +
         "(:habitacion IS NULL OR LOWER(r.habitacion) = LOWER(:habitacion))"
     )
-    List<Reserva> buscarReservas(
+    Page<Reserva> buscarReservas(
         @Param("codigo") String codigo,
         @Param("nombresapellidos") String nombresapellidos,
         @Param("dni") Integer dni,
-        @Param("habitacion") String habitacion
+        @Param("habitacion") String habitacion,
+        Pageable pageable
     );
 
     Optional<Reserva> findByCodigo(String codigo);
