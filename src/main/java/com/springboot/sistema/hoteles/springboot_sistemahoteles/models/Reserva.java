@@ -22,7 +22,7 @@ public class Reserva implements Serializable {
     @Column(name = "nombresapellidos", nullable = false)
     private String nombresapellidos;
 
-    @Column(name = "dni", unique = true, nullable = false)
+    @Column(name = "dni", nullable = false)
     private Integer dni;
 
     @Column(name = "edad", nullable = false)
@@ -30,6 +30,9 @@ public class Reserva implements Serializable {
 
     @Column(name = "habitacion", nullable = false)
     private String habitacion;
+
+    @Column(name = "id_habitacion")
+    private Long id_habitacion;
 
     @Column(name = "ocupantes", nullable = false)
     private String ocupantes;
@@ -61,19 +64,20 @@ public class Reserva implements Serializable {
         this.metodo_pago = metodo_pago;
     }
 
-    @PrePersist
-    public void prePersist(){
-        if(this.codigo == null || this.codigo.isEmpty()){
-            this.codigo = UUID.randomUUID().toString(); 
-        }
-    }
-    
     public Long getId_reserva() {
         return id_reserva;
     }
 
     public void setId_reserva(Long id_reserva) {
         this.id_reserva = id_reserva;
+    }
+
+    public Long getId_habitacion() {
+        return id_habitacion;
+    }
+
+    public void setId_habitacion(Long id_habitacion) {
+        this.id_habitacion = id_habitacion;
     }
 
     public String getCodigo() {
@@ -148,6 +152,19 @@ public class Reserva implements Serializable {
         this.metodo_pago = metodo_pago;
     }
 
+    @PrePersist
+    public void prePersist() {
+        if (this.codigo == null || this.codigo.isEmpty()) {
+            this.codigo = generarCodigoReserva();
+        }
+    }
+
+    private String generarCodigoReserva() {
+        String letras = UUID.randomUUID().toString().replace("-", "").substring(0, 3).toUpperCase();
+        int numeros = (int) (Math.random() * 900) + 100;
+        return "RES-" + letras + numeros;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -161,7 +178,8 @@ public class Reserva implements Serializable {
             return false;
         }
         Reserva other = (Reserva) object;
-        if ((this.id_reserva == null && other.id_reserva != null) || (this.id_reserva != null && !this.id_reserva.equals(other.id_reserva))) {
+        if ((this.id_reserva == null && other.id_reserva != null)
+                || (this.id_reserva != null && !this.id_reserva.equals(other.id_reserva))) {
             return false;
         }
         return true;
@@ -169,16 +187,16 @@ public class Reserva implements Serializable {
 
     @Override
     public String toString() {
-        return "Reserva{" + 
-        "id=" + id_reserva + 
-        "id=" + codigo +
-        ", nombres=" + nombresapellidos +
-        ", dni: " + dni + 
-        ", habitación: " + habitacion + 
-        ", Cantidad de Ocupantes: " + ocupantes + 
-        ", fecha de inicio: " + fechaInicio + 
-        ", fecha de salida: " + fecha_salida + 
-        ", metodo de pago: " + metodo_pago + 
-        '}';
+        return "Reserva{" +
+                "id=" + id_reserva +
+                "id=" + codigo +
+                ", nombres=" + nombresapellidos +
+                ", dni: " + dni +
+                ", habitación: " + habitacion +
+                ", Cantidad de Ocupantes: " + ocupantes +
+                ", fecha de inicio: " + fechaInicio +
+                ", fecha de salida: " + fecha_salida +
+                ", metodo de pago: " + metodo_pago +
+                '}';
     }
 }

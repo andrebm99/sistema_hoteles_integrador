@@ -11,9 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Reserva;
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.ReservaRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -21,6 +28,9 @@ import java.util.Optional;
 public class HabitacionController {
     @Autowired
     HabitacionRepository repository;
+
+    @Autowired
+    ReservaRepository reservaRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -35,6 +45,38 @@ public class HabitacionController {
             return new ResponseEntity<>(lista, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/habitaciones/estado")
+    public ResponseEntity<List<Map<String, Object>>> getHabitacionesConEstado(
+            @RequestParam String fechaInicio,
+            @RequestParam String fechaFin) {
+        try {
+            LocalDateTime inicio = LocalDateTime.parse(fechaInicio);
+            LocalDateTime fin = LocalDateTime.parse(fechaFin);
+
+            List<Habitacion> lista = new ArrayList<Habitacion>();
+            repository.findAll().forEach(lista::add);
+
+            List<Map<String, Object>> resp = new ArrayList<>();
+            for (Habitacion h : lista) {
+                List<Reserva> conflicts = reservaRepository.findConflictingReservationsByRoomId(
+                        h.getId_habitacion(), inicio, fin);
+                boolean disponible = (conflicts == null || conflicts.isEmpty());
+                Map<String, Object> item = new HashMap<>();
+                item.put("id_habitacion", h.getId_habitacion());
+                item.put("numerohabitacion", h.getNumerohabitacion());
+                item.put("nombre_comercial", h.getNombre_comercial());
+                item.put("descripcion", h.getDescripcion());
+                item.put("disponible", disponible);
+                resp.add(item);
+            }
+            return ResponseEntity.ok(resp);
+        } catch (DateTimeParseException ex) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

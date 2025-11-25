@@ -1,6 +1,7 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Reserva;
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Habitacion;
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.HabitacionRepository;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.ReservaRepository;
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.services.AuthService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -27,9 +31,16 @@ import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.Res
 public class ReservaController {
 
     private static final Logger logger = LoggerFactory.getLogger(ReservaController.class);
+    
+    @Autowired
+    private AuthService authService; 
+
     @Autowired
     ReservaRepository repository;
+    @Autowired
+    HabitacionRepository habitacionRepository;
 
+    @SuppressWarnings("null")
     @GetMapping("/reserva")
     public ResponseEntity<Map<String, Object>> getAll(
             @RequestParam(defaultValue = "10") int size,
@@ -108,7 +119,7 @@ public class ReservaController {
     }
 
     @GetMapping("/reserva/nombresapellidos/{nombresapellidos}")
-    public ResponseEntity<Reserva> getByName(@PathVariable("nombresapellidos") String nombresapellidos) {
+    public ResponseEntity<Reserva> getByName(@PathVariable String nombresapellidos) {
         try {
             Optional<Reserva> entidad = repository.findByNombresapellidos(nombresapellidos);
             if (entidad.isPresent()) {
@@ -122,7 +133,7 @@ public class ReservaController {
     }
 
     @GetMapping("/reserva/dni/{dni}")
-    public ResponseEntity<Reserva> getByDni(@PathVariable("dni") Integer dni) {
+    public ResponseEntity<Reserva> getByDni(@PathVariable Integer dni) {
         try {
             Optional<Reserva> entidad = repository.findByDni(dni);
             if (entidad.isPresent()) {
@@ -136,7 +147,7 @@ public class ReservaController {
     }
 
     @GetMapping("/reserva/habitacion/{habitacion}")
-    public ResponseEntity<List<Reserva>> getByHabitacion(@PathVariable("habitacion") String habitacion) {
+    public ResponseEntity<List<Reserva>> getByHabitacion(@PathVariable String habitacion) {
         try {
             List<Reserva> entidad = repository.findByHabitacion(habitacion);
             if (entidad.isEmpty()) {
@@ -149,46 +160,93 @@ public class ReservaController {
     }
 
     @PostMapping("/reserva")
-    public ResponseEntity<Reserva> create(@RequestBody Reserva entidad) {
-        try {
-            Reserva _entidad = repository.save(new Reserva(
-                    null,
-                    entidad.getCodigo(),
-                    entidad.getNombresapellidos(),
-                    entidad.getDni(),
-                    entidad.getEdad(),
-                    entidad.getHabitacion(),
-                    entidad.getOcupantes(),
-                    entidad.getFechaInicio(),
-                    entidad.getFecha_salida(),
-                    entidad.getMetodo_pago()));
-            return new ResponseEntity<>(_entidad, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+public ResponseEntity<?> create(@RequestBody Reserva entidad) {
+    try {
+        // Validaciones mínimas
+        if (entidad == null || entidad.getFechaInicio() == null || entidad.getFecha_salida() == null || entidad.getHabitacion() == null) {
+            return ResponseEntity.badRequest().body("Faltan datos (fecha inicio/fin o tipo de habitación).");
         }
+
+        LocalDateTime inicio = entidad.getFechaInicio();
+        LocalDateTime fin = entidad.getFecha_salida();
+        String tipo = entidad.getHabitacion(); // aquí se espera el nombre comercial/tipo
+
+        // Obtener todas las habitaciones del tipo pedido (case-insensitive)
+        List<Habitacion> habitaciones = habitacionRepository.findListByNombreComercialIgnoreCase(tipo);
+        if (habitaciones == null || habitaciones.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen habitaciones del tipo solicitado.");
+        }
+
+        // Buscar la primera habitación libre en el rango
+        for (Habitacion h : habitaciones) {
+            Long roomId = h.getId_habitacion(); // ajusta si tu getter tiene otro nombre
+            List<Reserva> conflictos = repository.findConflictingReservationsByRoomId(roomId, inicio, fin);
+            if (conflictos == null || conflictos.isEmpty()) {
+                // Asignar habitación y número
+                entidad.setId_habitacion(roomId);
+                // Opcional: ajustar el campo 'habitacion' para incluir número/identificador físico
+                String numero = (h.getNumerohabitacion() != null) ? (" #" + h.getNumerohabitacion()) : "";
+                entidad.setHabitacion(h.getNombre_comercial() + numero);
+
+                // Evitar problemas de optimistic locking: asegurar id nulo para nuevo registro
+                entidad.setId_reserva(null);
+
+                Reserva saved = repository.save(entidad);
+                return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+            }
+        }
+
+        // Si llegamos aquí, no hay habitaciones libres
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("No hay habitaciones libres para ese rango de fechas.");
+    } catch (Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
+}
 
     @PutMapping("/reserva/{id_reserva}")
-    public ResponseEntity<Reserva> update(@PathVariable("id_reserva") Long id_reserva, @RequestBody Reserva entidad) {
+    public ResponseEntity<?> update(@PathVariable long id_reserva, @RequestBody Reserva entidad) {
+
         Reserva _entidad = repository.findById(id_reserva).orElse(null);
-        if (_entidad != null) {
-            _entidad.setCodigo(entidad.getCodigo());
-            _entidad.setNombresapellidos(entidad.getNombresapellidos());
-            _entidad.setDni(entidad.getDni());
-            _entidad.setEdad(entidad.getEdad());
-            _entidad.setHabitacion(entidad.getHabitacion());
-            _entidad.setOcupantes(entidad.getOcupantes());
-            _entidad.setFechaInicio(entidad.getFechaInicio());
-            _entidad.setFecha_salida(entidad.getFecha_salida());
-            _entidad.setMetodo_pago(entidad.getMetodo_pago());
-            return new ResponseEntity<>(repository.save(_entidad), HttpStatus.OK);
-        } else {
+
+        if (_entidad == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        if(entidad.getHabitacion() == null || entidad.getFechaInicio() == null || entidad.getFecha_salida() == null){
+            return ResponseEntity.badRequest().body("Habitación, fecha de inicio y fecha de salida son obligatórios.");
+        }
+
+        boolean existeHabitacion = habitacionRepository.existsByNombreComercialIgnoreCase(entidad.getHabitacion()); 
+
+        if(!existeHabitacion){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La habitación indicada no existe."); 
+        }
+
+        List<Reserva> conflicts = repository.findConflictingReservations(
+                entidad.getHabitacion(), entidad.getFechaInicio(), entidad.getFecha_salida());
+
+        conflicts.removeIf(r -> r.getId_reserva().equals(id_reserva));
+
+        if (!conflicts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("La habitación no está disponible en las fechas indicadas.");
+        }
+
+        _entidad.setCodigo(entidad.getCodigo());
+        _entidad.setNombresapellidos(entidad.getNombresapellidos());
+        _entidad.setDni(entidad.getDni());
+        _entidad.setEdad(entidad.getEdad());
+        _entidad.setHabitacion(entidad.getHabitacion());
+        _entidad.setOcupantes(entidad.getOcupantes());
+        _entidad.setFechaInicio(entidad.getFechaInicio());
+        _entidad.setFecha_salida(entidad.getFecha_salida());
+        _entidad.setMetodo_pago(entidad.getMetodo_pago());
+        return new ResponseEntity<>(repository.save(_entidad), HttpStatus.OK);
+
     }
 
     @DeleteMapping("/reserva/{id_reserva}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id_reserva") Long id_reserva) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable long id_reserva) {
         try {
             repository.deleteById(id_reserva);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -196,4 +254,27 @@ public class ReservaController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/reserva/disponibilidad")
+    public ResponseEntity<Map<String, Object>> disponibilidad(
+            @RequestParam String habitacion,
+            @RequestParam String fechaInicio,
+            @RequestParam String fechaFin) {
+        try {
+            LocalDateTime inicio = LocalDateTime.parse(fechaInicio);
+            LocalDateTime fin = LocalDateTime.parse(fechaFin);
+            List<Reserva> conflicts = repository.findConflictingReservations(habitacion, inicio, fin);
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("habitacion", habitacion);
+            resp.put("disponible", conflicts.isEmpty());
+            resp.put("conflictos", conflicts);
+            return ResponseEntity.ok(resp);
+        } catch (DateTimeParseException exception) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("error", "Formato invalido de fecha, debe usar formato iso 'Ejemplo: yyyy-MM-ddTHH:mm:ss'"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

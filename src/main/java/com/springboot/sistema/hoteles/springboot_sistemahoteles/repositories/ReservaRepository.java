@@ -1,4 +1,5 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Habitacion;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Reserva;
 
 
@@ -30,4 +32,19 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long>{
     Optional<Reserva> findByNombresapellidos(String nombresapellidos); 
     Optional<Reserva> findByDni(Integer dni); 
     List<Reserva> findByHabitacion(String habitacion);
+
+
+        @Query("SELECT r FROM Reserva r WHERE r.id_habitacion = :roomId AND r.fechaInicio < :fechaFin AND r.fecha_salida > :fechaInicio")
+        List<Reserva> findConflictingReservationsByRoomId(
+            @Param("roomId") Long roomId,
+            @Param("fechaInicio") LocalDateTime fechaInicio,
+            @Param("fechaFin") LocalDateTime fechaFin
+        );
+    
+    @Query("SELECT r FROM Reserva r WHERE LOWER(r.habitacion) = LOWER(:habitacion)"
+    + "AND r.fechaInicio < :fechaFin AND r.fecha_salida > :fechaInicio") List<Reserva> findConflictingReservations(
+         @Param("habitacion") String habitacion,
+         @Param("fechaInicio") LocalDateTime fechaInicio,
+         @Param("fechaFin") LocalDateTime fechaFin
+    );
 }

@@ -65,6 +65,15 @@ public class Usuario_Administracion implements Serializable{
         this.nombres_apellidos = nombres_apellidos;
     }
 
+    // Compatibilidad con templates que esperan la propiedad 'nombres'
+    public String getNombres() {
+        return this.nombres_apellidos;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres_apellidos = nombres;
+    }
+
     public String getEmail() {
         return email;
     }

@@ -7,5 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class IntegradorspringbootApplication {
     public static void main(String[] args) {
         SpringApplication.run(IntegradorspringbootApplication.class, args);
+        System.out.println("URL: http://localhost:8081");
     }
 }
