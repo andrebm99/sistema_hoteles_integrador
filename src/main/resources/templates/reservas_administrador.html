@@ -60,7 +60,7 @@
                         </div>
                     </form>
                 </div>
-                <table class="table">
+                <table class="table table-sm">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -72,6 +72,8 @@
                             <th>Ocupantes</th>
                             <th>Fecha de Inicio</th>
                             <th>Fecha de Salida</th>
+                            <th>Precio(Noche)</th>
+                            <th>Pago</th>
                             <th>Metodo de pago</th>
                             <th>Botones de Acción</th>
                         </tr>
@@ -87,12 +89,14 @@
                             <td>{{item.ocupantes}}</td>
                             <td>{{item.fechaInicio}}</td>
                             <td>{{item.fecha_salida}}</td>
+                            <td>{{item.precio_aplicado}}</td>
+                            <td>{{item.total_aplicado}}</td>
                             <td>{{item.metodo_pago}}</td>
                             <td class="text-end">
                                 <div class="d-flex justify-content-end gap-1">
-                                    <button class="btn btn-primary me-1"
+                                    <button class="btn btn-sm btn-primary me-1"
                                         @click="editar(item.id_reserva)">Editar</button>
-                                    <button class="btn btn-danger me-1" @click="eliminar(item.id_reserva)"
+                                    <button class="btn btn-sm btn-danger me-1" @click="eliminar(item.id_reserva)"
                                         style="align-items: center; text-align: center; justify-content: center;">
                                         Eliminar
                                     </button>
@@ -218,13 +222,7 @@
                                     </div>
                                     </p>
                                 </div>
-                                <div class="form-group row mb-3 align-items-center">
-                                    <label for="proceso_pago" class="col-sm-4 col-form-label">Ir al proceso de pago:
-                                    </label>
-                                    <div class="col-sm-8 justify-content-end">
-                                        <a class="btn btn-primary" th:href="@{/proceso_pago}">Pagar ahora</a>
-                                    </div>
-                                </div>
+                                
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" v-if="entidad.id_reserva==null"
@@ -279,6 +277,8 @@
                     ocupantes: '',
                     fechaInicio: '',
                     fecha_salida: '',
+                    precio_aplicado: '',
+                    total_aplicado: '',
                     metodo_pago: ''
                 },
                 entidades: [],
@@ -349,126 +349,42 @@
                 },
 
                 listar: function () {
-                    const codigo = this.filtros.codigo && this.filtros.codigo.trim() !== "" ?
-                        this.filtros.codigo.trim() : null;
+                    const params = new URLSearchParams();
+                    params.append('page', this.page);
+                    params.append('size', this.size);
+                    params.append('sortBy', this.sortBy);
+                    params.append('sortDir', this.sortDir);
 
-                    const nombresapellidos = this.filtros.nombresapellidos && this.filtros.nombresapellidos.trim() !== "" ?
-                        this.filtros.nombresapellidos.trim() : null;
+                    const codigo = this.filtros.codigo && this.filtros.codigo.trim() !== "" ? this.filtros.codigo.trim() : null;
+                    const nombresapellidos = this.filtros.nombresapellidos && this.filtros.nombresapellidos.trim() !== "" ? this.filtros.nombresapellidos.trim() : null;
+                    const dni = this.filtros.dni && this.filtros.dni.trim() !== "" ? this.filtros.dni.trim() : null;
+                    const habitacion = this.filtros.habitacion && this.filtros.habitacion.trim() !== "" ? this.filtros.habitacion.trim() : null;
 
-                    const dni = this.filtros.dni && this.filtros.dni.trim() !== "" ?
-                        this.filtros.dni.trim() : null;
+                    if (codigo) params.append('codigo', codigo);
+                    if (nombresapellidos) params.append('nombresapellidos', nombresapellidos);
+                    if (dni) params.append('dni', dni);
+                    if (habitacion) params.append('habitacion', habitacion);
 
-                    const habitacion = this.filtros.habitacion && this.filtros.habitacion.trim() !== "" ?
-                        this.filtros.habitacion.trim() : null;
-
-                    if (codigo) {
-                        this.$http.get('/api/reserva/codigo/' + encodeURIComponent(codigo))
-                            .then(response => {
-                                const data = (response && response.data !== undefined) ? response.data : (response && response.body !== undefined ? response.body : null);
-                                const arr = data ? [data] : [];
-                                this.entidades = arr;
-                                this.allReservas = arr;
-                                this.totalElements = arr.length;
-                                this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.size));
-                                this.page = 0;
-                                this.updateDisplayed();
-                            })
-                            .catch(error => {
-                                this.entidades = [];
-                                alert('No encontrado o error al buscar por código', error);
-                            });
-                        return;
-                    }
-
-                    if (nombresapellidos) {
-                        this.$http.get('/api/reserva/nombresapellidos/' + encodeURIComponent(nombresapellidos))
-                            .then(response => {
-                                const data = this.responseArray(response);
-                                this.entidades = data;
-                                this.allReservas = data;
-                                this.totalElements = data.length;
-                                this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.size));
-                                this.page = 0;
-                                this.updateDisplayed();
-                            })
-                            .catch(error => {
-                                this.entidades = [];
-                                alert('Nombre no encontrado o error de filtro!', error);
-                            })
-                        return;
-                    }
-
-                    if (dni) {
-                        this.$http.get('/api/reserva/dni/' + encodeURIComponent(dni))
-                            .then(response => {
-                                const data = (response && response.data !== undefined) ? response.data : (response && response.body !== undefined ? response.body : null);
-                                const arr = data ? [data] : [];
-                                this.entidades = arr;
-                                this.allReservas = arr;
-                                this.totalElements = arr.length;
-                                this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.size));
-                                this.page = 0;
-                                this.updateDisplayed();
-                            })
-                            .catch(error => {
-                                this.entidades = [];
-                                alert("Dni no encontrado ó erro de filtro!", error);
-                            })
-                        return;
-                    }
-
-                    if (habitacion) {
-                        this.$http.get('/api/reserva/habitacion/' + encodeURIComponent(habitacion))
-                            .then(response => {
-                                const data = this.responseArray(response);
-                                this.entidades = data;
-                                this.allReservas = data;
-                                this.totalElements = data.length;
-                                this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.size));
-                                this.page = 0;
-                                this.updateDisplayed();
-                            })
-                            .catch(error => {
-                                this.entidades = [];
-                                alert('Habitación no encontrada o error de filtro!', error);
-                            })
-                        return;
-                    }
-
-                    this.$http.get('/api/reserva?page=' + this.page + '&size=' + this.size + '&sortBy=' + this.sortBy + '&sortDir=' + this.sortDir)
+                    this.$http.get('/api/reserva?' + params.toString())
                         .then(response => {
                             const resp = (response && response.data) ? response.data : null;
-                            if (resp && Array.isArray(resp.content)) {
-                                const content = resp.content;
-                                this.entidades = content;
-                                this.displayedReservas = content; // servidor ya trajo la página correcta
-                                this.allReservas = content;
-                                this.totalElements = resp.totalElements !== undefined ? resp.totalElements : content.length;
-                                this.totalPages = resp.totalPages !== undefined ? resp.totalPages : Math.max(1, Math.ceil(this.totalElements / this.size));
-                                this.page = resp.page !== undefined ? resp.page : 0;
-                                this.size = resp.size !== undefined ? resp.size : this.size;
-                            } else {
-                                // Fallback: respuesta es un array completo (client-side)
-                                const data = this.responseArray(response);
-                                this.entidades = data;
-                                this.allReservas = data;
-                                this.totalElements = data.length;
-                                this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.size));
-                                if (this.page >= this.totalPages) this.page = 0;
-                                this.updateDisplayed();
-                            }
+                            const content = resp && Array.isArray(resp.content) ? resp.content : [];
+                            this.entidades = content;
+                            this.displayedReservas = content; // servidor ya trajo la página correcta
+                            this.allReservas = content;
+                            this.totalElements = resp && resp.totalElements !== undefined ? resp.totalElements : content.length;
+                            this.totalPages = resp && resp.totalPages !== undefined ? resp.totalPages : Math.max(1, Math.ceil(this.totalElements / this.size));
+                            this.page = resp && resp.page !== undefined ? resp.page : 0;
+                            this.size = resp && resp.size !== undefined ? resp.size : this.size;
                         })
                         .catch(error => {
                             console.error('Error al listar reservas', error);
-
                             this.allReservas = [];
                             this.displayedReservas = [];
                             this.totalPages = 0;
                             this.totalElements = 0;
                         });
-
                 },
-
                 toLocalDateTimeString: function (date) {
                     return new Date(date).toISOString().slice(0, 19);
                 },

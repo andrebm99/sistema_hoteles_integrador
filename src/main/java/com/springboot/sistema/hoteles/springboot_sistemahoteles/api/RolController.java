@@ -29,12 +29,12 @@ public class RolController {
             }
             return new ResponseEntity<>(lista, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/rol/{id_roles}")
-    public ResponseEntity<Roles> getById(@PathVariable("id_roles") Long id_roles) {
+    public ResponseEntity<Roles> getById(@PathVariable("id_roles") long id_roles) {
         Optional<Roles> entidad = repository.findById(id_roles);
         if (entidad.isPresent()) {
             return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
@@ -53,12 +53,12 @@ public class RolController {
             ));
             return new ResponseEntity<>(_entidad, HttpStatus.CREATED);
         } catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); 
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
         }
     }
 
     @PutMapping("/rol/{id_rol}")
-    public ResponseEntity<Roles> update(@PathVariable("id_rol") Long id_rol, @RequestBody Roles entidad) {
+    public ResponseEntity<Roles> update(@PathVariable("id_rol") long id_rol, @RequestBody Roles entidad) {
         Roles _entidad = repository.findById(id_rol).orElse(null);
         if (_entidad != null) {
             _entidad.setNombre_rol(entidad.getNombre_rol());
@@ -72,7 +72,7 @@ public class RolController {
     
 
     @DeleteMapping("/rol/{id_rol}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id_rol") Long id_rol) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id_rol") long id_rol) {
         try {
             repository.deleteById(id_rol);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

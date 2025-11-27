@@ -18,6 +18,7 @@ public class HabitacionService {
         this.repositorio = repositorio;
     }
 
+    @SuppressWarnings("null")
     @Transactional
     public Habitacion create(Habitacion habitacion, MultipartFile file) throws IOException{
         if(file != null && !file.isEmpty()){
@@ -29,7 +30,7 @@ public class HabitacionService {
     }
 
     @Transactional(readOnly = true)
-    public Habitacion findById(Long id){
+    public Habitacion findById(long id){
         return repositorio.findById(id).orElseThrow(() -> new IllegalArgumentException("Habitación no encontrada.")); 
     }
 }

@@ -44,7 +44,7 @@ public class UsuarioAController {
             return new ResponseEntity<>(items, HttpStatus.OK);
 
         } catch(Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -63,7 +63,7 @@ public class UsuarioAController {
             Usuario_Administracion _entidad = repository.save(newAdmin);
             return new ResponseEntity<>(_entidad, HttpStatus.CREATED);
         } catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); 
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
         }
     }
 

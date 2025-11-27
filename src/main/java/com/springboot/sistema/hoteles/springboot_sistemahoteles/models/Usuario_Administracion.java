@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuario_administracion")
-public class Usuario_Administracion implements Serializable{
+public class Usuario_Administracion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,16 +18,16 @@ public class Usuario_Administracion implements Serializable{
     private String nombres_apellidos;
 
     @Column(name = "email")
-    private String email; 
+    private String email;
 
     @Column(name = "password_hash")
     private String passwordHash;
 
     @Column(name = "rol_id")
-    private Long rol_id; 
+    private Long rol_id;
 
     @Column(name = "estado")
-    private String estado; 
+    private String estado;
 
     @Column(name = "fecha_creado")
     private LocalDate fecha_creado;
@@ -38,7 +38,8 @@ public class Usuario_Administracion implements Serializable{
     public Usuario_Administracion() {
     }
 
-    public Usuario_Administracion(Long id, String nombres_apellidos, String email, String passwordHash, Long rol_id, String estado,
+    public Usuario_Administracion(Long id, String nombres_apellidos, String email, String passwordHash, Long rol_id,
+            String estado,
             LocalDate fecha_creado, LocalDate fecha_actualizacion) {
         this.id = id;
         this.nombres_apellidos = nombres_apellidos;
@@ -49,6 +50,7 @@ public class Usuario_Administracion implements Serializable{
         this.fecha_creado = fecha_creado;
         this.fecha_actualizacion = fecha_actualizacion;
     }
+
     public Long getId() {
         return id;
     }
@@ -65,7 +67,6 @@ public class Usuario_Administracion implements Serializable{
         this.nombres_apellidos = nombres_apellidos;
     }
 
-    // Compatibilidad con templates que esperan la propiedad 'nombres'
     public String getNombres() {
         return this.nombres_apellidos;
     }
@@ -143,14 +144,38 @@ public class Usuario_Administracion implements Serializable{
 
     @Override
     public String toString() {
-        return "Empleado{" + 
-        "id=" + id + 
-        ", nombres de empleado=" + nombres_apellidos +
-        ", email de empleado: " + email + 
-        ", rol del empleado: " + rol_id + 
-        ", estado (activo, desactivado: )" + estado + 
-        ", creado en: " + fecha_creado + 
-        ", fecha de actualización: " + fecha_actualizacion + 
-        '}';
+        return "Empleado{" +
+                "id=" + id +
+                ", nombres de empleado=" + nombres_apellidos +
+                ", email de empleado: " + email +
+                ", rol del empleado: " + rol_id +
+                ", estado (activo, desactivado: )" + estado +
+                ", creado en: " + fecha_creado +
+                ", fecha de actualización: " + fecha_actualizacion +
+                '}';
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "usuarios_admin_roles", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"), uniqueConstraints = @UniqueConstraint(name = "uk_usuario_rol", columnNames = {
+            "usuario_id", "rol_id" }))
+    private java.util.Set<com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Roles> roles = new java.util.HashSet<>();
+
+    public java.util.Set<com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(java.util.Set<com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Roles> roles) {
+        this.roles = roles;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.fecha_creado = LocalDate.now(); 
+        this.fecha_actualizacion = LocalDate.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.fecha_actualizacion = LocalDate.now(); 
     }
 }

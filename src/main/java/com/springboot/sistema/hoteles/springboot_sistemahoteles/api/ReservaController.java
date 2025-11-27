@@ -23,9 +23,6 @@ import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Reserva;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Habitacion;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.HabitacionRepository;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.ReservaRepository;
-import com.springboot.sistema.hoteles.springboot_sistemahoteles.services.AuthService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -33,9 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ReservaController {
 
     private static final Logger logger = LoggerFactory.getLogger(ReservaController.class);
-
-    @Autowired
-    private AuthService authService;
 
     @Autowired
     ReservaRepository repository;
@@ -151,13 +145,10 @@ public class ReservaController {
     @GetMapping("/reserva/habitacion/{habitacion}")
     public ResponseEntity<List<Reserva>> getByHabitacion(@PathVariable String habitacion) {
         try {
-            List<Reserva> entidad = repository.findByHabitacion(habitacion);
-            if (entidad.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(entidad, HttpStatus.OK);
+            List<Reserva> entidad = repository.findByHabitacionContainingIgnoreCase(habitacion);
+            return ResponseEntity.ok(entidad); // 200 incluso si está vacía
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

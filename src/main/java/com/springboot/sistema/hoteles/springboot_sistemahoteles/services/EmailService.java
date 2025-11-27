@@ -1,7 +1,5 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles.services;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Email;
+
 
 public class EmailService {
     /*  

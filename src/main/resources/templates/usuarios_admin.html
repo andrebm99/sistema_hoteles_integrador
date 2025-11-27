@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_navbar_admin}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Administración de Usuarios</title>
+  <link rel="icon" th:href="@{/favicon.ico}">
+</head>
+
+<body>
+  <section layout:fragment="content" id="app">
+    <div class="container-fluid">
+      <h3 class="mt-2 mb-3">Usuarios (Administración)</h3>
+
+      <div class="card p-3 mb-3">
+        <h5>Crear usuario</h5>
+        <div class="row g-2">
+          <div class="col-md-3"><input class="form-control" v-model="nuevo.nombres" placeholder="Nombres"></div>
+          <div class="col-md-3"><input class="form-control" v-model="nuevo.apellidos" placeholder="Apellidos"></div>
+          <div class="col-md-3"><input class="form-control" type="email" v-model="nuevo.email" placeholder="Email">
+          </div>
+          <div class="col-md-3"><input class="form-control" type="password" v-model="nuevo.password"
+              placeholder="Password"></div>
+        </div>
+        <div class="mt-2">
+          <button class="btn btn-primary" @click="crear">Crear</button>
+        </div>
+      </div>
+
+      <div class="card p-3">
+        <h5>Listado</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Fecha Creado</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="u in usuarios" :key="u.id || u.id_usuario_administracion">
+              <td>{{ u.id || u.id_usuario_administracion }}</td>
+              <td>{{ u.nombres_apellidos }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ nombreRol(u) }}</td>
+              <td>{{ u.fecha_creado }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary" @click="abrirAsignar(u)">Asignar rol</button>
+                  <button class="btn btn-sm btn-danger" @click="eliminar(u)">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal fade" id="mdlAsignar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Asignar rol</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-2">
+                <label>Rol</label>
+                <select class="form-select" v-model.number="asignar.rolId">
+                  <option v-for="r in roles" :key="r.id_rol" :value="r.id_rol">{{ r.nombre_rol }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" @click="confirmarAsignar">Asignar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script layout:fragment="script">
+    if (window.axios && window.Vue) { Vue.prototype.$http = axios; }
+    document.addEventListener('DOMContentLoaded', function () {
+      new Vue({
+        el: "#app",
+        data: {
+          usuarios: [],
+          roles: [],
+          nuevo: { 
+            nombres: '', 
+            apellidos: '', 
+            email: '', 
+            password: '' 
+          },
+          asignar: { userId: null, rolId: null }
+        },
+
+        methods: {
+          apiBase() { return '/api'; },
+          listar() {
+            (this.$http || axios).get(this.apiBase() + '/admin/usuarios').then(r => {
+              this.usuarios = Array.isArray(r.data) ? r.data : [];
+            });
+            (this.$http || axios).get(this.apiBase() + '/rol').then(r => {
+              this.roles = Array.isArray(r.data) ? r.data : [];
+            });
+          },
+
+          nombreRol(u) {
+            const id = u.rol_id;
+            if (!id) return '(sin rol)';
+            const rol = this.roles.find(rr => rr.id_rol === id);
+            return rol ? rol.nombre_rol : '(desconocido)';
+          },
+
+          crear() {
+            const payload = { nombres: this.nuevo.nombres, apellidos: this.nuevo.apellidos, email: this.nuevo.email, password: this.nuevo.password };
+            (this.$http || axios).post(this.apiBase() + '/admin/usuarios', payload)
+              .then(() => { this.nuevo = { nombres: '', apellidos: '', email: '', password: '' }; this.listar(); })
+              .catch(err => alert(err.response?.data || 'Error al crear usuario'));
+          },
+
+          eliminar(u) {
+            const id = u.id || u.id_usuario_administracion;
+            if (!id) return;
+            if (!confirm('¿Eliminar usuario?')) return;
+            (this.$http || axios).delete(this.apiBase() + '/admin/usuarios/' + id)
+              .then(() => this.listar())
+              .catch(() => alert('No se pudo eliminar'));
+          },
+
+          abrirAsignar(u) {
+            this.asignar.userId = u.id || u.id_usuario_administracion;
+            this.asignar.rolId = null;
+            const mdl = bootstrap.Modal.getOrCreateInstance(document.getElementById('mdlAsignar'));
+            mdl.show();
+          },
+
+          confirmarAsignar() {
+            if (!this.asignar.userId || !this.asignar.rolId) { alert('Seleccione un rol'); return; }
+            (this.$http || axios).post(this.apiBase() + '/admin/usuarios/' + this.asignar.userId + '/roles/' + this.asignar.rolId)
+              .then(() => {
+                const mdl = bootstrap.Modal.getOrCreateInstance(document.getElementById('mdlAsignar'));
+                mdl.hide();
+                this.listar();
+              })
+              .catch(err => alert(err.response?.data || 'Error al asignar rol'));
+          }
+        },
+        mounted() { this.listar(); }
+      });
+    });
+  </script>
+</body>
+
+</html>

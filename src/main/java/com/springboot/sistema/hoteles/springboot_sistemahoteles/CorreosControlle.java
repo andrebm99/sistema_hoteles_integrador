@@ -1,13 +1,6 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles;
 
-import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Email;
-import com.springboot.sistema.hoteles.springboot_sistemahoteles.services.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-@Controller
+// @Controller
 public class CorreosControlle {
     /*  
     @Autowired

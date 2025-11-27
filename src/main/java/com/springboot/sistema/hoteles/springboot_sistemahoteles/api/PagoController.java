@@ -19,7 +19,7 @@ public class PagoController {
     private ReservaRepository reservaRepository;
 
     @PostMapping("/confirmar")
-    public ResponseEntity<?> confirmarPago(@RequestParam("id") Long idReserva, @RequestBody(required = false) Map<String, Object> body){
+    public ResponseEntity<?> confirmarPago(@RequestParam("id") long idReserva, @RequestBody(required = false) Map<String, Object> body){
         try{
             Optional<Reserva> opt = reservaRepository.findById(idReserva);
             if(opt.isEmpty()){

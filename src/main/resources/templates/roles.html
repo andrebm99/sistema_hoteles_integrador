@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_navbar_admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>Roles</title>
+  <link rel="icon" th:href="@{/favicon.ico}">
+</head>
+<body>
+<section layout:fragment="content" id="app">
+  <div class="container-fluid">
+    <h3 class="mt-2 mb-3">Roles</h3>
+
+    <div class="card p-3 mb-3">
+      <h5>Crear rol</h5>
+      <div class="row g-2">
+        <div class="col-md-4"><input class="form-control" v-model="nuevo.nombre_rol" placeholder="Nombre de rol"></div>
+        <div class="col-md-6"><input class="form-control" v-model="nuevo.descripcion" placeholder="Descripción"></div>
+        <div class="col-md-2"><button class="btn btn-primary" @click="crear">Crear</button></div>
+      </div>
+    </div>
+
+    <div class="card p-3">
+      <h5>Listado</h5>
+      <table class="table table-striped">
+        <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th class="text-end">Acciones</th></tr></thead>
+        <tbody>
+          <tr v-for="r in roles" :key="r.id_rol">
+            <td>{{ r.id_rol }}</td>
+            <td><input class="form-control form-control-sm" v-model="r.nombre_rol"></td>
+            <td><input class="form-control form-control-sm" v-model="r.descripcion"></td>
+            <td class="text-end">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-primary" @click="guardar(r)">Guardar</button>
+                <button class="btn btn-sm btn-danger" @click="eliminar(r)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script layout:fragment="script">
+  if (window.axios && window.Vue) { Vue.prototype.$http = axios; }
+  document.addEventListener('DOMContentLoaded', function(){
+    new Vue({
+      el: "#app",
+      data: { roles: [], nuevo: { nombre_rol:'', descripcion:'' } },
+      methods: {
+        apiBase(){ return '/api'; },
+        listar(){ (this.$http || axios).get(this.apiBase() + '/rol').then(r => { this.roles = Array.isArray(r.data) ? r.data : []; }); },
+        crear(){
+          (this.$http || axios).post(this.apiBase() + '/rol', this.nuevo)
+            .then(() => { this.nuevo = { nombre_rol:'', descripcion:'' }; this.listar(); })
+            .catch(() => alert('Error al crear rol'));
+        },
+        guardar(r){
+          (this.$http || axios).put(this.apiBase() + '/rol/' + r.id_rol, r)
+            .then(() => this.listar())
+            .catch(() => alert('Error al actualizar'));
+        },
+        eliminar(r){
+          if(!confirm('¿Eliminar rol?')) return;
+          (this.$http || axios).delete(this.apiBase() + '/rol/' + r.id_rol)
+            .then(() => this.listar())
+            .catch(() => alert('No se pudo eliminar'));
+        }
+      },
+      mounted(){ this.listar(); }
+    });
+  });
+</script>
+</body>
+</html>

@@ -227,7 +227,7 @@
     <div id="app" class="container-fluid p-0" style="min-width:100vw;">
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 border-bottom">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold fs-3" href="/">Aurum</a>
+                <a class="navbar-brand fw-bold fs-3" th:href="@{/}">Aurum</a>
                 <button id="sidebar-open-btn" 
                         class="btn btn-outline-secondary d-lg-none me-2" 
                         aria-label="Abrir menú"
@@ -294,11 +294,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/reservas/reportes}" data-path="reportes">
-                            <i class="fa-solid fa-chart-simple me-3"></i> Reporte Mensual
+                            <i class="fa-solid fa-chart-simple me-3"></i> Reportes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/usuarios_administracion" data-path="usuarios_administracion">
+                        <a class="nav-link" th:href="@{/usuarios_admin}" data-path="usuarios">
                             <i class="fa-solid fa-clipboard-user me-3"></i> Personal Hotel
                         </a>
                     </li>

@@ -17,6 +17,7 @@ public class PersonaController {
     @Autowired
     PersonaRepository repository;
 
+    @SuppressWarnings("null")
     @GetMapping("/persona")
     public ResponseEntity<List<Persona>> getAll(@RequestParam(required = false) String title) {
         try {
@@ -33,6 +34,7 @@ public class PersonaController {
 
     @GetMapping("/persona/{id}")
     public ResponseEntity<Persona> getById(@PathVariable("id") Long id) {
+        @SuppressWarnings("null")
         Optional<Persona> entidad = repository.findById(id);
         if (entidad.isPresent()) {
             return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
@@ -47,12 +49,13 @@ public class PersonaController {
             Persona _entidad = repository.save(new Persona(null, entidad.getNombres(), entidad.getApellidos()));
             return new ResponseEntity<>(_entidad, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/persona/{id}")
     public ResponseEntity<Persona> update(@PathVariable("id") Long id, @RequestBody Persona entidad) {
+        @SuppressWarnings("null")
         Persona _entidad = repository.findById(id).orElse(null);
         if (_entidad != null) {
             _entidad.setNombres(entidad.getNombres());
@@ -63,6 +66,7 @@ public class PersonaController {
         }
     }
 
+    @SuppressWarnings("null")
     @DeleteMapping("/persona/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         try {

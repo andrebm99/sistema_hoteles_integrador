@@ -34,6 +34,7 @@ public class HabitacionController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @SuppressWarnings("null")
     @GetMapping("/habitaciones")
     public ResponseEntity<List<Habitacion>> getAll(@RequestParam(required = false) String title) {
         try {
@@ -82,6 +83,7 @@ public class HabitacionController {
 
     @GetMapping("/habitaciones/{id_habitacion}")
     public ResponseEntity<Habitacion> getById(@PathVariable("id_habitacion") Long id_habitacion) {
+        @SuppressWarnings("null")
         Optional<Habitacion> entidad = repository.findById(id_habitacion);
         if (entidad.isPresent()) {
             return new ResponseEntity<>(entidad.get(), HttpStatus.OK);
@@ -90,6 +92,7 @@ public class HabitacionController {
         }
     }
 
+    @SuppressWarnings("null")
     @PostMapping(value = "/habitaciones", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Habitacion> create(
             @RequestPart("data") String habitacionJson,
@@ -115,6 +118,7 @@ public class HabitacionController {
     @PutMapping("/habitaciones/{id_habitacion}")
     public ResponseEntity<Habitacion> update(@PathVariable("id_habitacion") Long id_habitacion,
             @RequestBody Habitacion entidad) {
+        @SuppressWarnings("null")
         Habitacion _entidad = repository.findById(id_habitacion).orElse(null);
         if (_entidad != null) {
             _entidad.setNumerohabitacion(entidad.getNumerohabitacion());
@@ -136,6 +140,7 @@ public class HabitacionController {
             @PathVariable("id_habitacion") Long id_habitacion,
             @RequestPart("file") MultipartFile file) {
                 try{
+                    @SuppressWarnings("null")
                     Optional<Habitacion> optional = repository.findById(id_habitacion);
 
                     if(!optional.isPresent()){
@@ -160,6 +165,7 @@ public class HabitacionController {
                 }
             }
 
+    @SuppressWarnings("null")
     @DeleteMapping("/habitaciones/{id_habitacion}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id_habitacion") Long id_habitacion) {
         try {
@@ -170,6 +176,7 @@ public class HabitacionController {
         }
     }
 
+    @SuppressWarnings("null")
     @Transactional
     @GetMapping("/habitaciones/{id_habitacion}/foto")
     public ResponseEntity<byte[]> getFoto(@PathVariable("id_habitacion") Long id_habitacion) {
