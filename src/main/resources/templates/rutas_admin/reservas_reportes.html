@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_navbar_admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>Reportes Mensuales - Reservas</title>
+  <link rel="icon" th:href="@{/favicon.ico}">
+</head>
+<body>
+<section layout:fragment="content" id="app">
+  <div class="container-fluid">
+    <h3 class="mt-2 mb-3">Reservas • Reportes Mensuales</h3>
+
+    <div class="card p-3 mb-3">
+      <h5>Subir reporte mensual</h5>
+      <form @submit.prevent="subir">
+        <div class="row g-2">
+          <div class="col-md-2">
+            <label class="form-label">Mes</label>
+            <select class="form-select" v-model.number="nuevo.month" required>
+              <option v-for="m in 12" :key="m" :value="m">{{ m }}</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Año</label>
+            <input type="number" class="form-control" v-model.number="nuevo.year" min="2000" max="2100" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Título</label>
+            <input type="text" class="form-control" v-model="nuevo.title" placeholder="Ejm: Reporte reservas Noviembre" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Notas (opcional)</label>
+            <input type="text" class="form-control" v-model="nuevo.notes" placeholder="Observaciones, notas...">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Archivo</label>
+            <input type="file" id="fileReporte" class="form-control" accept=".pdf,.xlsx,.xls,.csv" required>
+            <small class="text-muted">Se admite PDF, Excel, CSV. Se almacenará en la base de datos.</small>
+          </div>
+          <div class="col-md-4 d-flex align-items-end justify-content-end">
+            <button class="btn btn-primary" type="button" @click="subir">Subir reporte</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card p-3">
+      <h5>Reportes subidos</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Mes</th>
+            <th>Año</th>
+            <th>Título</th>
+            <th>Archivo</th>
+            <th>Fecha</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="r in reportes" :key="r.id_reporte">
+            <td>{{ r.id_reporte }}</td>
+            <td>{{ r.month }}</td>
+            <td>{{ r.year }}</td>
+            <td>{{ r.title }}</td>
+            <td>{{ r.filename || '-' }}</td>
+            <td>{{ r.createdAt }}</td>
+            <td class="text-end">
+              <div class="btn-group">
+                <a class="btn btn-sm btn-outline-primary" :href="apiBase() + '/reportes/' + r.id_reporte + '/ver'" target="_blank">Ver</a>
+                <a class="btn btn-sm btn-outline-secondary" :href="apiBase() + '/reportes/' + r.id_reporte + '/descargar'">Descargar</a>
+                <button class="btn btn-sm btn-danger" @click="eliminar(r.id_reporte)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div v-if="reportes.length === 0" class="text-muted">No hay reportes subidos todavía.</div>
+    </div>
+  </div>
+</section>
+
+<script layout:fragment="script">
+  if (window.axios && window.Vue) { Vue.prototype.$http = axios; }
+  document.addEventListener('DOMContentLoaded', function () {
+    new Vue({
+      el: "#app",
+      data: {
+        reportes: [],
+        nuevo: {
+          month: new Date().getMonth() + 1,
+          year: new Date().getFullYear(),
+          title: '',
+          notes: ''
+        }
+      },
+      methods: {
+        apiBase() { return '/api'; },
+        listar() {
+          (this.$http || axios).get(this.apiBase() + '/reportes')
+            .then(resp => { this.reportes = Array.isArray(resp.data) ? resp.data : []; })
+            .catch(err => { console.error('Error listando reportes', err); this.reportes = []; });
+        },
+        subir() {
+          const fileInput = document.getElementById('fileReporte');
+          if (!fileInput || fileInput.files.length === 0) { alert('Seleccione un archivo'); return; }
+          const fd = new FormData();
+          fd.append('month', this.nuevo.month);
+          fd.append('year', this.nuevo.year);
+          fd.append('title', this.nuevo.title || '');
+          fd.append('notes', this.nuevo.notes || '');
+          fd.append('file', fileInput.files[0]);
+
+          (this.$http || axios).post(this.apiBase() + '/reportes/subir', fd)
+            .then(() => {
+              alert('Reporte subido');
+              fileInput.value = '';
+              this.nuevo.title=''; this.nuevo.notes='';
+              this.listar();
+            })
+            .catch(err => {
+              const msg = (err.response && err.response.data) ? err.response.data : 'Error al subir reporte';
+              alert(msg);
+            });
+        },
+        eliminar(id) {
+          if (!confirm('¿Desea eliminar este reporte?')) return;
+          (this.$http || axios).delete(this.apiBase() + '/reportes/' + id)
+            .then(() => { this.listar(); })
+            .catch(err => { console.error('Error eliminando', err); alert('No se pudo eliminar'); });
+        }
+      },
+      mounted() { this.listar(); }
+    });
+  });
+</script>
+</body>
+</html>

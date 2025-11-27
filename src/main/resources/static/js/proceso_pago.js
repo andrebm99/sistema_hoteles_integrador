@@ -1,90 +1,118 @@
-document.addEventListener('DOMContentLoaded', function () {
-  //Completar con datos de reservas  //
-  try {
-    const q = new URLSearchParams(window.location.search);
-    const room = q.get('room');
-    const checkin = q.get('checkin');
-    const checkout = q.get('checkout');
-    const guests = q.get('guests');
-    const days = q.get('days');
-    const total = q.get('total');
-    if (room) {
-      const el = document.getElementById('pp-room'); if (el) el.textContent = room;
-    }
-    if (checkin && checkout) {
-      const el = document.getElementById('pp-dates'); if (el) el.textContent = checkin + ' - ' + checkout;
-    }
-    if (guests) {
-      const el = document.getElementById('pp-guests'); if (el) el.textContent = guests;
-    }
-    if (days) {
-      const el = document.getElementById('pp-days'); if (el) el.textContent = days;
-    }
-    if (total) {
-      const el = document.getElementById('pp-total'); if (el) el.textContent = 'S/. ' + total;
-    }
-  } catch(e) {}
-  // seleccionar metodo de pago//
-  const paymentOptions = document.querySelectorAll('.payment-option');
-  const tarjetaForm = document.getElementById('tarjeta-form');
-  const paypalForm = document.getElementById('paypal-form');
-  const transferenciaForm = document.getElementById('transferencia-form');
+(function(){
+  const qs = new URLSearchParams(window.location.search);
+  const reservaId = qs.get('id');
 
-  paymentOptions.forEach(option => {
-    option.addEventListener('click', function () {
-      paymentOptions.forEach(opt => opt.classList.remove('active'));
-      this.classList.add('active');
-
-      // Ocultar todos
-      if (tarjetaForm) tarjetaForm.style.display = 'none';
-      if (paypalForm) paypalForm.style.display = 'none';
-      if (transferenciaForm) transferenciaForm.style.display = 'none';
-
-      // Mostrar el seleccionado
-      if (this.id === 'tarjeta-option' && tarjetaForm) {
-        tarjetaForm.style.display = 'block';
-      } else if (this.id === 'paypal-option' && paypalForm) {
-        paypalForm.style.display = 'block';
-      } else if (this.id === 'transferencia-option' && transferenciaForm) {
-        transferenciaForm.style.display = 'block';
-      }
-    });
-  });
-
-  document.querySelectorAll('form').forEach(f => {
-    f.setAttribute('novalidate', 'novalidate');
-  });
-
-  const goTo = (url) => { window.location.href = url; };
-  document.querySelectorAll('.btn-confirm-payment').forEach(btn => {
-    btn.addEventListener('click', () => goTo('reserva_exitosa'));
-  });
-
-  // Modo oscuros //
-  const darkModeToggle = document.getElementById('dark-mode-toggle');
-  const body = document.body;
-
-  const applyTheme = () => {
-    const savedTheme = localStorage.getItem('theme');
-    const icon = darkModeToggle?.querySelector('i');
-
-    if (savedTheme === 'dark') {
-      body.classList.add('dark-mode');
-      icon?.classList.remove('bi-moon');
-      icon?.classList.add('bi-sun');
-    } else {
-      body.classList.remove('dark-mode');
-      icon?.classList.remove('bi-sun');
-      icon?.classList.add('bi-moon');
-    }
+  const el = (id) => document.getElementById(id);
+  const fmtMoney = (n) => {
+    const v = Number(n || 0);
+    return 'S/. ' + v.toFixed(2);
+  };
+  const parseISO = (s) => s ? new Date(s) : null;
+  const diffNights = (ini, fin) => {
+    if(!ini || !fin) return 1;
+    const ms = fin.getTime() - ini.getTime();
+    const nights = Math.floor(ms / (1000 * 60 * 60 * 24));
+    return Math.max(1, nights);
+  };
+  const fmtDates = (ini, fin) => {
+    if(!ini || !fin) return '-';
+    return ini.toLocaleString() + ' - ' + fin.toLocaleString();
   };
 
-  darkModeToggle?.addEventListener('click', (e) => {
-    e.preventDefault();
-    body.classList.toggle('dark-mode');
-    localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
-    applyTheme();
-  });
+  let metodoSeleccionado = 'Tarjeta';
 
-  applyTheme();
-});
+  function setActivePayment(idActive){
+    const options = [
+      { id: 'tarjeta-option', form: 'tarjeta-form', name: 'Tarjeta' },
+      { id: 'paypal-option', form: 'paypal-form', name: 'Paypal' },
+      { id: 'transferencia-option', form: 'transferencia-form', name: 'Transferencia' }
+    ];
+    options.forEach(opt => {
+      const optEl = document.getElementById(opt.id);
+      const formEl = document.getElementById(opt.form);
+      if(!optEl || !formEl) return;
+      const active = (opt.id === idActive);
+      optEl.classList.toggle('active', active);
+      formEl.style.display = active ? '' : 'none';
+      if(active) metodoSeleccionado = opt.name;
+    });
+  }
+
+  async function cargarReserva(){
+    if(!reservaId){
+      alert('Falta el id de la reserva en la URL (?id=...)');
+      return;
+    }
+    try{
+      const resp = await fetch('/api/reserva/' + encodeURIComponent(reservaId));
+      if(!resp.ok){
+        const txt = await resp.text();
+        throw new Error(txt || ('Error ' + resp.status));
+      }
+      const r = await resp.json();
+
+      const ini = parseISO(r.fechaInicio);
+      const fin = parseISO(r.fecha_salida);
+      const noches = diffNights(ini, fin);
+
+      // Mostrar datos
+      if(el('pp-room')) el('pp-room').textContent = r.habitacion || '-';
+      if(el('pp-dates')) el('pp-dates').textContent = fmtDates(ini, fin);
+      if(el('pp-guests')) el('pp-guests').textContent = r.ocupantes || '-';
+      if(el('pp-days')) el('pp-days').textContent = noches;
+
+      // Precio / Total
+      const unit = (r.precio_aplicado != null) ? r.precio_aplicado : 0;
+      const total = (r.total_aplicado != null) ? r.total_aplicado : (unit * noches);
+      if(el('pp-total')) el('pp-total').textContent = fmtMoney(total);
+
+      // Preseleccionar método existente
+      if(r.metodo_pago){
+        if(r.metodo_pago === 'Paypal') setActivePayment('paypal-option');
+        else if(r.metodo_pago === 'Transferencia') setActivePayment('transferencia-option');
+        else setActivePayment('tarjeta-option');
+      } else {
+        setActivePayment('tarjeta-option');
+      }
+
+      // Botones confirmar pago (de cualquier formulario)
+      document.querySelectorAll('.btn-confirm-payment').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          try{
+            const pr = await fetch('/api/pago/confirmar?id=' + encodeURIComponent(reservaId), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ metodo_pago: metodoSeleccionado })
+            });
+            if(pr.ok){
+              alert('Pago confirmado. ¡Gracias!');
+              window.location.href = '/reservas';
+            } else {
+              const txt = await pr.text();
+              alert('Error al confirmar pago: ' + txt);
+            }
+          } catch(e){
+            console.error(e);
+            alert('Error de red al confirmar pago');
+          }
+        });
+      });
+
+    } catch(e){
+      console.error(e);
+      alert('No se pudo cargar la reserva: ' + e.message);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle de métodos
+    const tar = document.getElementById('tarjeta-option');
+    const pay = document.getElementById('paypal-option');
+    const tra = document.getElementById('transferencia-option');
+    if(tar) tar.addEventListener('click', () => setActivePayment('tarjeta-option'));
+    if(pay) pay.addEventListener('click', () => setActivePayment('paypal-option'));
+    if(tra) tra.addEventListener('click', () => setActivePayment('transferencia-option'));
+
+    cargarReserva();
+  });
+})();

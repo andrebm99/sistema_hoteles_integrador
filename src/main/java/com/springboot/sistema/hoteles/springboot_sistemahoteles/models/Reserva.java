@@ -43,6 +43,12 @@ public class Reserva implements Serializable {
     @Column(name = "fecha_salida")
     private LocalDateTime fecha_salida;
 
+    @Column(name = "precio_aplicado")
+    private Double precio_aplicado;
+
+    @Column(name = "total_aplicado")
+    private Double total_aplicado;
+
     @Column(name = "metodo_pago")
     private String metodo_pago;
 
@@ -50,17 +56,20 @@ public class Reserva implements Serializable {
     }
 
     public Reserva(Long id_reserva, String codigo, String nombresapellidos, Integer dni, Integer edad,
-            String habitacion, String ocupantes, LocalDateTime fechaInicio, LocalDateTime fecha_salida,
-            String metodo_pago) {
+            String habitacion, Long id_habitacion, String ocupantes, LocalDateTime fechaInicio,
+            LocalDateTime fecha_salida, Double precio_aplicado, Double total_aplicado, String metodo_pago) {
         this.id_reserva = id_reserva;
         this.codigo = codigo;
         this.nombresapellidos = nombresapellidos;
         this.dni = dni;
         this.edad = edad;
         this.habitacion = habitacion;
+        this.id_habitacion = id_habitacion;
         this.ocupantes = ocupantes;
         this.fechaInicio = fechaInicio;
         this.fecha_salida = fecha_salida;
+        this.precio_aplicado = precio_aplicado;
+        this.total_aplicado = total_aplicado;
         this.metodo_pago = metodo_pago;
     }
 
@@ -70,14 +79,6 @@ public class Reserva implements Serializable {
 
     public void setId_reserva(Long id_reserva) {
         this.id_reserva = id_reserva;
-    }
-
-    public Long getId_habitacion() {
-        return id_habitacion;
-    }
-
-    public void setId_habitacion(Long id_habitacion) {
-        this.id_habitacion = id_habitacion;
     }
 
     public String getCodigo() {
@@ -120,6 +121,14 @@ public class Reserva implements Serializable {
         this.habitacion = habitacion;
     }
 
+    public Long getId_habitacion() {
+        return id_habitacion;
+    }
+
+    public void setId_habitacion(Long id_habitacion) {
+        this.id_habitacion = id_habitacion;
+    }
+
     public String getOcupantes() {
         return ocupantes;
     }
@@ -142,6 +151,22 @@ public class Reserva implements Serializable {
 
     public void setFecha_salida(LocalDateTime fecha_salida) {
         this.fecha_salida = fecha_salida;
+    }
+
+    public Double getPrecio_aplicado() {
+        return precio_aplicado;
+    }
+
+    public void setPrecio_aplicado(Double precio_aplicado) {
+        this.precio_aplicado = precio_aplicado;
+    }
+
+    public Double getTotal_aplicado() {
+        return total_aplicado;
+    }
+
+    public void setTotal_aplicado(Double total_aplicado) {
+        this.total_aplicado = total_aplicado;
     }
 
     public String getMetodo_pago() {

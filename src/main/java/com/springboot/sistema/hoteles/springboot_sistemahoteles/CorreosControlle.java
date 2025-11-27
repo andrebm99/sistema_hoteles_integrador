@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class CorreosControlle {
+    /*  
     @Autowired
     private JavaMailSender emailSender;
     @RequestMapping("/correos")
@@ -21,4 +22,5 @@ public class CorreosControlle {
                 emailSender);
         return "correos";
     }
+        */
 }

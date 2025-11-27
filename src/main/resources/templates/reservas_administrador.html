@@ -469,11 +469,11 @@
 
                 },
 
-                toLocalDateTimeString: function(date){
-                    return new Date(date).toISOString().slice(0,19);
+                toLocalDateTimeString: function (date) {
+                    return new Date(date).toISOString().slice(0, 19);
                 },
 
-                checkDisponibilidad: async function(habitacion, inicioDate, finDate){
+                checkDisponibilidad: async function (habitacion, inicioDate, finDate) {
                     const inicio = this.toLocalDateTimeString(inicioDate);
                     const fin = this.toLocalDateTimeString(finDate);
                     const url = '/api/reserva/disponibilidad'
@@ -481,7 +481,7 @@
                         + '&fechaInicio=' + encodeURIComponent(inicio)
                         + '&fechaFin=' + encodeURIComponent(fin);
                     const resp = await fetch(url);
-                    if(!resp.ok){
+                    if (!resp.ok) {
                         const txt = await resp.text();
                         throw new Error(`Error comprobando disponibilidad: ${resp.status} ${txt}`);
                     }
@@ -490,29 +490,29 @@
                     return json.disponible === true;
                 },
 
-                reservar: async function(habitacion, inicioDate, finDate, datosReserva){
+                reservar: async function (habitacion, inicioDate, finDate, datosReserva) {
                     const ok = await this.checkDisponibilidad(habitacion, inicioDate, finDate);
 
-                    if(!ok){
+                    if (!ok) {
                         alert("La habitación no está disponible en esas fechas");
                         return;
                     }
                 },
 
-                crearReservaAPI: async function(reservaObj){
+                crearReservaAPI: async function (reservaObj) {
                     const resp = await fetch('/api/reserva', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(reservaObj)
                     });
-                    if(resp.status === 201){
+                    if (resp.status === 201) {
                         const created = await resp.json();
                         return {
                             ok: true,
                             data: created
                         };
                     }
-                    if(resp.status === 409){
+                    if (resp.status === 409) {
                         const txt = await resp.text();
                         return {
                             ok: false,
@@ -521,13 +521,13 @@
                         };
                     }
 
-                    if(resp.status === 400){
+                    if (resp.status === 400) {
                         const txt = await resp.text();
                         return {
                             ok: false,
                             code: 400,
                             message: txt || "Datos inválidos"
-                        }; 
+                        };
                     }
 
                     const txt = await resp.text();
@@ -535,7 +535,7 @@
                         ok: false,
                         code: resp.status,
                         message: txt || "Error del servidor."
-                    }; 
+                    };
                 },
 
                 nuevo: function () {
@@ -561,36 +561,33 @@
                 },
                 guardar: function () {
                     const dni = String(this.entidad.dni);
-
-                    if (!dni || dni.length !== 8) {
-                        alert("Esta ingresando menos/más caracteres que lo permitido.");
-                        return;
-                    }
-
+                    if (!dni || dni.length !== 8) { alert("Esta ingresando menos/más caracteres que lo permitido."); return; }
                     const edad = Number(this.entidad.edad);
+                    if (!Number.isFinite(edad) || edad < 18) { alert("No se permiten menores de 18 en registros del Hotel Aurum!."); return; }
 
-                    if (!Number.isFinite(edad) || edad < 18) {
-                        alert("No se permiten menores de 18 en registros del Hotel Aurum!.");
-                        return;
-                    }
-
-                    this.$http.post('/api/reserva', this.entidad).then(response => {
-                        this.listar();
-                        $("#mdlEntidad").modal("hide");
-                    })
-                    .catch(error => {
-                        const status = error.status || (error.response && error.response.status);
-                        const body = error.body || (error.response && error.response.data) || '';
-
-                        if(status === 409){
-                            alert("No disponible: " + (body || "La habitación no está disponible en las fechas indicasdas.")); 
-                        } else if(status === 404){
-                            alert("Habitación no encontrada: " + (body || "Revise la habitación seleccionada"));
-                        } else{
-                            console.error(error); 
-                            alert("Error al guardar reserva."); 
-                        }
-                    }); 
+                    this.$http.post('/api/reserva', this.entidad)
+                        .then(response => {
+                            const created = response.data;
+                            this.listar();
+                            $("#mdlEntidad").modal("hide");
+                            if (created && created.id_reserva) {
+                                window.location.href = '/proceso_pago?id=' + encodeURIComponent(created.id_reserva);
+                            } else {
+                                alert('Reserva creada, pero no se pudo redirigir al pago.');
+                            }
+                        })
+                        .catch(error => {
+                            const status = error.status || (error.response && error.response.status);
+                            const body = error.body || (error.response && error.response.data) || '';
+                            if (status === 409) {
+                                alert("No disponible: " + (body || "La habitación no está disponible en las fechas indicasdas."));
+                            } else if (status === 404) {
+                                alert("Habitación no encontrada: " + (body || "Revise la habitación seleccionada"));
+                            } else {
+                                console.error(error);
+                                alert("Error al guardar reserva.");
+                            }
+                        });
                 },
                 actualizar: function () {
                     this.$http.put('/api/reserva/' + this.entidad.id_reserva, this.entidad).then(response => {

@@ -24,6 +24,8 @@ import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Habitacio
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.HabitacionRepository;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.repositories.ReservaRepository;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.services.AuthService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -31,9 +33,9 @@ import com.springboot.sistema.hoteles.springboot_sistemahoteles.services.AuthSer
 public class ReservaController {
 
     private static final Logger logger = LoggerFactory.getLogger(ReservaController.class);
-    
+
     @Autowired
-    private AuthService authService; 
+    private AuthService authService;
 
     @Autowired
     ReservaRepository repository;
@@ -160,48 +162,60 @@ public class ReservaController {
     }
 
     @PostMapping("/reserva")
-public ResponseEntity<?> create(@RequestBody Reserva entidad) {
-    try {
-        // Validaciones mínimas
-        if (entidad == null || entidad.getFechaInicio() == null || entidad.getFecha_salida() == null || entidad.getHabitacion() == null) {
-            return ResponseEntity.badRequest().body("Faltan datos (fecha inicio/fin o tipo de habitación).");
-        }
-
-        LocalDateTime inicio = entidad.getFechaInicio();
-        LocalDateTime fin = entidad.getFecha_salida();
-        String tipo = entidad.getHabitacion(); // aquí se espera el nombre comercial/tipo
-
-        // Obtener todas las habitaciones del tipo pedido (case-insensitive)
-        List<Habitacion> habitaciones = habitacionRepository.findListByNombreComercialIgnoreCase(tipo);
-        if (habitaciones == null || habitaciones.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen habitaciones del tipo solicitado.");
-        }
-
-        // Buscar la primera habitación libre en el rango
-        for (Habitacion h : habitaciones) {
-            Long roomId = h.getId_habitacion(); // ajusta si tu getter tiene otro nombre
-            List<Reserva> conflictos = repository.findConflictingReservationsByRoomId(roomId, inicio, fin);
-            if (conflictos == null || conflictos.isEmpty()) {
-                // Asignar habitación y número
-                entidad.setId_habitacion(roomId);
-                // Opcional: ajustar el campo 'habitacion' para incluir número/identificador físico
-                String numero = (h.getNumerohabitacion() != null) ? (" #" + h.getNumerohabitacion()) : "";
-                entidad.setHabitacion(h.getNombre_comercial() + numero);
-
-                // Evitar problemas de optimistic locking: asegurar id nulo para nuevo registro
-                entidad.setId_reserva(null);
-
-                Reserva saved = repository.save(entidad);
-                return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    public ResponseEntity<?> create(@RequestBody Reserva entidad) {
+        try {
+            if (entidad == null || entidad.getFechaInicio() == null || entidad.getFecha_salida() == null
+                    || entidad.getHabitacion() == null) {
+                return ResponseEntity.badRequest().body("Faltan datos (fecha inicio/fin o tipo de habitación).");
             }
-        }
 
-        // Si llegamos aquí, no hay habitaciones libres
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("No hay habitaciones libres para ese rango de fechas.");
-    } catch (Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+            LocalDateTime inicio = entidad.getFechaInicio();
+            LocalDateTime fin = entidad.getFecha_salida();
+            String tipo = entidad.getHabitacion();
+
+            List<Habitacion> habitaciones = habitacionRepository.findListByNombreComercialIgnoreCase(tipo);
+            if (habitaciones == null || habitaciones.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen habitaciones del tipo solicitado.");
+            }
+
+            for (Habitacion h : habitaciones) {
+                Long roomId = h.getId_habitacion();
+                List<Reserva> conflictos = repository.findConflictingReservationsByRoomId(roomId, inicio, fin);
+                if (conflictos == null || conflictos.isEmpty()) {
+                    entidad.setId_habitacion(roomId);
+
+                    // Asignar habitación y número
+                    String numero = (h.getNumerohabitacion() != null) ? (" #" + h.getNumerohabitacion()) : "";
+                    entidad.setHabitacion(h.getNombre_comercial() + numero);
+
+                    // Calcular
+                    long horas = java.time.Duration.between(inicio, fin).toHours();
+                    long noches = Math.max(1, horas / 24);
+
+                    Double precioUnitario = h.getPrecio() != null ? h.getPrecio() : 0.0;
+                    Double totalAplicado = precioUnitario * noches;
+
+                    entidad.setPrecio_aplicado(precioUnitario);
+                    entidad.setTotal_aplicado(totalAplicado);
+
+                    entidad.setId_reserva(null);
+
+                    Reserva saved = repository.save(entidad);
+
+                    h.setEstado_operativo("Ocupada");
+                    habitacionRepository.save(h);
+
+                    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+                }
+            }
+
+            // Si llegamos aquí, no hay habitaciones libres
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("No hay habitaciones libres para ese rango de fechas.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
-}
 
     @PutMapping("/reserva/{id_reserva}")
     public ResponseEntity<?> update(@PathVariable long id_reserva, @RequestBody Reserva entidad) {
@@ -212,14 +226,14 @@ public ResponseEntity<?> create(@RequestBody Reserva entidad) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(entidad.getHabitacion() == null || entidad.getFechaInicio() == null || entidad.getFecha_salida() == null){
+        if (entidad.getHabitacion() == null || entidad.getFechaInicio() == null || entidad.getFecha_salida() == null) {
             return ResponseEntity.badRequest().body("Habitación, fecha de inicio y fecha de salida son obligatórios.");
         }
 
-        boolean existeHabitacion = habitacionRepository.existsByNombreComercialIgnoreCase(entidad.getHabitacion()); 
+        boolean existeHabitacion = habitacionRepository.existsByNombreComercialIgnoreCase(entidad.getHabitacion());
 
-        if(!existeHabitacion){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La habitación indicada no existe."); 
+        if (!existeHabitacion) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La habitación indicada no existe.");
         }
 
         List<Reserva> conflicts = repository.findConflictingReservations(
@@ -245,11 +259,28 @@ public ResponseEntity<?> create(@RequestBody Reserva entidad) {
 
     }
 
+    @SuppressWarnings("null")
     @DeleteMapping("/reserva/{id_reserva}")
     public ResponseEntity<HttpStatus> delete(@PathVariable long id_reserva) {
         try {
+
+            Reserva reserva = repository.findById(id_reserva).orElse(null);
+
+            if (reserva == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
             repository.deleteById(id_reserva);
+
+            if (reserva.getId_habitacion() != null) {
+                habitacionRepository.findById(reserva.getId_habitacion()).ifPresent(h -> {
+                    h.setEstado_operativo("Disponible");
+                    habitacionRepository.save(h);
+                });
+            }
+
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -275,6 +306,13 @@ public ResponseEntity<?> create(@RequestBody Reserva entidad) {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/reserva/{id_reserva}")
+    public ResponseEntity<Reserva> getById(@PathVariable("id_reserva") long id_reserva) {
+        Optional<Reserva> optional = repository.findById(id_reserva);
+        return optional.map(res -> new ResponseEntity<>(res, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }

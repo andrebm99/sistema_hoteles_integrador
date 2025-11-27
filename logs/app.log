@@ -1,9 +1,201 @@
-2025-11-25T00:13:18.920-05:00  INFO 80843 --- [springboot-sistemahoteles] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2025-11-25T00:13:19.818-05:00  INFO 80843 --- [springboot-sistemahoteles] [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-11-25T00:13:19.818-05:00  INFO 80843 --- [springboot-sistemahoteles] [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-11-25T00:13:19.820-05:00  INFO 80843 --- [springboot-sistemahoteles] [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2025-11-25T00:15:30.821-05:00  INFO 80843 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2025-11-25T00:15:30.825-05:00  INFO 80843 --- [springboot-sistemahoteles] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2025-11-25T00:15:30.833-05:00  INFO 80843 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-11-25T00:15:30.836-05:00  INFO 80843 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
-2025-11-25T00:15:30.839-05:00  INFO 80843 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2025-11-27T00:12:24.372-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Starting IntegradorspringbootApplication using Java 21.0.9 with PID 13528 (C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador\target\classes started by ronal in C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador)
+2025-11-27T00:12:24.383-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : No active profile set, falling back to 1 default profile: "default"
+2025-11-27T00:12:24.849-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-11-27T00:12:24.849-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-11-27T00:12:27.110-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-27T00:12:27.227-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 99 ms. Found 7 JPA repository interfaces.
+2025-11-27T00:12:28.255-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-11-27T00:12:28.274-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-27T00:12:28.275-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-11-27T00:12:28.353-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-27T00:12:28.355-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3505 ms
+2025-11-27T00:12:28.977-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-27T00:12:29.060-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.36.Final
+2025-11-27T00:12:29.117-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-27T00:12:29.962-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-27T00:12:30.009-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-27T00:12:31.457-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@60e1a35b
+2025-11-27T00:12:31.460-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-27T00:12:31.779-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-27T00:12:33.224-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-27T00:12:33.753-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-27T00:12:34.426-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-27T00:12:36.378-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HabitacionesController.page()
+2025-11-27T00:12:36.379-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HomeController.page()
+2025-11-27T00:12:36.383-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.proceso_pagosController.page()
+2025-11-27T00:12:36.387-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservaexitosaController.page()
+2025-11-27T00:12:36.389-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.ReservasController.page()
+2025-11-27T00:12:36.392-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservas_usuarioController.page()
+2025-11-27T00:12:36.394-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.RolesController.page()
+2025-11-27T00:12:36.418-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.UsuariosAController.page()
+2025-11-27T00:12:36.496-05:00  WARN 13528 --- [springboot-sistemahoteles] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-27T00:12:36.551-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-11-27T00:12:37.798-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-11-27T00:12:37.816-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27T00:12:37.993-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2025-11-27T00:12:38.021-05:00  INFO 13528 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Started IntegradorspringbootApplication in 14.387 seconds (process running for 15.355)
+2025-11-27T00:12:39.290-05:00  INFO 13528 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-27T00:12:39.290-05:00  INFO 13528 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-27T00:12:39.292-05:00  INFO 13528 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-11-27T00:14:13.599-05:00  WARN 13528 --- [springboot-sistemahoteles] [http-nio-8081-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
+2025-11-27T00:14:13.606-05:00  WARN 13528 --- [springboot-sistemahoteles] [http-nio-8081-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
+2025-11-27T00:14:36.627-05:00  WARN 13528 --- [springboot-sistemahoteles] [http-nio-8081-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'month' for method parameter type Integer is not present]
+2025-11-27T00:16:19.332-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Starting IntegradorspringbootApplication using Java 21.0.9 with PID 1652 (C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador\target\classes started by ronal in C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador)
+2025-11-27T00:16:19.336-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : No active profile set, falling back to 1 default profile: "default"
+2025-11-27T00:16:19.760-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-11-27T00:16:19.760-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-11-27T00:16:21.576-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-27T00:16:21.685-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 97 ms. Found 7 JPA repository interfaces.
+2025-11-27T00:16:22.650-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-11-27T00:16:22.675-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-27T00:16:22.676-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-11-27T00:16:22.755-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-27T00:16:22.756-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2995 ms
+2025-11-27T00:16:23.199-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-27T00:16:23.298-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.36.Final
+2025-11-27T00:16:23.366-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-27T00:16:24.142-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-27T00:16:24.194-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-27T00:16:25.636-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@9ef78ec
+2025-11-27T00:16:25.642-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-27T00:16:25.984-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-27T00:16:27.179-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-27T00:16:27.718-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-27T00:16:28.344-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-27T00:16:29.859-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HabitacionesController.page()
+2025-11-27T00:16:29.865-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HomeController.page()
+2025-11-27T00:16:29.868-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.proceso_pagosController.page()
+2025-11-27T00:16:29.872-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservaexitosaController.page()
+2025-11-27T00:16:29.884-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.ReservasController.page()
+2025-11-27T00:16:29.909-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservas_usuarioController.page()
+2025-11-27T00:16:29.915-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.RolesController.page()
+2025-11-27T00:16:29.939-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.UsuariosAController.page()
+2025-11-27T00:16:30.019-05:00  WARN 1652 --- [springboot-sistemahoteles] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-27T00:16:30.071-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-11-27T00:16:31.206-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-11-27T00:16:31.221-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27T00:16:31.370-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2025-11-27T00:16:31.391-05:00  INFO 1652 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Started IntegradorspringbootApplication in 12.77 seconds (process running for 13.724)
+2025-11-27T00:16:33.952-05:00  INFO 1652 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-27T00:16:33.952-05:00  INFO 1652 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-27T00:16:33.954-05:00  INFO 1652 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-11-27T00:17:10.655-05:00  WARN 1652 --- [springboot-sistemahoteles] [http-nio-8081-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'month' for method parameter type Integer is not present]
+2025-11-27T00:17:15.990-05:00  WARN 1652 --- [springboot-sistemahoteles] [http-nio-8081-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'month' for method parameter type Integer is not present]
+2025-11-27T00:22:32.361-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Starting IntegradorspringbootApplication using Java 21.0.9 with PID 11536 (C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador\target\classes started by ronal in C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador)
+2025-11-27T00:22:32.361-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : No active profile set, falling back to 1 default profile: "default"
+2025-11-27T00:22:32.777-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-11-27T00:22:32.777-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-11-27T00:22:34.585-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-27T00:22:34.709-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 110 ms. Found 7 JPA repository interfaces.
+2025-11-27T00:22:35.700-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-11-27T00:22:35.725-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-27T00:22:35.726-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-11-27T00:22:35.807-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-27T00:22:35.808-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3031 ms
+2025-11-27T00:22:36.599-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-27T00:22:36.697-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.36.Final
+2025-11-27T00:22:36.756-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-27T00:22:37.202-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-27T00:22:37.241-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-27T00:22:38.708-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1f9e2443
+2025-11-27T00:22:38.715-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-27T00:22:39.084-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.4.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-27T00:22:40.562-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-27T00:22:41.123-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-27T00:22:41.793-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-27T00:22:43.281-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HabitacionesController.page()
+2025-11-27T00:22:43.282-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HomeController.page()
+2025-11-27T00:22:43.285-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.proceso_pagosController.page()
+2025-11-27T00:22:43.288-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservaexitosaController.page()
+2025-11-27T00:22:43.292-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.ReservasController.page()
+2025-11-27T00:22:43.296-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservas_usuarioController.page()
+2025-11-27T00:22:43.301-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.RolesController.page()
+2025-11-27T00:22:43.337-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.UsuariosAController.page()
+2025-11-27T00:22:43.424-05:00  WARN 11536 --- [springboot-sistemahoteles] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-27T00:22:43.474-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-11-27T00:22:44.722-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-11-27T00:22:44.740-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27T00:22:45.067-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2025-11-27T00:22:45.108-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Started IntegradorspringbootApplication in 13.462 seconds (process running for 14.378)
+2025-11-27T00:22:47.011-05:00  INFO 11536 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-27T00:22:47.015-05:00  INFO 11536 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-27T00:22:47.018-05:00  INFO 11536 --- [springboot-sistemahoteles] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-11-27T00:28:41.118-05:00  WARN 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
+2025-11-27T00:28:41.129-05:00  WARN 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
+2025-11-27T00:28:46.959-05:00  WARN 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
+2025-11-27T00:28:46.961-05:00  WARN 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.multipart.MaxUploadSizeExceededException: Maximum upload size exceeded]
+2025-11-27T00:30:03.032-05:00  INFO 11536 --- [springboot-sistemahoteles] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-11-27T00:30:03.041-05:00  INFO 11536 --- [springboot-sistemahoteles] [Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-27T00:30:03.053-05:00  INFO 11536 --- [springboot-sistemahoteles] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-27T00:30:03.065-05:00  INFO 11536 --- [springboot-sistemahoteles] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-27T00:30:03.073-05:00  INFO 11536 --- [springboot-sistemahoteles] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-27T00:30:03.091-05:00  INFO 11536 --- [springboot-sistemahoteles] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-27T00:30:03.286-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Starting IntegradorspringbootApplication using Java 21.0.9 with PID 11536 (C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador\target\classes started by ronal in C:\Users\ronal\Desktop\Projects\sistema_hoteles_integrador)
+2025-11-27T00:30:03.299-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : No active profile set, falling back to 1 default profile: "default"
+2025-11-27T00:30:04.173-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-27T00:30:04.227-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 7 JPA repository interfaces.
+2025-11-27T00:30:04.387-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-11-27T00:30:04.389-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-27T00:30:04.391-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-11-27T00:30:04.441-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-27T00:30:04.442-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1077 ms
+2025-11-27T00:30:04.552-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-27T00:30:04.560-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-27T00:30:04.596-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-27T00:30:04.598-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-11-27T00:30:05.901-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1419e66e
+2025-11-27T00:30:05.903-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-11-27T00:30:06.019-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 8.4.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-27T00:30:06.400-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-27T00:30:06.646-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-27T00:30:06.954-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HabitacionesController.page()
+2025-11-27T00:30:06.955-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.HomeController.page()
+2025-11-27T00:30:06.958-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.proceso_pagosController.page()
+2025-11-27T00:30:06.960-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservaexitosaController.page()
+2025-11-27T00:30:06.962-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.ReservasController.page()
+2025-11-27T00:30:06.963-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.reservas_usuarioController.page()
+2025-11-27T00:30:06.966-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.RolesController.page()
+2025-11-27T00:30:06.984-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] f.a.AutowiredAnnotationBeanPostProcessor : Autowired annotation should only be used on methods with parameters: public java.lang.String com.springboot.sistema.hoteles.springboot_sistemahoteles.UsuariosAController.page()
+2025-11-27T00:30:07.012-05:00  WARN 11536 --- [springboot-sistemahoteles] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-27T00:30:07.019-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-11-27T00:30:07.346-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-11-27T00:30:07.350-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-11-27T00:30:07.385-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2025-11-27T00:30:07.400-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .s.s.h.s.IntegradorspringbootApplication : Started IntegradorspringbootApplication in 4.2 seconds (process running for 456.669)
+2025-11-27T00:30:07.408-05:00  INFO 11536 --- [springboot-sistemahoteles] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-11-27T00:30:07.439-05:00  INFO 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-27T00:30:07.440-05:00  INFO 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-27T00:30:07.443-05:00  INFO 11536 --- [springboot-sistemahoteles] [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-11-27T00:30:59.997-05:00  INFO 11536 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-27T00:31:00.003-05:00  INFO 11536 --- [springboot-sistemahoteles] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-27T00:31:00.018-05:00  INFO 11536 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-27T00:31:00.023-05:00  INFO 11536 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2025-11-27T00:31:00.033-05:00  INFO 11536 --- [springboot-sistemahoteles] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
