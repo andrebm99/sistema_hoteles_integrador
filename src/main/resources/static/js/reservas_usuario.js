@@ -1,158 +1,159 @@
-﻿
-// MODO OSCURO
-(function() {
-  const toggle = document.getElementById('dark-mode-toggle');
-  if (!toggle) return;
+﻿// SIN VALIDACIONES COMPLEJAS: solo envía la reserva y redirige a la página de éxito.
 
-  const icon = toggle.querySelector('i');
-  const body = document.body;
-  const media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
-
-  const saved = localStorage.getItem('darkMode');
-  let forced = (saved === 'enabled' || saved === 'disabled');
-  let isDark = forced ? (saved === 'enabled') : (media ? media.matches : false);
-
-  applyTheme(isDark);
-
-  toggle.addEventListener('click', function(e) {
-    e.preventDefault();
-    isDark = !body.classList.contains('dark-mode');
-    applyTheme(isDark);
-    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-    forced = true;
-  });
-
-  if (media && typeof media.addEventListener === 'function') {
-    media.addEventListener('change', function(ev) {
-      if (!forced) applyTheme(ev.matches);
-    });
-  }
-
-  function applyTheme(dark) {
-    body.classList.toggle('dark-mode', dark);
-    if (icon) {
-      icon.classList.toggle('bi-sun', dark);
-      icon.classList.toggle('bi-moon', !dark);
-    }
-    toggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
-  }
-})();
-
-// MODAL DE IMÁGENES
-const images = document.querySelectorAll('.room-card img');
-const modal = document.getElementById('imgModal');
-const modalImg = document.getElementById('modalImg');
-
-images.forEach(img => {
-  img.addEventListener('click', () => {
-    modalImg.src = img.src;
-    modal.classList.add('active');
-  });
-});
-
-// Cerrar modal al hacer clic
-modal.addEventListener('click', () => {
-  modal.classList.remove('active');
-});
-
-// UTILIDADES DE RESERVA
-function daysBetween(d1, d2) {
-  const date1 = new Date(d1);
-  const date2 = new Date(d2);
-  const diffTime = date2 - date1;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return Math.max(1, diffDays);
+function parseDateTimeInput(v) {
+  if (!v) return null;
+  if (v.length === 16) return v + ":00";
+  return v;
 }
-function selectRoom(room, pricePerNight) {
-  const checkin = document.getElementById("checkin").value;
-  const checkout = document.getElementById("checkout").value;
+function daysBetween(a, b) {
+  try {
+    const d1 = new Date(a),
+      d2 = new Date(b);
+    return Math.max(1, Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24)));
+  } catch {
+    return 1;
+  }
+}
+function setSummary({ room, inicio, fin, ocupantes, price }) {
+  const noches = daysBetween(inicio, fin);
+  const total = noches * (price || 0);
+  document.getElementById("res_roomType").innerText = room || "-";
+  document.getElementById("res_dates").innerText =
+    inicio && fin ? inicio + " a " + fin : "-";
+  document.getElementById("res_guests").innerText = ocupantes || "-";
+  document.getElementById("res_days").innerText = noches;
+  document.getElementById("res_price").innerText = "s/. " + (price || 0);
+  document.getElementById("res_total").innerText = "s/. " + total;
+}
+
+async function crearReserva(obj) {
+  const resp = await fetch("/api/reserva", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(obj),
+  });
+  if (resp.status === 201) {
+    return { ok: true, data: await resp.json() };
+  }
+  return { ok: false, status: resp.status, text: await resp.text() };
+}
+
+(function init() {
+  const checkin = document.getElementById("checkin");
+  const checkout = document.getElementById("checkout");
   const guestsSel = document.getElementById("guests");
-  const guests = guestsSel.options[guestsSel.selectedIndex].text;
-  
-  if (!checkin || !checkout) {
-    alert("Por favor seleccione las fechas de check-in y check-out.");
-    return;
-  }
-  
-  // Validar que checkout sea después de checkin
-  if (new Date(checkout) <= new Date(checkin)) {
-    alert("La fecha de salida debe ser posterior a la fecha de entrada.");
-    return;
-  }
-  
-  const nights = daysBetween(checkin, checkout);
-  const total = nights * pricePerNight;
-  
-  document.getElementById("roomType").innerText = room;
-  document.getElementById("dates").innerText = `${checkin} - ${checkout}`;
-  document.getElementById("guestInfo").innerText = guests;
-  document.getElementById("days").innerText = nights;
-  document.getElementById("total").innerText = `s/. ${total}`;
-  
-  var btn = document.querySelector(".continue-btn");
-  if (btn) {
-    var url = "proceso_pago" +
-      "?room=" + encodeURIComponent(room) +
-      "&checkin=" + encodeURIComponent(checkin) +
-      "&checkout=" + encodeURIComponent(checkout) +
-      "&guests=" + encodeURIComponent(guests) +
-      "&days=" + encodeURIComponent(String(nights)) +
-      "&total=" + encodeURIComponent(String(total));
-    btn.onclick = function() { location.href = url; };
-  }
-}
-// VALIDACIÓN DE FECHAS
-const today = new Date().toISOString().split('T')[0];
-const checkinInput = document.getElementById('checkin');
-const checkoutInput = document.getElementById('checkout');
+  const roomSel = document.getElementById("roomtype");
+  const clearBtn = document.getElementById("clearFilters");
 
-if (checkinInput) {
-  checkinInput.setAttribute('min', today);
-  
-  checkinInput.addEventListener('change', function() {
-    const checkinDate = new Date(this.value);
-    checkinDate.setDate(checkinDate.getDate() + 1);
-    const minCheckout = checkinDate.toISOString().split('T')[0];
-    checkoutInput.setAttribute('min', minCheckout);
+  const f = {
+    nombres: document.getElementById("nombresapellidos"),
+    dni: document.getElementById("dni"),
+    edad: document.getElementById("edad"),
+    habitacion: document.getElementById("habitacion"),
+    ocupantes: document.getElementById("ocupantes"),
+    inicio: document.getElementById("fechaInicio"),
+    salida: document.getElementById("fecha_salida"),
+    metodo: document.getElementById("metodo_pago"),
+    reservar: document.getElementById("btnReservar"),
+  };
 
-    if (checkoutInput.value && checkoutInput.value < minCheckout) {
-      checkoutInput.value = '';
-    }
+  document.querySelectorAll(".reserve-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const room = btn.getAttribute("data-room");
+      const price = Number(btn.getAttribute("data-price") || 0);
+      if (f.habitacion) f.habitacion.value = room;
+      if (checkin && f.inicio && checkin.value) f.inicio.value = checkin.value;
+      if (checkout && f.salida && checkout.value)
+        f.salida.value = checkout.value;
+      if (guestsSel && f.ocupantes) f.ocupantes.value = guestsSel.value;
+      const inicioIso = parseDateTimeInput(f.inicio.value);
+      const salidaIso = parseDateTimeInput(f.salida.value);
+      setSummary({
+        room,
+        inicio: inicioIso,
+        fin: salidaIso,
+        ocupantes: f.ocupantes.value,
+        price,
+      });
+    });
   });
-}
 
-if (checkoutInput) {
-  checkoutInput.setAttribute('min', today);
-}
-// FILTRO POR TIPO DE HABITACIÓN
-(function(){
-  function getTypeFromCard(card){
-    var t = card.getAttribute('data-type');
-    if (t) return t;
-    var img = card.querySelector('img');
-    if (!img) return '';
-    var alt = (img.getAttribute('alt')||'').toLowerCase();
-    if (alt.includes('matrimonial')) return 'Matrimonial';
-    if (alt.includes('doble')) return 'Doble';
-    return 'Estandar';
-  }
-  function applyFilter(){
-    var sel = document.getElementById('roomtype');
-    if (!sel) return;
-    var val = sel.value;
-    document.querySelectorAll('.room-card').forEach(function(card){
-      var type = getTypeFromCard(card);
-      card.style.display = (!val || type === val) ? '' : 'none';
+  if (roomSel) {
+    roomSel.addEventListener("change", () => {
+      const val = roomSel.value;
+      document.querySelectorAll(".room-card").forEach((card) => {
+        const type = card.getAttribute("data-type") || "";
+        card.style.display = !val || val === type ? "" : "none";
+      });
     });
   }
-  document.addEventListener('DOMContentLoaded', function(){
-    var sel = document.getElementById('roomtype');
-    if (sel) {
-      sel.addEventListener('change', applyFilter);
-      applyFilter();
-    }
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (checkin) checkin.value = "";
+      if (checkout) checkout.value = "";
+      if (guestsSel) guestsSel.selectedIndex = 0;
+      if (roomSel) roomSel.value = "";
+      document
+        .querySelectorAll(".room-card")
+        .forEach((c) => (c.style.display = ""));
+      setSummary({ room: "-", inicio: "", fin: "", ocupantes: "-", price: 0 });
+    });
+  }
+
+  if (f.reservar) {
+    f.reservar.addEventListener("click", async () => {
+      // Solo toma lo que hay y lo envía (sin validaciones extras)
+      const reservaObj = {
+        id_reserva: null,
+        nombresapellidos: (f.nombres.value || "").trim(),
+        dni: f.dni.value ? Number(f.dni.value) : null,
+        edad: f.edad.value ? Number(f.edad.value) : null,
+        habitacion: f.habitacion.value,
+        ocupantes: f.ocupantes.value,
+        fechaInicio: parseDateTimeInput(f.inicio.value),
+        fecha_salida: parseDateTimeInput(f.salida.value),
+        metodo_pago: f.metodo.value,
+      };
+
+      // Actualiza resumen antes de enviar
+      const base =
+        reservaObj.habitacion === "Matrimonial"
+          ? 100
+          : reservaObj.habitacion === "Estandar"
+          ? 150
+          : reservaObj.habitacion === "Doble"
+          ? 130
+          : 120;
+      setSummary({
+        room: reservaObj.habitacion,
+        inicio: reservaObj.fechaInicio,
+        fin: reservaObj.fecha_salida,
+        ocupantes: reservaObj.ocupantes,
+        price: base,
+      });
+
+      const r = await crearReserva(reservaObj);
+      if (!r.ok) {
+        alert("Error creando reserva: " + (r.text || r.status));
+        return;
+      }
+      // Redirige a página de éxito con el código
+      const codigo = r.data.codigo;
+      window.location.href =
+        "/reserva_exitosa?codigo=" + encodeURIComponent(codigo);
+    });
+  }
+
+  // Modal imágenes
+  const images = document.querySelectorAll(".room-card img");
+  const modal = document.getElementById("imgModal");
+  const modalImg = document.getElementById("modalImg");
+  images.forEach((img) => {
+    img.addEventListener("click", () => {
+      modalImg.src = img.src;
+      modal.classList.add("active");
+    });
   });
+  if (modal)
+    modal.addEventListener("click", () => modal.classList.remove("active"));
 })();
-
-
-
