@@ -365,7 +365,7 @@
                     if (dni) params.append('dni', dni);
                     if (habitacion) params.append('habitacion', habitacion);
 
-                    this.$http.get('/api/reserva?' + params.toString())
+                    (this.$http || axios).get('/api/reserva?' + params.toString())
                         .then(response => {
                             const resp = (response && response.data) ? response.data : null;
                             const content = resp && Array.isArray(resp.content) ? resp.content : [];
@@ -470,7 +470,7 @@
                     $("#mdlEntidad").modal("show");
                 },
                 editar: function (id_reserva) {
-                    this.$http.get('/api/reserva/' + id_reserva).then(response => {
+                    (this.$http || axios).get('/api/reserva/' + id_reserva).then(response => {
                         this.entidad = response.data;
                         $("#mdlEntidad").modal("show");
                     });
@@ -481,7 +481,7 @@
                     const edad = Number(this.entidad.edad);
                     if (!Number.isFinite(edad) || edad < 18) { alert("No se permiten menores de 18 en registros del Hotel Aurum!."); return; }
 
-                    this.$http.post('/api/reserva', this.entidad)
+                    (this.$http || axios).post('/api/reserva', this.entidad)
                         .then(response => {
                             const created = response.data;
                             this.listar();
