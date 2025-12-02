@@ -135,7 +135,11 @@
     <div class="user-info-badge">
       <i class="bi bi-person-circle"></i>
       <span
-        th:text="${session.user != null ? session.user.nombres_apellidos : (#authentication != null ? #authentication.name : 'Invitado')}">Invitado</span>
+        th:if="${session.user instanceof T(com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Usuario_Administracion)}"
+        th:text="${session.user.nombres_apellidos}"></span>
+      <span
+        th:if="${session.user instanceof T(com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente)}"
+        th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></span>
     </div>
   </div>
 
