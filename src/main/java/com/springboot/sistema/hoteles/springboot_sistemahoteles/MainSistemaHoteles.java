@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IntegradorspringbootApplication {
+public class MainSistemaHoteles {
     public static void main(String[] args) {
-        SpringApplication.run(IntegradorspringbootApplication.class, args);
+        SpringApplication.run(MainSistemaHoteles.class, args);
         System.out.println("URL: http://localhost:8081");
     }
 }

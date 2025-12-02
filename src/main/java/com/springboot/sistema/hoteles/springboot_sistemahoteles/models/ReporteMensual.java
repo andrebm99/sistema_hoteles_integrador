@@ -3,15 +3,12 @@ package com.springboot.sistema.hoteles.springboot_sistemahoteles.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GenerationType;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -37,16 +34,8 @@ public class ReporteMensual implements Serializable{
     @Column(name ="notes")
     private String notes; 
 
-    @Column(name = "content_type")
-    private String contentType;
-    
-    @Column(name = "filename")
-    private String filename; 
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "data", columnDefinition = "LONGBLOB")
-    private byte[] data;
+    @Column(name = "url_formulario")
+    private String urlFormulario; 
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt; 
@@ -59,17 +48,19 @@ public class ReporteMensual implements Serializable{
     public ReporteMensual() {
     }
 
-    public ReporteMensual(Long id_reporte, Integer month, Integer year, String title, String notes, String contentType,
-            String filename, byte[] data, LocalDateTime createdAt) {
+    public ReporteMensual(Long id_reporte, Integer month, Integer year, String title, String notes,
+            String urlFormulario, LocalDateTime createdAt) {
         this.id_reporte = id_reporte;
         this.month = month;
         this.year = year;
         this.title = title;
         this.notes = notes;
-        this.contentType = contentType;
-        this.filename = filename;
-        this.data = data;
+        this.urlFormulario = urlFormulario;
         this.createdAt = createdAt;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
     public Long getId_reporte() {
@@ -112,28 +103,12 @@ public class ReporteMensual implements Serializable{
         this.notes = notes;
     }
 
-    public String getContentType() {
-        return contentType;
+    public String getUrlFormulario() {
+        return urlFormulario;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setUrlFormulario(String urlFormulario) {
+        this.urlFormulario = urlFormulario;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -143,5 +118,5 @@ public class ReporteMensual implements Serializable{
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    
+
 }
