@@ -9,20 +9,6 @@
   <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-  <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true" data-mdb-backdrop="static" data-mdb-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="roleModalLabel">¿Cómo desea ingresar?</h5>
-        </div>
-        <div class="modal-body">
-          <button type="button" class="btn btn-primary" data-mdb-dismiss="modal" id="adminBtn">Admin</button>
-          <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" id="clientBtn">Cliente</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <section class="vh-100 d-flex align-items-center justify-content-center p-0 m-0">
     <div class="container-fluid p-0 m-0">
       <div class="row g-0">
@@ -33,7 +19,6 @@
             <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
           </div>
           <form class="login-form" method="POST" action="/login">
-            <input type="hidden" name="userType" id="userType"/>
             
             <div class="logo-container mb-3">
               <img src="/img/apple-touch-icon.jpeg" alt="logo">
@@ -80,24 +65,5 @@
   </section>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
-  <script>
-    const roleModal = new mdb.Modal(document.getElementById('roleModal'));
-    const userTypeInput = document.getElementById('userType');
-    const loginTitle = document.getElementById('loginTitle');
-
-    window.addEventListener('load', () => {
-      roleModal.show();
-    });
-
-    document.getElementById('adminBtn').addEventListener('click', () => {
-      userTypeInput.value = 'admin';
-      loginTitle.textContent = 'Iniciar sesión como Admin';
-    });
-
-    document.getElementById('clientBtn').addEventListener('click', () => {
-      userTypeInput.value = 'cliente';
-      loginTitle.textContent = 'Iniciar sesión como Cliente';
-    });
-  </script>
 </body>
 </html>

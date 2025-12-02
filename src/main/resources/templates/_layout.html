@@ -27,7 +27,8 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6 style="color: black;" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
+                                <h6 style="color: black;" th:if="${session.user instanceof T(com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Usuario_Administracion)}" th:text="${session.user.nombres_apellidos}"></h6>
+                                <h6 style="color: black;" th:if="${session.user instanceof T(com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente)}" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
                                 <span>Usuario</span>
                             </li>
                             <li><hr class="dropdown-divider"></li>
@@ -71,7 +72,8 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
               <li class="dropdown-header">
-                <h6 style="color: black;" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
+                <h6 style="color: black;" th:if="${session.user instanceof T(com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Usuario_Administracion)}" th:text="${session.user.nombres_apellidos}"></h6>
+                                <h6 style="color: black;" th:if="${session.user instanceof T(com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente)}" th:text="${session.user.nombres} + ' ' + ${session.user.apellidos}"></h6>
                 <span>Usuario</span>
               </li>
               <li>

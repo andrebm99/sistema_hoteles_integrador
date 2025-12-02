@@ -29,28 +29,24 @@ public class loginController {
     public String doLogin(
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestParam("userType") String userType,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        return authService.authenticate(email, password, userType)
+        return authService.authenticate(email, password)
                 .map(user -> {
                     session.setAttribute("user", user);
 
-                    String name = "";
                     if (user instanceof Usuario_Administracion) {
-                        name = ((Usuario_Administracion) user).getNombres_apellidos();
+                        String name = ((Usuario_Administracion) user).getNombres_apellidos();
+                        redirectAttributes.addFlashAttribute("success", "¡Bienvenido/a de nuevo, " + name + "!");
+                        return "redirect:/admin_redirect";
                     } else if (user instanceof UsuarioCliente) {
-                        name = ((UsuarioCliente) user).getNombres();
-                    }
-
-                    redirectAttributes.addFlashAttribute("success", "¡Bienvenido/a de nuevo, " + name + "!");
-
-                    if ("admin".equals(userType)) {
-                        return "redirect:/admin/home";
-                    } else {
+                        String name = ((UsuarioCliente) user).getNombres();
+                        redirectAttributes.addFlashAttribute("success", "¡Bienvenido/a de nuevo, " + name + "!");
                         return "redirect:/home";
                     }
+                    
+                    return "redirect:/login";
                 })
                 .orElseGet(() -> {
                     redirectAttributes.addFlashAttribute("error", "Correo o contraseña incorrectos");
@@ -63,5 +59,10 @@ public class loginController {
         session.invalidate();
         redirectAttributes.addFlashAttribute("success", "Has cerrado sesión correctamente.");
         return "redirect:/home";
+    }
+    
+    @GetMapping("/admin_redirect")
+    public String adminRedirect() {
+        return "admin_redirect";
     }
 }
