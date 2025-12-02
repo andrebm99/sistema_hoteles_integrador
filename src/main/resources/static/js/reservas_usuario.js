@@ -26,6 +26,45 @@ function setSummary({ room, inicio, fin, ocupantes, price }) {
   document.getElementById("res_total").innerText = "s/. " + total;
 }
 
+function showBookingCard() {
+  const card = document.getElementById('bookingCard');
+  if (!card) return;
+  card.classList.remove('d-none');
+}
+
+function handleReserveButtonClick(btn) {
+  const id = btn.getAttribute("data-id");
+  const room = btn.getAttribute("data-room");
+  const price = Number(btn.getAttribute("data-price") || 0);
+
+  // Fill form fields
+  const habitacionField = document.getElementById("habitacion");
+  const checkinInput = document.getElementById("checkin");
+  const checkoutInput = document.getElementById("checkout");
+  const fechaInicio = document.getElementById("fechaInicio");
+  const fechaSalida = document.getElementById("fecha_salida");
+  const guestsSel = document.getElementById("guests");
+  const ocupanteField = document.getElementById("ocupantes");
+
+  if (habitacionField) habitacionField.value = room;
+  if (checkinInput && checkinInput.value && fechaInicio) fechaInicio.value = checkinInput.value;
+  if (checkoutInput && checkoutInput.value && fechaSalida) fechaSalida.value = checkoutInput.value;
+  if (guestsSel && ocupanteField) ocupanteField.value = guestsSel.value;
+
+  setSummary({
+    room,
+    inicio: parseDateTimeInput(fechaInicio?.value),
+    fin: parseDateTimeInput(fechaSalida?.value),
+    ocupantes: ocupanteField?.value,
+    price,
+  });
+
+  // Show booking card and scroll
+  showBookingCard();
+  const form = document.getElementById("userBookingForm");
+  if (form) form.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 async function crearReserva(obj) {
   const resp = await fetch("/api/reserva", {
     method: "POST",
@@ -83,7 +122,7 @@ async function loadRooms() {
       habitacionSel.innerHTML = '<option value="">--Elija una habitación--</option>' + tiposUnicos.map(t => `<option value="${t}">${t}</option>`).join('');
     }
 
-    // Render cards
+    // Render cards and attach per-card handlers
     rooms.forEach(r => {
       const id = r.id_habitacion;
       const price = r.precio || 0;
@@ -111,40 +150,12 @@ async function loadRooms() {
         </div>
       `;
       container.appendChild(html);
-    });
 
-    // Hook events for newly created buttons and images
-    document.querySelectorAll(".reserve-btn").forEach(btn => {
-      btn.addEventListener("click", (ev) => {
-        const id = btn.getAttribute("data-id");
-        const room = btn.getAttribute("data-room");
-        const price = Number(btn.getAttribute("data-price") || 0);
-
-        // Fill form fields
-        const habitacionField = document.getElementById("habitacion");
-        const checkinInput = document.getElementById("checkin");
-        const checkoutInput = document.getElementById("checkout");
-        const fechaInicio = document.getElementById("fechaInicio");
-        const fechaSalida = document.getElementById("fecha_salida");
-        const guestsSel = document.getElementById("guests");
-        const ocupanteField = document.getElementById("ocupantes");
-
-        if (habitacionField) habitacionField.value = room;
-        if (checkinInput && checkinInput.value && fechaInicio) fechaInicio.value = checkinInput.value;
-        if (checkoutInput && checkoutInput.value && fechaSalida) fechaSalida.value = checkoutInput.value;
-        if (guestsSel && ocupanteField) ocupanteField.value = guestsSel.value;
-
-        setSummary({
-          room,
-          inicio: parseDateTimeInput(fechaInicio?.value),
-          fin: parseDateTimeInput(fechaSalida?.value),
-          ocupantes: ocupanteField?.value,
-          price
-        });
-
-        // Scroll to reservation form
-        document.getElementById("userBookingForm").scrollIntoView({ behavior: "smooth", block: "center" });
-      });
+      // Attach listener to this card's reserve button
+      const newBtn = html.querySelector(".reserve-btn");
+      if (newBtn) {
+        newBtn.addEventListener("click", () => handleReserveButtonClick(newBtn));
+      }
     });
 
     // Setup modal images for dynamic images
@@ -213,7 +224,12 @@ async function updateAvailabilityForRange(inicioIso, finIso){
     reservar: document.getElementById("btnReservar"),
   };
 
-  // Load and render rooms
+  // Attach handlers to any existing static reserve buttons (template cards)
+  document.querySelectorAll('.rooms .reserve-btn').forEach(btn => {
+    btn.addEventListener('click', () => handleReserveButtonClick(btn));
+  });
+
+  // Load and render rooms (dynamic) - dynamic cards will attach their own handlers
   loadRooms().then(() => {
     // Make sure filters are applied after rooms are loaded
   });

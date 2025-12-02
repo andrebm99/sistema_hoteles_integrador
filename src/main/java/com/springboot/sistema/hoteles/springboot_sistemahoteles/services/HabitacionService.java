@@ -1,6 +1,7 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,11 @@ public class HabitacionService {
             habitacion.setFoto_portada_filename(file.getOriginalFilename());
         }
         return repositorio.save(habitacion); 
+    }
+
+    @Transactional(readOnly = true)
+    public List<Habitacion> findAll(){
+        return (List<Habitacion>) repositorio.findAll();
     }
 
     @Transactional(readOnly = true)
