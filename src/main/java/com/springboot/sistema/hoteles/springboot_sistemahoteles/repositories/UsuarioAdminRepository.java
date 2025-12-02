@@ -8,4 +8,5 @@ import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Usuario_A
 
 public interface UsuarioAdminRepository extends JpaRepository<Usuario_Administracion, Long>{
     Optional<Usuario_Administracion> findByEmailAndPasswordHash(String email, String passwordHash);
+    Optional<Usuario_Administracion> findByEmail(String email); 
 }

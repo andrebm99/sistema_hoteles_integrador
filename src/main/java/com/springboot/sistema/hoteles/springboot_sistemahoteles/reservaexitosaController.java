@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class ReservaExitosaController {
+public class reservaexitosaController {
 
     @GetMapping("/reserva_exitosa")
     public String reservaExitosa(@RequestParam(name="codigo", required=false) String codigo, Model model) {

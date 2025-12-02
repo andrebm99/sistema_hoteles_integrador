@@ -1,6 +1,8 @@
 package com.springboot.sistema.hoteles.springboot_sistemahoteles.services;
 
 import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,10 +16,13 @@ public class UsuarioAdministracionService {
 
     private final UsuarioAdministracionRepository userRepo;
     private final RolesRespository rolesRepo;
+    private final PasswordEncoder passwordEncoder; 
 
-    public UsuarioAdministracionService(UsuarioAdministracionRepository userRepo, RolesRespository rolesRepo) {
+    public UsuarioAdministracionService(UsuarioAdministracionRepository userRepo, RolesRespository rolesRepo,
+            PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.rolesRepo = rolesRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Usuario_Administracion crearUsuario(String nombres, String apellidos, String email, String password) {
@@ -30,7 +35,7 @@ public class UsuarioAdministracionService {
         Usuario_Administracion u = new Usuario_Administracion();
         u.setNombres_apellidos(nombres + " " + apellidos);
         u.setEmail(email);
-        u.setPasswordHash(password); 
+        u.setPasswordHash(passwordEncoder.encode(password)); 
         u.setRol_id(null);
         return userRepo.save(u);
     }
@@ -41,7 +46,7 @@ public class UsuarioAdministracionService {
             .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         if (StringUtils.hasText(nombresApellidos)) u.setNombres_apellidos(nombresApellidos);
         if (StringUtils.hasText(email)) u.setEmail(email);
-        if (StringUtils.hasText(password)) u.setPasswordHash(password);
+        if (StringUtils.hasText(password)) u.setPasswordHash(passwordEncoder.encode(password));
         return userRepo.save(u);
     }
 

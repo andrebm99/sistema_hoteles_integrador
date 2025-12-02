@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioClienteRepository extends JpaRepository<UsuarioCliente, Long> {
 
     Optional<UsuarioCliente> findByEmailAndPasswordHash(String email, String passwordHash);
+    Optional<UsuarioCliente> findByEmail(String email); 
 
 }

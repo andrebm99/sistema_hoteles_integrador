@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -25,17 +26,61 @@ public class AuthService {
     @Autowired
     private UsuarioAdminRepository usuarioAdminRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional(readOnly = true)
     public Optional<? extends Object> authenticate(String email, String password) {
-        Optional<Usuario_Administracion> admin = usuarioAdminRepository.findByEmailAndPasswordHash(email, password);
-        if (admin.isPresent()) {
-            return admin;
+        String e = (email == null) ? null : email.trim();
+        if (!StringUtils.hasText(e) || !StringUtils.hasText(password))
+            return Optional.empty();
+        if (e.length() > 254 || password.length() > 200)
+            return Optional.empty();
+        if (!e.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"))
+            return Optional.empty();
+
+        // Admin por email
+        Optional<Usuario_Administracion> adminOpt = usuarioAdminRepository.findByEmail(e);
+        if (adminOpt.isPresent()) {
+            Usuario_Administracion admin = adminOpt.get();
+            String stored = admin.getPasswordHash();
+            if (isBcrypt(stored) && passwordEncoder.matches(password, stored)) {
+                return Optional.of(admin);
+            }
+            // Migración opcional: si estaba en texto plano, migrar a BCrypt en el primer
+            // login correcto
+            if (!isBcrypt(stored) && stored != null && stored.equals(password)) {
+                admin.setPasswordHash(passwordEncoder.encode(password));
+                usuarioAdminRepository.save(admin);
+                return Optional.of(admin);
+            }
         }
-        return usuarioClienteRepository.findByEmailAndPasswordHash(email, password);
+
+        // Cliente por email
+        Optional<UsuarioCliente> clientOpt = usuarioClienteRepository.findByEmail(e);
+        if (clientOpt.isPresent()) {
+            UsuarioCliente client = clientOpt.get();
+            String stored = client.getPasswordHash();
+            if (isBcrypt(stored) && passwordEncoder.matches(password, stored)) {
+                return Optional.of(client);
+            }
+            if (!isBcrypt(stored) && stored != null && stored.equals(password)) {
+                client.setPasswordHash(passwordEncoder.encode(password));
+                usuarioClienteRepository.save(client);
+                return Optional.of(client);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private boolean isBcrypt(String s) {
+        return s != null && (s.startsWith("$2a$") || s.startsWith("$2b$") || s.startsWith("$2y$"));
     }
 
     @Transactional
-    public UsuarioCliente register(String nombres, String apellidos, String direccion, String genero, String ciudad, String distrito, String fechaNacimiento, String dni, String email, String password) {
+    public UsuarioCliente register(String nombres, String apellidos, String direccion, String genero, String ciudad,
+            String distrito, String fechaNacimiento, String dni, String email, String password) {
         UsuarioCliente newUser = new UsuarioCliente();
 
         newUser.setNombres(nombres);
@@ -47,15 +92,15 @@ public class AuthService {
         newUser.setDni(dni);
         newUser.setEmail(email);
 
-        // Guarda la contraseña 
-        newUser.setPasswordHash(password);
-        
+        // Guarda la contraseña
+        newUser.setPasswordHash(passwordEncoder.encode(password));
+
         if (StringUtils.hasText(fechaNacimiento)) {
             try {
                 LocalDate date = LocalDate.parse(fechaNacimiento, DateTimeFormatter.ISO_LOCAL_DATE);
                 newUser.setFechaNacimiento(date);
             } catch (Exception e) {
-                 System.err.println("Error al parsear la fecha: " + e.getMessage());
+                System.err.println("Error al parsear la fecha: " + e.getMessage());
             }
         }
 
@@ -68,60 +113,60 @@ public class AuthService {
     @Transactional
     @NonNull
     public UsuarioCliente updateProfile(
-                Long userId,
-                String nombres,
-                String apellidos,
-                String direccion,
-                String genero,
-                String ciudad,
-                String distrito,
-                String fechaNacimiento,
-                String dni,
-                String email) {
-    
-            if (userId == null) {
-                throw new IllegalArgumentException("El ID de usuario no puede ser nulo");
+            Long userId,
+            String nombres,
+            String apellidos,
+            String direccion,
+            String genero,
+            String ciudad,
+            String distrito,
+            String fechaNacimiento,
+            String dni,
+            String email) {
+
+        if (userId == null) {
+            throw new IllegalArgumentException("El ID de usuario no puede ser nulo");
+        }
+
+        UsuarioCliente user = usuarioClienteRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        // Actualiza los campos solo si se proporcionan nuevos valores
+        if (StringUtils.hasText(nombres)) {
+            user.setNombres(nombres);
+        }
+        if (StringUtils.hasText(apellidos)) {
+            user.setApellidos(apellidos);
+        }
+        if (StringUtils.hasText(direccion)) {
+            user.setDireccion(direccion);
+        }
+        if (StringUtils.hasText(genero)) {
+            user.setGenero(genero);
+        }
+        if (StringUtils.hasText(ciudad)) {
+            user.setCiudad(ciudad);
+        }
+        if (StringUtils.hasText(distrito)) {
+            user.setDistrito(distrito);
+        }
+        if (StringUtils.hasText(dni)) {
+            user.setDni(dni);
+        }
+        if (StringUtils.hasText(email)) {
+            user.setEmail(email);
+        }
+        if (StringUtils.hasText(fechaNacimiento)) {
+            try {
+                LocalDate date = LocalDate.parse(fechaNacimiento, DateTimeFormatter.ISO_LOCAL_DATE);
+                user.setFechaNacimiento(date);
+            } catch (Exception e) {
+                System.err.println("Error al parsear la fecha: " + e.getMessage());
             }
-    
-            UsuarioCliente user = usuarioClienteRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-    
-            // Actualiza los campos solo si se proporcionan nuevos valores
-            if (StringUtils.hasText(nombres)) {
-                user.setNombres(nombres);
-            }
-            if (StringUtils.hasText(apellidos)) {
-                user.setApellidos(apellidos);
-            }
-            if (StringUtils.hasText(direccion)) {
-                user.setDireccion(direccion);
-            }
-            if (StringUtils.hasText(genero)) {
-                user.setGenero(genero);
-            }
-            if (StringUtils.hasText(ciudad)) {
-                user.setCiudad(ciudad);
-            }
-            if (StringUtils.hasText(distrito)) {
-                user.setDistrito(distrito);
-            }
-            if (StringUtils.hasText(dni)) {
-                user.setDni(dni);
-            }
-            if (StringUtils.hasText(email)) {
-                user.setEmail(email);
-            }
-            if (StringUtils.hasText(fechaNacimiento)) {
-                try {
-                    LocalDate date = LocalDate.parse(fechaNacimiento, DateTimeFormatter.ISO_LOCAL_DATE);
-                    user.setFechaNacimiento(date);
-                } catch (Exception e) {
-                    System.err.println("Error al parsear la fecha: " + e.getMessage());
-                }
-            }
-            user.setFechaActualizacion(LocalDateTime.now());
-    
-            return Objects.requireNonNull(usuarioClienteRepository.save(user));
+        }
+        user.setFechaActualizacion(LocalDateTime.now());
+
+        return Objects.requireNonNull(usuarioClienteRepository.save(user));
     }
-    
+
 }
