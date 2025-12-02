@@ -1,4 +1,4 @@
-﻿package com.springboot.sistema.hoteles.springboot_sistemahoteles.services;
+package com.springboot.sistema.hoteles.springboot_sistemahoteles.services;
 
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Usuario_Administracion;
@@ -44,15 +44,21 @@ public class AuthService {
         if (adminOpt.isPresent()) {
             Usuario_Administracion admin = adminOpt.get();
             String stored = admin.getPasswordHash();
-            if (isBcrypt(stored) && passwordEncoder.matches(password, stored)) {
-                return Optional.of(admin);
-            }
-            // Migración opcional: si estaba en texto plano, migrar a BCrypt en el primer
-            // login correcto
-            if (!isBcrypt(stored) && stored != null && stored.equals(password)) {
-                admin.setPasswordHash(passwordEncoder.encode(password));
-                usuarioAdminRepository.save(admin);
-                return Optional.of(admin);
+
+            boolean credOk = (isBcrypt(stored) && passwordEncoder.matches(password, stored))
+                          || (!isBcrypt(stored) && stored != null && stored.equals(password));
+
+            if (credOk) {
+                // Migración a BCrypt si estaba en texto plano
+                if (!isBcrypt(stored)) {
+                    admin.setPasswordHash(passwordEncoder.encode(password));
+                    usuarioAdminRepository.save(admin);
+                }
+                // Solo retornar admin si tiene rol válido
+                if (isAdminRole(admin.getRol_id())) {
+                    return Optional.of(admin);
+                }
+                // Si no tiene rol admin, NO tratamos como admin; seguimos con cliente
             }
         }
 
@@ -61,17 +67,24 @@ public class AuthService {
         if (clientOpt.isPresent()) {
             UsuarioCliente client = clientOpt.get();
             String stored = client.getPasswordHash();
-            if (isBcrypt(stored) && passwordEncoder.matches(password, stored)) {
-                return Optional.of(client);
-            }
-            if (!isBcrypt(stored) && stored != null && stored.equals(password)) {
-                client.setPasswordHash(passwordEncoder.encode(password));
-                usuarioClienteRepository.save(client);
+
+            boolean credOk = (isBcrypt(stored) && passwordEncoder.matches(password, stored))
+                          || (!isBcrypt(stored) && stored != null && stored.equals(password));
+
+            if (credOk) {
+                if (!isBcrypt(stored)) {
+                    client.setPasswordHash(passwordEncoder.encode(password));
+                    usuarioClienteRepository.save(client);
+                }
                 return Optional.of(client);
             }
         }
 
         return Optional.empty();
+    }
+
+    private boolean isAdminRole(Long rol) {
+        return rol != null && (rol == 1L || rol == 2L || rol == 3L);
     }
 
     private boolean isBcrypt(String s) {
@@ -92,15 +105,15 @@ public class AuthService {
         newUser.setDni(dni);
         newUser.setEmail(email);
 
-        // Guarda la contraseña
         newUser.setPasswordHash(passwordEncoder.encode(password));
+        newUser.setRol_id(4L);
 
         if (StringUtils.hasText(fechaNacimiento)) {
             try {
                 LocalDate date = LocalDate.parse(fechaNacimiento, DateTimeFormatter.ISO_LOCAL_DATE);
                 newUser.setFechaNacimiento(date);
-            } catch (Exception e) {
-                System.err.println("Error al parsear la fecha: " + e.getMessage());
+            } catch (Exception ex) {
+                System.err.println("Error al parsear la fecha: " + ex.getMessage());
             }
         }
 
@@ -131,42 +144,24 @@ public class AuthService {
         UsuarioCliente user = usuarioClienteRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-        // Actualiza los campos solo si se proporcionan nuevos valores
-        if (StringUtils.hasText(nombres)) {
-            user.setNombres(nombres);
-        }
-        if (StringUtils.hasText(apellidos)) {
-            user.setApellidos(apellidos);
-        }
-        if (StringUtils.hasText(direccion)) {
-            user.setDireccion(direccion);
-        }
-        if (StringUtils.hasText(genero)) {
-            user.setGenero(genero);
-        }
-        if (StringUtils.hasText(ciudad)) {
-            user.setCiudad(ciudad);
-        }
-        if (StringUtils.hasText(distrito)) {
-            user.setDistrito(distrito);
-        }
-        if (StringUtils.hasText(dni)) {
-            user.setDni(dni);
-        }
-        if (StringUtils.hasText(email)) {
-            user.setEmail(email);
-        }
+        if (StringUtils.hasText(nombres)) user.setNombres(nombres);
+        if (StringUtils.hasText(apellidos)) user.setApellidos(apellidos);
+        if (StringUtils.hasText(direccion)) user.setDireccion(direccion);
+        if (StringUtils.hasText(genero)) user.setGenero(genero);
+        if (StringUtils.hasText(ciudad)) user.setCiudad(ciudad);
+        if (StringUtils.hasText(distrito)) user.setDistrito(distrito);
+        if (StringUtils.hasText(dni)) user.setDni(dni);
+        if (StringUtils.hasText(email)) user.setEmail(email);
         if (StringUtils.hasText(fechaNacimiento)) {
             try {
                 LocalDate date = LocalDate.parse(fechaNacimiento, DateTimeFormatter.ISO_LOCAL_DATE);
                 user.setFechaNacimiento(date);
-            } catch (Exception e) {
-                System.err.println("Error al parsear la fecha: " + e.getMessage());
+            } catch (Exception ex) {
+                System.err.println("Error al parsear la fecha: " + ex.getMessage());
             }
         }
         user.setFechaActualizacion(LocalDateTime.now());
 
         return Objects.requireNonNull(usuarioClienteRepository.save(user));
     }
-
 }

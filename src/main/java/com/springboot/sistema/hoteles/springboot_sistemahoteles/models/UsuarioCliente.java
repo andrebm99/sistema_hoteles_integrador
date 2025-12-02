@@ -57,6 +57,9 @@ public class UsuarioCliente implements Serializable {
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
+    @Column(name = "rol_id")
+    private Long rol_id; 
+    
     public UsuarioCliente() {}
 
     public Long getId() {
@@ -161,6 +164,14 @@ public class UsuarioCliente implements Serializable {
 
     public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public Long getRol_id() {
+        return rol_id;
+    }
+
+    public void setRol_id(Long rol_id) {
+        this.rol_id = rol_id;
     }
 
     @Override
