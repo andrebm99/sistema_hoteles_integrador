@@ -1,4 +1,4 @@
-﻿package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
+package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

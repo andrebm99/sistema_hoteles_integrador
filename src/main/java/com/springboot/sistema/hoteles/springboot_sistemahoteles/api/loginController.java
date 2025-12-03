@@ -1,4 +1,4 @@
-﻿package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
+package com.springboot.sistema.hoteles.springboot_sistemahoteles.api;
 
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.UsuarioCliente;
 import com.springboot.sistema.hoteles.springboot_sistemahoteles.models.Usuario_Administracion;
@@ -36,16 +36,16 @@ public class loginController {
                 .map(user -> {
                     session.setAttribute("user", user);
 
-                    if (user instanceof Usuario_Administracion) {
-                        String name = ((Usuario_Administracion) user).getNombres_apellidos();
+                    if (user instanceof Usuario_Administracion admin) {
+                        String name = admin.getNombres_apellidos();
                         redirectAttributes.addFlashAttribute("success", "¡Bienvenido/a de nuevo, " + name + "!");
-                        return "redirect:/admin_redirect";
-                    } else if (user instanceof UsuarioCliente) {
-                        String name = ((UsuarioCliente) user).getNombres();
+                        return isAdminRole(admin.getRol_id()) ? "redirect:/admin_redirect" : "redirect:/home";
+                    } else if (user instanceof UsuarioCliente client) {
+                        String name = client.getNombres();
                         redirectAttributes.addFlashAttribute("success", "¡Bienvenido/a de nuevo, " + name + "!");
                         return "redirect:/home";
                     }
-                    
+
                     return "redirect:/login";
                 })
                 .orElseGet(() -> {
@@ -60,9 +60,13 @@ public class loginController {
         redirectAttributes.addFlashAttribute("success", "Has cerrado sesión correctamente.");
         return "redirect:/home";
     }
-    
+
     @GetMapping("/admin_redirect")
     public String adminRedirect() {
         return "admin_redirect";
+    }
+
+    private boolean isAdminRole(Long rol) {
+        return rol != null && (rol == 1L || rol == 2L || rol == 3L);
     }
 }
