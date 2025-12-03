@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,37 @@ public class ReservaController {
     ReservaRepository repository;
     @Autowired
     HabitacionRepository habitacionRepository;
+
+    @GetMapping("/reservas/habitaciones/{id_habitacion}/foto")
+    public ResponseEntity<byte[]> getFoto(@PathVariable("id_habitacion") Long id_habitacion) {
+        Optional<Habitacion> habitacionOpt = habitacionRepository.findById(id_habitacion);
+
+        if (!habitacionOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Habitacion habitacion = habitacionOpt.get();
+
+        byte[] image = habitacion.getFoto_portada();
+        if (image == null || image.length == 0) {
+            return ResponseEntity.noContent().build();
+        }
+
+        String tipoContenido = habitacion.getFoto_portada_content_type();
+        MediaType mediaType;
+
+        try {
+            mediaType = (tipoContenido != null) ? MediaType.parseMediaType(tipoContenido)
+                    : MediaType.APPLICATION_OCTET_STREAM;
+        } catch (Exception e) {
+            mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        }
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .contentLength(image.length)
+                .body(image);
+    }
 
     @SuppressWarnings("null")
     @GetMapping("/reserva")

@@ -162,54 +162,29 @@
           <option value="Doble Accesible">Doble Accesible</option>
           <option value="Familiar">Familiar</option>
         </select>
-        <button class="btn btn-outline-secondary filter-btn" id="clearFilters" type="button">Limpiar</button>
+        <button class="btn btn-warning filter-btn" id="clearFilters" type="button">Limpiar</button>
       </div>
 
       <!-- Tarjetas -->
-      <div class="room-card" data-type="Matrimonial">
-        <img src="/img/habitacion1.jpg" alt="Matrimonial">
+      <div th:each="h : ${habitaciones}" class="room-card" th:attr="data-type=${h.nombre_comercial}">
+        <img th:src="@{'/api/reservas/habitaciones/' + ${h.id_habitacion} + '/foto'}" th:alt="${h.nombre_comercial}">
         <div class="room-info">
-          <h5>Matrimonial</h5>
-          <p>Cama matrimonial, WiFi y TV.</p>
-          <div class="tags"><span class="tag">2 pers.</span><span class="tag">17m²</span></div>
-          <div class="price-reserve">
-            <p>Desde s/. 100</p>
-            <button class="btn btn-primary reserve-btn" data-room="Matrimonial" data-price="100"
-              type="button">Reservar</button>
+          <h5 th:text="${h.nombre_comercial}"></h5>
+          <p th:text="${h.descripcion}"></p>
+          <div class="tags">
+            <span class="tag" th:text="${h.capacidad_total}"></span>
+            <span class="tag" th:text="${h.medidas}"></span>
           </div>
-        </div>
-      </div>
-
-      <div class="room-card" data-type="Estandar">
-        <img src="/img/habitacion2.jpg" alt="Estandar">
-        <div class="room-info">
-          <h5>Suite Estandar</h5>
-          <p>Vista a laguna, frigobar y A/C.</p>
-          <div class="tags"><span class="tag">2 pers.</span><span class="tag">18m²</span></div>
           <div class="price-reserve">
-            <p>Desde s/. 150</p>
-            <button class="btn btn-primary reserve-btn" data-room="Estandar" data-price="150"
-              type="button">Reservar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="room-card" data-type="Doble">
-        <img src="/img/imagen4.jpg" alt="Doble">
-        <div class="room-info">
-          <h5>Doble</h5>
-          <p>Amplia, luminosa y panorámica.</p>
-          <div class="tags"><span class="tag">4 pers.</span><span class="tag">20m²</span></div>
-          <div class="price-reserve">
-            <p>Desde s/. 130</p>
-            <button class="btn btn-primary reserve-btn" data-room="Doble" data-price="130"
+            <p th:text="'Desde s/. ' + ${h.precio}"></p>
+            <button class="btn btn-warning reserve-btn" th:attr="data-room=${h.nombre_comercial}, data-price=${h.precio}"
               type="button">Reservar</button>
           </div>
         </div>
       </div>
 
       <!-- Form -->
-      <div class="card mt-3">
+      <div class="card mt-3" id="booking-form" style="display: none;">
         <div class="card-header">Datos de la reserva</div>
         <div class="card-body">
           <form id="userBookingForm" class="row g-3" autocomplete="off">
@@ -229,11 +204,7 @@
               <label class="form-label">Habitación</label>
               <select class="form-select" id="habitacion" required>
                 <option value="">--Elija una habitación--</option>
-                <option value="Matrimonial">Matrimonial</option>
-                <option value="Estandar">Suite Estandar</option>
-                <option value="Doble">Doble</option>
-                <option value="Doble Accesible">Doble Accesible</option>
-                <option value="Familiar">Familiar</option>
+                <option th:each="h : ${habitaciones}" th:value="${h.nombre_comercial}" th:text="${h.nombre_comercial}"></option>
               </select>
             </div>
             <div class="col-md-6">
@@ -269,7 +240,7 @@
               </select>
             </div>
             <div class="col-12 d-flex justify-content-end">
-              <button type="button" class="btn btn-primary" id="btnReservar">Reservar</button>
+              <button type="button" class="btn btn-warning" id="btnReservar">Reservar</button>
             </div>
           </form>
         </div>
@@ -305,6 +276,28 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
   <script th:src="@{/js/reservas_usuario.js}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const reserveButtons = document.querySelectorAll('.reserve-btn');
+      const bookingForm = document.getElementById('booking-form');
+      const habitacionSelect = document.getElementById('habitacion');
+
+      reserveButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const roomType = this.getAttribute('data-room');
+          
+          // Show the form
+          bookingForm.style.display = 'block';
+
+          // Set the selected room in the dropdown
+          habitacionSelect.value = roomType;
+
+          // Scroll to the form
+          bookingForm.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
