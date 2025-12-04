@@ -86,7 +86,7 @@
             });
             if(pr.ok){
               alert('Pago confirmado. ¡Gracias!');
-              window.location.href = '/reservas';
+              window.location.href = '/pago_exitoso?id=' + encodeURIComponent(reservaId);
             } else {
               const txt = await pr.text();
               alert('Error al confirmar pago: ' + txt);

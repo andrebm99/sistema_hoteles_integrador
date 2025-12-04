@@ -106,7 +106,7 @@ public class AuthService {
         newUser.setEmail(email);
 
         newUser.setPasswordHash(passwordEncoder.encode(password));
-        newUser.setRol_id(4L);
+        newUser.setRol_id(4L);  
 
         if (StringUtils.hasText(fechaNacimiento)) {
             try {

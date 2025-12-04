@@ -506,9 +506,12 @@
                         });
                 },
                 actualizar: function () {
-                    this.$http.put('/api/reserva/' + this.entidad.id_reserva, this.entidad).then(response => {
+                    (this.$http || axios).put('/api/reserva/' + this.entidad.id_reserva, this.entidad).then(response => {
                         this.listar();
                         $("#mdlEntidad").modal("hide");
+                    }).catch(error => {
+                        console.error('Error al actualizar reserva', error);
+                        alert('Error al actualizar reserva.');
                     });
                 },
                 eliminar: function (id_reserva) {
@@ -516,9 +519,12 @@
                     $("#mdlEliminar").modal("show");
                 },
                 confirmareliminacion: function () {
-                    this.$http.delete('/api/reserva/' + this.entidad.id_reserva).then(response => {
+                    (this.$http || axios).delete('/api/reserva/' + this.entidad.id_reserva).then(response => {
                         this.listar();
                         $("#mdlEliminar").modal("hide");
+                    }).catch(error => {
+                        console.error('Error al eliminar reserva', error);
+                        alert('Error al eliminar reserva.');
                     });
                 },
 

@@ -264,7 +264,6 @@
       <div class="section">
         <div class="row"><strong>Total</strong><strong id="res_total">s/. 0</strong></div>
       </div>
-      <small>(Estimado – el backend recalcula al guardar)</small>
     </div>
   </div>
 
@@ -281,6 +280,60 @@
       const reserveButtons = document.querySelectorAll('.reserve-btn');
       const bookingForm = document.getElementById('booking-form');
       const habitacionSelect = document.getElementById('habitacion');
+      const btnReservar = document.getElementById('btnReservar');
+
+      async function submitReservation() {
+        const nombresapellidos = document.getElementById('nombresapellidos').value.trim();
+        const dni = document.getElementById('dni').value.trim();
+        const edad = Number(document.getElementById('edad').value);
+        const habitacion = document.getElementById('habitacion').value;
+        const ocupantes = document.getElementById('ocupantes').value;
+        const fechaInicio = document.getElementById('fechaInicio').value;
+        const fecha_salida = document.getElementById('fecha_salida').value;
+        const metodo_pago = document.getElementById('metodo_pago').value;
+
+        if (!nombresapellidos) { alert('Ingrese nombres y apellidos'); return; }
+        if (!dni || dni.length !== 8) { alert('DNI inválido. Debe tener 8 caracteres.'); return; }
+        if (!Number.isFinite(edad) || edad < 18) { alert('No se permiten menores de 18 años.'); return; }
+        if (!habitacion) { alert('Seleccione una habitación'); return; }
+        if (!fechaInicio || !fecha_salida) { alert('Ingrese fechas de inicio y salida'); return; }
+        if (!metodo_pago) { alert('Seleccione un método de pago'); return; }
+
+        const reservaObj = {
+          nombresapellidos, dni, edad, habitacion, ocupantes, fechaInicio, fecha_salida, metodo_pago
+        };
+
+        try {
+          const resp = await fetch('/api/reserva', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reservaObj)
+          });
+
+          if (resp.status === 201) {
+            const created = await resp.json();
+            if (created && created.id_reserva) {
+              window.location.href = '/proceso_pago?id=' + encodeURIComponent(created.id_reserva);
+              return;
+            }
+            // fallback redirect if no id
+            window.location.href = '/proceso_pago';
+            return;
+          }
+
+          if (resp.status === 409) {
+            const txt = await resp.text();
+            alert('No disponible: ' + (txt || 'La habitación no está disponible en las fechas seleccionadas.'));
+            return;
+          }
+
+          const txt = await resp.text();
+          alert('Error al reservar: ' + (txt || resp.status));
+        } catch (err) {
+          console.error('Error al crear reserva', err);
+          alert('Error al crear reserva. Revise la consola.');
+        }
+      }
 
       reserveButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -296,6 +349,12 @@
           bookingForm.scrollIntoView({ behavior: 'smooth' });
         });
       });
+
+      if (btnReservar) {
+        btnReservar.addEventListener('click', function () {
+          submitReservation();
+        });
+      }
     });
   </script>
 </body>
